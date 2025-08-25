@@ -57,7 +57,7 @@
 import BasePassword from '@/components/inputs/BasePassword.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
-import { useUserStore } from '@/stores'
+import { signUpByUserData } from '@/services'
 import type { TRequestError } from '@/types'
 import useVuelidate from '@vuelidate/core'
 import { email, minLength, required, sameAs } from '@vuelidate/validators'
@@ -65,7 +65,6 @@ import { computed, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const store = useUserStore()
 const userData = reactive({
   email: '',
   placeName: '',
@@ -92,7 +91,7 @@ const submit = async () => {
   if (!isFormCorrect) return
   try {
     const { placeName, email, password } = userData
-    await store.signUp({
+    await signUpByUserData({
       placeName,
       email,
       password,

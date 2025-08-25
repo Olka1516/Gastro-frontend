@@ -1,4 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios'
+import { STORAGE_KEYS } from './constants'
 
 interface ICustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
@@ -10,7 +11,7 @@ const API = axios.create({
 })
 
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken')
+  const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -28,20 +29,20 @@ API.interceptors.response.use(
       originalRequest._retry = true
       try {
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/refresh`, {
-          refreshToken: localStorage.getItem('refreshToken'),
+          refreshToken: localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN),
         })
 
         const { accessToken } = response.data
 
-        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken)
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
 
         return API(originalRequest)
       } catch (error) {
         if (error instanceof AxiosError && error.response?.status === 403) {
-          localStorage.removeItem('refreshToken')
-          localStorage.removeItem('accessToken')
+          localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
+          localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
           return
         }
       }

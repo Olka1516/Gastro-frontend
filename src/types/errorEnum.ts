@@ -1,12 +1,12 @@
 import type { AxiosError } from 'axios'
 
 export enum ErrorMessageEnum {
-  IsRequired = 'Value is required',
-  EmailIsNotValid = 'Value is not a valid email address',
-  PasswordMinLength = 'This field should be at least 6 characters long',
-  PasswordIsEqual = 'The value must be equal to the other value',
+  IsRequired = 'required',
+  EmailIsNotValid = 'email',
+  PasswordMinLength = 'minLength',
+  PasswordIsEqual = 'sameAs',
   EmailInUse = 'emailTaken',
-  UsernameInUse = 'usernameTaken',
+  PlaceInUse = 'placeTaken',
   PassMissMach = 'passMissMatch',
   InvalidCredentials = 'invalidCredentials',
 }

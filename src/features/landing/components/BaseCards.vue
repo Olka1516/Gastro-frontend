@@ -30,27 +30,11 @@
           </div>
 
           <div class="flex justify-center gap-4">
-            <button
-              @click="activeModal = 'signUp'"
-              :class="[
-                'px-4 py-2 rounded-lg text-sm font-medium transition',
-                activeModal === 'signUp'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-              ]"
-            >
+            <button @click="activeModal = 'signUp'" :class="activeStyle('signUp')">
               {{ t('button.signUp') }}
             </button>
 
-            <button
-              @click="activeModal = 'signIn'"
-              :class="[
-                'px-4 py-2 rounded-lg text-sm font-medium transition',
-                activeModal === 'signIn'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-              ]"
-            >
+            <button @click="activeModal = 'signIn'" :class="activeStyle('signIn')">
               {{ t('button.signIn') }}
             </button>
           </div>
@@ -68,6 +52,7 @@ import type { ModalKey } from '../types'
 import { loadStripe } from '@stripe/stripe-js'
 import { getCheckoutId } from '@/services'
 import SignInModal from './modals/SignInModal.vue'
+import { plans } from '../constants'
 
 const { t } = useI18n()
 const open = ref(false)
@@ -76,21 +61,6 @@ const modals = {
   signUp: SignUpModal,
   signIn: SignInModal,
 }
-
-const plans = [
-  {
-    name: 'free',
-    price: 10.0,
-  },
-  {
-    name: 'standart',
-    price: 20.0,
-  },
-  {
-    name: 'pro',
-    price: 30.0,
-  },
-]
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
@@ -113,6 +83,15 @@ const nextStep = async () => {
   } else {
     await testStripe()
   }
+}
+
+const activeStyle = (name: ModalKey) => {
+  return [
+    'px-4 py-2 rounded-lg text-sm font-medium transition',
+    activeModal.value === name
+      ? 'bg-blue-600 text-white shadow-md'
+      : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+  ]
 }
 
 const closeModal = () => {

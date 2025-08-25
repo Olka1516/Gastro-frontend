@@ -3,3 +3,5 @@ export type Product = {
   name: string
   ingredients: string
 }
+
+export type ModalKey = 'signUp' | 'signIn'

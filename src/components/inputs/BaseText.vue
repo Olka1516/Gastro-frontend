@@ -5,7 +5,7 @@
       v-model="userInfo"
       :autocomplete="autocomplete"
       @input="handleInput($event)"
-      :placeholder="props.type"
+      :placeholder="t(`inputs.${props.type}`)"
       :class="[
         'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition',
         isInfoInvalid()
@@ -18,6 +18,9 @@
 <script setup lang="ts">
 import { ErrorMessageEnum } from '@/types'
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   modelValue: string

@@ -1,10 +1,10 @@
 import { type UserSignIn, type UserSignUp } from '@/types'
 import http from '../http'
-import { ENDPOINTS } from '@/constants'
+import { ENDPOINTS, STORAGE_KEYS } from '@/constants'
 
 const setTokens = (refreshToken: string, accessToken: string) => {
-  localStorage.setItem('refreshToken', refreshToken)
-  localStorage.setItem('accessToken', accessToken)
+  localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken)
+  localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken)
 }
 
 export const signUpByUserData = async (user: UserSignUp) => {
@@ -17,6 +17,6 @@ export const signInByUserData = async (user: UserSignIn) => {
 }
 
 export const logOutUser = () => {
-  localStorage.removeItem('refreshToken')
-  localStorage.removeItem('accessToken')
+  localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN)
+  localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN)
 }

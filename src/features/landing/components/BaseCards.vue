@@ -67,13 +67,14 @@ import SignUpModal from './modals/SignUpModal.vue'
 import type { ModalKey } from '../types'
 import { loadStripe } from '@stripe/stripe-js'
 import { getCheckoutId } from '@/services'
+import SignInModal from './modals/SignInModal.vue'
 
 const { t } = useI18n()
 const open = ref(false)
 const activeModal = ref<ModalKey>('signUp')
 const modals = {
   signUp: SignUpModal,
-  signIn: SignUpModal,
+  signIn: SignInModal,
 }
 
 const plans = [
@@ -95,7 +96,6 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
 const testStripe = async () => {
   const id = await getCheckoutId()
-  console.log(id)
   const stripe = await stripePromise
   if (!stripe) {
     console.log('not loaded')

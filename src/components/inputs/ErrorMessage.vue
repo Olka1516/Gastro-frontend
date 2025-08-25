@@ -10,7 +10,9 @@
 import { ErrorMessageEnum } from '@/types'
 import type { ErrorObject } from '@vuelidate/core'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const props = defineProps<{
   v: {
     $error: boolean
@@ -37,28 +39,26 @@ const {
 } = ErrorMessageEnum
 
 const getError = () => {
-  // TODO: to lang
   const { $message: message } = props.v.$errors?.[0] ?? { $message: null }
   switch (props.v.$path) {
     case 'email':
-      if (message === EmailIsNotValid) return EmailIsNotValid
-      else if (message === IsRequired) return IsRequired
-      else if (props.error === EmailInUse) return 'Email already in use!'
-      else if (props.error === InvalidCredentials) return 'Email not found!'
+      if (message === EmailIsNotValid) return t('errors.emailNotValid')
+      else if (message === IsRequired) return t('errors.valueIsRequired')
+      else if (props.error === EmailInUse) return t('errors.emailInUse')
+      else if (props.error === InvalidCredentials) return t('errors.emailNotFound')
       break
     case 'password':
-      if (message === IsRequired) return IsRequired
-      else if (message === PasswordMinLength) return PasswordMinLength
-      else if (props.error === PassMissMach) return 'Password is wrong'
+      if (message === IsRequired) return t('errors.valueIsRequired')
+      else if (message === PasswordMinLength) return t('errors.passwordMinLength')
+      else if (props.error === PassMissMach) return t('errors.passwordWrong')
       break
     case 'confirmPassword':
-      if (message === IsRequired) return IsRequired
-      else if (message === PasswordIsEqual) return PasswordIsEqual
+      if (message === IsRequired) return t('errors.valueIsRequired')
+      else if (message === PasswordIsEqual) return t('errors.passwordNotEqual')
       break
     case 'placeName':
-      if (message === IsRequired) return IsRequired
-      else if (props.error === UsernameInUse) return 'Username already in use!'
-      else if (props.error === InvalidCredentials) return 'Username does not exist'
+      if (message === IsRequired) return t('errors.valueIsRequired')
+      else if (props.error === UsernameInUse) return t('errors.placeNameInUse')
       break
   }
 }

@@ -19,4 +19,20 @@ export default {
     signUp: 'Зареєструватися',
     signIn: 'Увійти',
   },
+  errors: {
+    emailNotValid: 'Значення не є дійсною адресою електронної пошти',
+    valueIsRequired: 'Потрібне значення',
+    emailInUse: 'Електронна пошта вже використовується!',
+    emailNotFound: 'Електронну пошту не знайдено!',
+    passwordMinLength: 'Це поле має містити щонайменше 6 символів',
+    passwordWrong: 'Пароль неправильний',
+    passwordNotEqual: 'Значення має дорівнювати іншому значенню',
+    placeNameInUse: 'Назва місця вже використовується!',
+  },
+  inputs: {
+    email: 'Емейл',
+    placeName: 'Назва організації',
+    password: 'Пароль',
+    confirmPassword: 'Підтвердити пароль',
+  },
 }

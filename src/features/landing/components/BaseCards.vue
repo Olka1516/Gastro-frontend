@@ -3,7 +3,9 @@
     <div class="bg-[#1f3a66] w-100 p-8" v-for="value in plans" :key="value.name">
       <h4 class="text-[#fff]">{{ value.name }}</h4>
       <h5 class="text-[#fff]">{{ value.price }}</h5>
-      <button class="text-[#fff] bg-[#000] hover:bg-[#014] p-4" @click="nextStep">buy</button>
+      <button class="text-[#fff] bg-[#000] hover:bg-[#014] p-4" @click="nextStep(value)">
+        buy
+      </button>
     </div>
   </div>
 
@@ -48,12 +50,14 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SignUpModal from './modals/SignUpModal.vue'
-import type { ModalKey } from '../types'
+import type { ModalKey, Plan } from '../types'
 import { loadStripe } from '@stripe/stripe-js'
 import { getCheckoutId } from '@/services'
 import SignInModal from './modals/SignInModal.vue'
 import { plans } from '../constants'
+import { useUserStore } from '@/stores'
 
+const store = useUserStore()
 const { t } = useI18n()
 const open = ref(false)
 const activeModal = ref<ModalKey>('signUp')
@@ -64,8 +68,8 @@ const modals = {
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 
-const testStripe = async () => {
-  const id = await getCheckoutId()
+const loadCheckout = async (value: Plan) => {
+  const id = await getCheckoutId(value)
   const stripe = await stripePromise
   if (!stripe) {
     console.log('not loaded')
@@ -76,12 +80,12 @@ const testStripe = async () => {
   })
 }
 
-const nextStep = async () => {
-  if (true) {
+const nextStep = async (value: Plan) => {
+  if (!store.isUserAuthorized) {
     open.value = true
     document.body.style.overflow = 'hidden'
   } else {
-    await testStripe()
+    await loadCheckout(value)
   }
 }
 

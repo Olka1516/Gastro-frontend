@@ -11,4 +11,11 @@ export enum ErrorMessageEnum {
   InvalidCredentials = 'invalidCredentials',
 }
 
+export enum EStatus {
+  pending = 'pending',
+  complete = 'complete',
+  error = 'error',
+  cancelled = 'cancelled',
+}
+
 export type TRequestError = AxiosError<{ message: string }>

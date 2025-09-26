@@ -3,5 +3,6 @@ export const ENDPOINTS = {
   LOGIN: '/users/login',
   REGISTRATION: '/users/register',
   CHECK_AUTH: '/users/check',
+  PUT_FREE_PLAN: `users/put-free-plan`,
   GET_USER_DETAILS: `dashboard/get-details`,
 }

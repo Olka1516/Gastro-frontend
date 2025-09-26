@@ -6,4 +6,8 @@
 
 <style>
 @import 'tailwindcss';
+
+html {
+  scroll-behavior: smooth;
+}
 </style>

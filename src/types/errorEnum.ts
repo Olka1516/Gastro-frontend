@@ -18,4 +18,10 @@ export enum EStatus {
   cancelled = 'cancelled',
 }
 
+export enum EPlan {
+  free = 'free',
+  standart = 'standart',
+  premium = 'premium',
+}
+
 export type TRequestError = AxiosError<{ message: string }>

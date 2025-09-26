@@ -1,6 +1,7 @@
 import {
   getUserAuthorized,
   getUserDetailsByUserId,
+  putUserFreePlan,
   signInByUserData,
   signUpByUserData,
 } from '@/services'
@@ -55,5 +56,18 @@ export const useUserStore = defineStore('counter', () => {
     updateState(data.user)
   }
 
-  return { ...toRefs(state), isUserAuthorized, setUserAuthorized, signIn, signUp, getUserDetails }
+  const putFreePlan = async () => {
+    const data = await putUserFreePlan()
+    updateState(data.user)
+  }
+
+  return {
+    ...toRefs(state),
+    isUserAuthorized,
+    setUserAuthorized,
+    signIn,
+    signUp,
+    getUserDetails,
+    putFreePlan,
+  }
 })

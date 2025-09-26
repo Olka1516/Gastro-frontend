@@ -25,7 +25,7 @@
 
     <button
       type="submit"
-      class="w-full py-2 mt-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
+      class="cursor-pointer w-full py-2 mt-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
     >
       {{ t('button.signIn') }}
     </button>

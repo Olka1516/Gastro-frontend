@@ -10,6 +10,10 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  if (to.path === from.path && to.fullPath !== from.fullPath) {
+    next()
+    return
+  }
   const store = useUserStore()
   await store.setUserAuthorized()
   next()

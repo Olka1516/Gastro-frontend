@@ -1,7 +1,7 @@
 <template>
   <header
     :class="getHeaderBG().value"
-    class="w-full fixed z-1000 h-20 flex justify-between px-56 items-center transition-colors duration-500"
+    class="w-full fixed z-1000 h-20 grid grid-cols-[200px_minmax(0,1fr)_200px] justify-items-center justify-center px-46 items-center transition-colors duration-500"
   >
     <div>
       <a href="/" class="logo" aria-label="На головну">
@@ -22,19 +22,47 @@
         </li>
       </ul>
     </nav>
+    <nav aria-label="Головна навігація">
+      <ul class="flex gap-8">
+        <li>
+          <button
+            @click="setOpenAuthModal(true, 'signUp')"
+            class="cursor-pointer text-[#fff] bg-[#dc5b41] px-4 py-1"
+          >
+            {{ t('button.signUp') }}
+          </button>
+        </li>
+        <li>
+          <button
+            @click="setOpenAuthModal(true, 'signIn')"
+            class="cursor-pointer text-[#fff] border border-[#dc5b41] px-4 py-1"
+          >
+            {{ t('button.signIn') }}
+          </button>
+        </li>
+        <!-- <li>
+          <button>{{ t('button.dashboard') }}</button>
+        </li> -->
+      </ul>
+    </nav>
   </header>
+  <AuthTeleportModals v-model:open="open" v-model:activeModal="activeModal" />
 
   <div id="scrollArea" :style="{ '--limit-length': props.limit }"></div>
 </template>
 
 <script setup lang="ts">
+import AuthTeleportModals from '@/features/landing/components/modals/AuthTeleportModals.vue'
+import type { ModalKey } from '@/features/landing/types'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ limit: number; navigations: string[]; activeSection: string }>()
 const { t } = useI18n()
-const active = ref(props.navigations[0])
+const active = ref(props.activeSection)
 const isLimit = ref(true)
+const open = ref(false)
+const activeModal = ref<ModalKey>('signUp')
 
 const options = {
   root: document.querySelector('#scrollArea'),
@@ -59,6 +87,12 @@ const getHeaderBG = () => {
   return computed(() =>
     isLimit.value ? ['backdrop-blur-md', 'bg-black/10'] : ['backdrop-blur-none', 'bg-transparent'],
   )
+}
+
+const setOpenAuthModal = (key: boolean, nav: ModalKey) => {
+  open.value = key
+  activeModal.value = nav
+  document.body.style.overflow = 'hidden'
 }
 
 const setActiveNav = (nav: string) => {

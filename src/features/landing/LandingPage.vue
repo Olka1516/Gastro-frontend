@@ -33,11 +33,12 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const activeSection = ref('')
 const sections = [
-  { id: 'home', component: ContentBlock },
-  { id: 'phones', component: PhonesBlock },
-  { id: 'numbers', component: NumbersBlock },
+  { id: 'home', name: '', component: ContentBlock },
+  { id: 'phones', name: '', component: PhonesBlock },
+  { id: 'numbers', name: '', component: NumbersBlock },
   {
     id: 'info',
+    name: 'info',
     component: InfoBlock,
     repeat: 3,
     props: (n: number) => ({
@@ -48,14 +49,18 @@ const sections = [
       buttonText: 'button.buyNow',
     }),
   },
-  { id: 'plans', component: BaseCards },
-  { id: 'map', component: MapBlock },
+  { id: 'plans', name: 'plans', component: BaseCards },
+  { id: 'map', name: 'map', component: MapBlock },
 ]
 
-const navs = sections.map((s) => s.id.charAt(0).toUpperCase() + s.id.slice(1))
+const navs = sections
+  .map((s) => (s.name ? s.name.charAt(0).toUpperCase() + s.name.slice(1) : ''))
+  .filter((name) => name)
+
+const navsId = sections.map((s) => s.id.charAt(0).toUpperCase() + s.id.slice(1))
 
 const onScroll = () => {
-  for (const id of navs) {
+  for (const id of navsId) {
     const el = document.getElementById(id.toLowerCase())
     if (!el) continue
     const rect = el.getBoundingClientRect()

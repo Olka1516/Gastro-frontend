@@ -46,57 +46,22 @@
       </div>
     </div>
 
-    <Teleport to="body">
-      <Transition
-        enter-active-class="transition duration-300 ease-out"
-        enter-from-class="opacity-0 scale-90"
-        enter-to-class="opacity-100 scale-100"
-        leave-active-class="transition duration-200 ease-in"
-        leave-from-class="opacity-100 scale-100"
-        leave-to-class="opacity-0 scale-90"
-      >
-        <div v-if="open" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div class="relative bg-white w-full max-w-md rounded-2xl shadow-2xl p-8">
-            <button
-              @click="closeModal"
-              class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition"
-            >
-              ✕
-            </button>
-
-            <div class="mb-6">
-              <component :is="modals[activeModal]" />
-            </div>
-
-            <div class="flex justify-center gap-4">
-              <button @click="activeModal = 'signUp'" :class="activeStyle('signUp')">
-                {{ t('button.signUp') }}
-              </button>
-
-              <button @click="activeModal = 'signIn'" :class="activeStyle('signIn')">
-                {{ t('button.signIn') }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
+    <AuthTeleportModals v-model:open="open" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import SignUpModal from './modals/SignUpModal.vue'
-import type { ModalKey, Plan } from '../types'
+import type { Plan } from '../types'
 import { loadStripe } from '@stripe/stripe-js'
 import { getCheckoutId } from '@/services'
-import SignInModal from './modals/SignInModal.vue'
 import { plans } from '../constants'
 import { useUserStore } from '@/stores'
 import { EPlan } from '@/types'
 import { useRouter } from 'vue-router'
 import { getImage } from '@/common/functions'
+import AuthTeleportModals from './modals/AuthTeleportModals.vue'
 
 const store = useUserStore()
 const router = useRouter()
@@ -104,11 +69,6 @@ const { t, tm, rt } = useI18n()
 const open = ref(false)
 const visible = ref(false)
 const visibilityId = ref()
-const activeModal = ref<ModalKey>('signUp')
-const modals = {
-  signUp: SignUpModal,
-  signIn: SignInModal,
-}
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 const changeVisibility = (key: boolean, id: number) => {
@@ -138,20 +98,6 @@ const nextStep = async (value: Plan) => {
   } else {
     await loadCheckout(value)
   }
-}
-
-const activeStyle = (name: ModalKey) => {
-  return [
-    'px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer',
-    activeModal.value === name
-      ? 'bg-blue-600 text-white shadow-md'
-      : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-  ]
-}
-
-const closeModal = () => {
-  open.value = false
-  document.body.style.overflow = ''
 }
 </script>
 

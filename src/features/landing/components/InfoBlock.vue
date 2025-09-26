@@ -22,9 +22,12 @@
             <p class="text-[#5d6073] text-lg">{{ t(description) }}</p>
           </div>
         </div>
-        <button class="cursor-pointer relative z-2 text-[#fff] bg-[#dc5b41] px-8 py-4 mx-6">
+        <a
+          href="#plans"
+          class="cursor-pointer relative z-2 text-[#fff] bg-[#dc5b41] px-8 py-4 mx-6"
+        >
           {{ t(buttonText) }}
-        </button>
+        </a>
       </div>
     </div>
   </div>

@@ -124,11 +124,12 @@ export default {
   },
   button: {
     clickMe: 'Натисни мене',
-    signUp: 'Зареєструватися',
-    signIn: 'Увійти',
+    signUp: 'Реєстрація',
+    signIn: 'Вхід',
     buyNow: 'Купи зараз',
     reserveNow: 'Зарезервуй зараз',
     choose: 'Обрати',
+    dashboard: 'Дашборд',
   },
   errors: {
     email: {
@@ -160,10 +161,8 @@ export default {
   },
   navs: {
     home: 'Головна',
-    phones: 'Приклад',
-    numbers: 'Дані',
-    info: 'Інформація',
+    info: 'Про нас',
     plans: 'Плани та ціни',
-    map: 'Карта',
+    map: 'Контакти',
   },
 }

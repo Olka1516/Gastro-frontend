@@ -1,6 +1,7 @@
 import {
   getUserAuthorized,
   getUserDetailsByUserId,
+  logOutUser,
   putUserFreePlan,
   signInByUserData,
   signUpByUserData,
@@ -51,6 +52,11 @@ export const useUserStore = defineStore('counter', () => {
     updateState(data.user)
   }
 
+  const logOut = () => {
+    logOutUser()
+    resetState()
+  }
+
   const getUserDetails = async () => {
     const data = await getUserDetailsByUserId()
     updateState(data.user)
@@ -69,5 +75,6 @@ export const useUserStore = defineStore('counter', () => {
     signUp,
     getUserDetails,
     putFreePlan,
+    logOut,
   }
 })

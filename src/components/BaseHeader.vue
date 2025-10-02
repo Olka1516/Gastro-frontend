@@ -23,7 +23,7 @@
       </ul>
     </nav>
     <nav aria-label="Головна навігація">
-      <ul class="flex gap-8">
+      <ul class="flex gap-8" v-if="!store.isUserAuthorized">
         <li>
           <button
             @click="setOpenAuthModal(true, 'signUp')"
@@ -40,23 +40,47 @@
             {{ t('button.signIn') }}
           </button>
         </li>
-        <!-- <li>
-          <button>{{ t('button.dashboard') }}</button>
-        </li> -->
+      </ul>
+      <ul class="flex gap-8" v-else>
+        <li>
+          <button
+            @click="changeRoute(LINK_TEMPLATES.DASHBOARD)"
+            class="cursor-pointer text-[#fff] bg-[#dc5b41] px-4 py-1"
+          >
+            {{ t('button.dashboard') }}
+          </button>
+        </li>
+        <li>
+          <button
+            @click="store.logOut"
+            class="cursor-pointer text-[#fff] border border-[#dc5b41] px-4 py-1"
+          >
+            {{ t('button.logOut') }}
+          </button>
+        </li>
       </ul>
     </nav>
   </header>
-  <AuthTeleportModals v-model:open="open" v-model:activeModal="activeModal" />
+  <AuthTeleportModals
+    v-model:open="open"
+    v-model:activeModal="activeModal"
+    @handleProcess="changeRoute(LINK_TEMPLATES.DASHBOARD)"
+  />
 
   <div id="scrollArea" :style="{ '--limit-length': props.limit }"></div>
 </template>
 
 <script setup lang="ts">
+import { LINK_TEMPLATES } from '@/constants'
 import AuthTeleportModals from '@/features/landing/components/modals/AuthTeleportModals.vue'
 import type { ModalKey } from '@/features/landing/types'
+import { useUserStore } from '@/stores'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
+const store = useUserStore()
+const router = useRouter()
 const props = defineProps<{ limit: number; navigations: string[]; activeSection: string }>()
 const { t } = useI18n()
 const active = ref(props.activeSection)
@@ -97,6 +121,10 @@ const setOpenAuthModal = (key: boolean, nav: ModalKey) => {
 
 const setActiveNav = (nav: string) => {
   active.value = nav
+}
+
+const changeRoute = async (link: string) => {
+  await router.push(link)
 }
 
 watch(

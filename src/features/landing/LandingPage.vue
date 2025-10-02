@@ -71,10 +71,12 @@ const onScroll = () => {
   }
 }
 
-onMounted(() => window.addEventListener('scroll', onScroll))
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
-
 onMounted(async () => {
+  window.addEventListener('scroll', onScroll)
   await router.replace({ path: router.currentRoute.value.path })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
 })
 </script>

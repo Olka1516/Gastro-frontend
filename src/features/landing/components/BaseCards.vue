@@ -46,12 +46,17 @@
       </div>
     </div>
 
-    <AuthTeleportModals v-model:open="open" />
+    <AuthTeleportModals v-model:open="open" @handleProcess="nextStep(plan)" />
+    <BaseDelete
+      text="landing.changePlan"
+      v-model:openDelete="openDelete"
+      @handleProcess="(value) => setFreePlan(value)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Plan } from '../types'
 import { loadStripe } from '@stripe/stripe-js'
@@ -62,13 +67,17 @@ import { EPlan } from '@/types'
 import { useRouter } from 'vue-router'
 import { getImage } from '@/common/functions'
 import AuthTeleportModals from './modals/AuthTeleportModals.vue'
+import { LINK_TEMPLATES } from '@/constants'
+import BaseDelete from '@/components/modal/BaseDelete.vue'
 
 const store = useUserStore()
 const router = useRouter()
 const { t, tm, rt } = useI18n()
 const open = ref(false)
+const openDelete = ref(false)
 const visible = ref(false)
 const visibilityId = ref()
+const plan: Ref<Plan> = ref({ name: '', price: 0 })
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 const changeVisibility = (key: boolean, id: number) => {
@@ -88,13 +97,23 @@ const loadCheckout = async (value: Plan) => {
   })
 }
 
+const setFreePlan = async (value: boolean) => {
+  if (value) {
+    await store.putFreePlan()
+    await router.push(LINK_TEMPLATES.DASHBOARD)
+  }
+}
+
 const nextStep = async (value: Plan) => {
   if (!store.isUserAuthorized) {
+    plan.value = value
     open.value = true
     document.body.style.overflow = 'hidden'
+  } else if (value.name === EPlan.free && store.planName !== EPlan.free) {
+    openDelete.value = true
+    document.body.style.overflow = 'hidden'
   } else if (value.name === EPlan.free) {
-    await store.putFreePlan()
-    await router.push('/dashboard')
+    await setFreePlan(true)
   } else {
     await loadCheckout(value)
   }

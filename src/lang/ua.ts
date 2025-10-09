@@ -100,6 +100,26 @@ export default {
       },
     },
   },
+  dashboard: {
+    pro: {
+      navs: {},
+    },
+    standart: {
+      navs: {
+        home: 'Головна',
+        menu: 'Меню',
+      },
+    },
+    tableHead: {
+      name: 'Назва',
+      image: 'Картинка',
+      price: 'Ціна',
+      category: 'Категорія',
+      settings: 'Налаштування',
+      deleteMeal: 'Ви впевнені, що хочете видалити дану страву?',
+    },
+    editText: 'Оновити дані',
+  },
   footer: {
     description:
       'У Gastro ми захоплені створенням незабутніх моментів завдяки нашій кулінарній майстерності.',
@@ -128,6 +148,7 @@ export default {
   },
   button: {
     clickMe: 'Натисни мене',
+    edit: 'Оновити',
     signUp: 'Реєстрація',
     signIn: 'Вхід',
     buyNow: 'Купи зараз',
@@ -169,6 +190,9 @@ export default {
     placeName: 'Назва організації',
     password: 'Пароль',
     confirmPassword: 'Підтвердити пароль',
+    name: 'Назва',
+    description: 'Опис',
+    price: 'Ціна',
   },
   navs: {
     home: 'Головна',

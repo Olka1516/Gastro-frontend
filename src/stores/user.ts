@@ -6,19 +6,19 @@ import {
   signInByUserData,
   signUpByUserData,
 } from '@/services'
-import type { UserSignIn, UserSignUp } from '@/types'
+import type { IUserData, UserSignIn, UserSignUp } from '@/types'
 import { defineStore } from 'pinia'
 import { reactive, ref, toRefs } from 'vue'
 
 export const useUserStore = defineStore('counter', () => {
   const isUserAuthorized = ref(false)
-  const defaultState = () => ({
+  const defaultState = (): IUserData => ({
     email: '',
     placeName: '',
     id: '',
-    planName: '',
-    planDate: '',
-    status: '',
+    planName: null,
+    planDate: null,
+    status: null,
   })
 
   const state = reactive(defaultState())

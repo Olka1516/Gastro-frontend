@@ -13,61 +13,84 @@
         class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px]"
       >
         <div
-          class="relative border border-[#dc5b41] w-full max-w-md rounded-2xl shadow-2xl p-12 bg-black/80"
+          class="relative border border-[#dc5b41] w-full max-w-md max-h-[90vh] rounded-2xl shadow-2xl bg-black/80 overflow-hidden flex flex-col"
         >
-          <button
-            @click="closeModal"
-            class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition"
-          >
-            ✕
-          </button>
-
-          <h2 class="text-2xl font-semibold text-white text-center mb-6">
-            {{ t(text) }}
-          </h2>
-
-          <form class="space-y-6" @submit.prevent="handleNextStep" autocomplete="on">
-            <div class="relative">
-              <BaseDragFile />
-            </div>
-            <div class="relative">
-              <BaseText
-                v-model="data.name"
-                :v="v$.name"
-                type="name"
-                :error="error"
-                autocomplete="name"
-              />
-              <ErrorMessage :v="v$.name" :error="error" />
-            </div>
-            <div class="relative">
-              <BaseText
-                v-model="data.price"
-                :v="v$.price"
-                type="price"
-                :error="error"
-                autocomplete="price"
-              />
-              <ErrorMessage :v="v$.price" :error="error" />
-            </div>
-            <div class="relative">
-              <BaseText
-                v-model="data.description"
-                :v="v$.description"
-                type="description"
-                :error="error"
-                autocomplete="description"
-              />
-              <ErrorMessage :v="v$.description" :error="error" />
-            </div>
-
+          <div class="flex-shrink-0 relative p-6 pb-0">
             <button
-              type="submit"
-              class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold shadow-md hover:bg-[#dc5b34] transition"
+              @click="closeModal"
+              class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition"
             >
-              {{ t('button.edit') }}
+              ✕
             </button>
-          </form>
+
+            <h2 class="text-2xl font-semibold text-white text-center mb-6">
+              {{ t(text) }}
+            </h2>
+          </div>
+
+          <div class="flex-1 overflow-y-auto px-6 pb-8 custom-scrollbar">
+            <form class="space-y-6" @submit.prevent="handleNextStep" autocomplete="on">
+              <div class="relative">
+                <BaseDragFile :url="data.image" :v="v$.image" @update="handleImageUpdate" />
+              </div>
+              <div class="relative">
+                <BaseText
+                  v-model="data.name"
+                  :v="v$.name"
+                  type="name"
+                  :error="error"
+                  autocomplete="name"
+                />
+                <ErrorMessage :v="v$.name" :error="error" />
+              </div>
+              <div class="relative">
+                <BaseText
+                  v-model="data.price"
+                  :v="v$.price"
+                  type="price"
+                  :error="error"
+                  autocomplete="price"
+                />
+                <ErrorMessage :v="v$.price" :error="error" />
+              </div>
+              <div class="relative">
+                <BaseSelect
+                  v-model:category="data.category"
+                  :all-selections="category"
+                  type="dashboard.tableHead.category"
+                  :v="v$.category"
+                />
+                <ErrorMessage :v="v$.category" :error="error" />
+              </div>
+              <div class="relative">
+                <BaseText
+                  v-model="data.description"
+                  :v="v$.description"
+                  type="description"
+                  :error="error"
+                  autocomplete="description"
+                />
+                <ErrorMessage :v="v$.description" :error="error" />
+              </div>
+
+              <div class="relative">
+                <BaseAvailabilitySelect
+                  v-model:availability="data.isAvailable"
+                  :all-selections="availabilityOptions"
+                  type="dashboard.availability"
+                  :v="v$.isAvailable"
+                />
+                <ErrorMessage :v="v$.isAvailable" :error="error" />
+              </div>
+
+              <button
+                type="submit"
+                class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold shadow-md hover:bg-[#dc5b34] transition"
+              >
+                {{ isEditMode ? t('button.edit') : t('button.add') }}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </Transition>
@@ -75,13 +98,15 @@
 </template>
 
 <script setup lang="ts">
+import BaseAvailabilitySelect from '@/components/inputs/BaseAvailabilitySelect.vue'
 import BaseDragFile from '@/components/inputs/BaseDragFile.vue'
+import BaseSelect from '@/components/inputs/BaseSelect.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
 import type { IDish } from '@/types/menu'
 import useVuelidate from '@vuelidate/core'
 import { numeric, required } from '@vuelidate/validators'
-import { reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ text: string; error: string; category: string[] }>()
@@ -98,32 +123,53 @@ const data = reactive<IDish>({
   image: '',
   price: 0,
   description: '',
+  category: '',
   id: '',
+  isAvailable: 'available', // Зберігаємо як string для select
+  ownerId: '',
 })
+
+const availabilityOptions = ['available', 'unavailable']
+
 const issue = ref('')
 const rules = {
   name: { required },
   image: { required },
   price: { required, numeric },
   description: { required },
+  category: { required },
+  isAvailable: { required },
 }
 
 const v$ = useVuelidate(rules, data)
+
+// Визначаємо чи це режим редагування (якщо є ID) чи додавання
+const isEditMode = computed(() => !!dish.value?.id)
 
 const closeModal = () => {
   open.value = false
   document.body.style.overflow = ''
 }
 
-const handleNextStep = () => {
+const handleNextStep = async () => {
+  const isFormCorrect = await v$.value.$validate()
+  console.log('isFormCorrect', isFormCorrect)
+  console.log('data', data)
+  if (!isFormCorrect) return
   closeModal()
   emit('handleProcess', data)
+}
+
+const handleImageUpdate = (image: File) => {
+  data.image = image
 }
 
 watch(
   dish,
   (newDish) => {
-    if (newDish) Object.assign(data, newDish)
+    if (newDish) {
+      Object.assign(data, newDish)
+    }
   },
   { deep: true },
 )
@@ -135,4 +181,32 @@ watch(
 )
 </script>
 
-<style scoped></style>
+<style scoped>
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #dc5b41 transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #dc5b41;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #dc5b34;
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+</style>

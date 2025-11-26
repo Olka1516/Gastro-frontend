@@ -1,6 +1,11 @@
 <template>
   <div class="p-12 flex flex-col items-center gap-12">
-    <h2 class="text-white">Table</h2>
+    <div class="flex items-center justify-between w-full">
+      <h2 class="text-white">Table</h2>
+      <button @click="openAddDish" class="text-white bg-[#dc5b41] px-4 py-2 cursor-pointer">
+        Add Meal
+      </button>
+    </div>
     <table class="min-w-full border-collapse text-sm">
       <thead class="bg-[#dc5b41]">
         <tr>
@@ -51,6 +56,14 @@
       :error
       @handleProcess="(value) => editMeal(value)"
     />
+    <ManageDish
+      text="dashboard.addText"
+      v-model:dish="newDish"
+      v-model:openManage="openAdd"
+      :category="tempCategory"
+      :error
+      @handleProcess="(value) => addMeal(value)"
+    />
   </div>
 </template>
 
@@ -62,9 +75,10 @@ import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ManageDish from '../general/ManageDish.vue'
 
-const size = 2
+const size = 5
 const openDelete = ref(false)
 const openManage = ref(false)
+const openAdd = ref(false)
 const mealId = ref('')
 const error = ref('')
 const editDish = ref<IDish>({
@@ -72,19 +86,35 @@ const editDish = ref<IDish>({
   image: '',
   price: 0,
   description: '',
+  category: '',
   id: '',
+  isAvailable: 'available',
+  ownerId: '',
+})
+const newDish = ref<IDish>({
+  name: '',
+  image: '',
+  price: 0,
+  description: '',
+  category: '',
+  id: '',
+  isAvailable: 'available',
+  ownerId: '',
 })
 const paginationPage = ref(1)
 const tableHead = ['name', 'image', 'price', 'category', 'settings']
 const tempCategory = reactive(['meal', 'breakfast', 'diner'])
-const tempData = [
+const tempData: IDish[] = [
   {
     name: 'test 1',
-    image: 'lal',
+    image:
+      'https://cloudinary-marketing-res.cloudinary.com/images/w_1000,c_scale/v1679921049/Image_URL_header/Image_URL_header-png?_i=AA',
     price: 10,
     category: 'meal',
     description: 'test test tets',
     id: '1',
+    isAvailable: 'available',
+    ownerId: '',
   },
   {
     name: 'test 2',
@@ -93,6 +123,8 @@ const tempData = [
     price: 40,
     category: 'meal',
     id: '2',
+    isAvailable: 'available',
+    ownerId: '',
   },
   {
     name: 'test 3',
@@ -101,6 +133,8 @@ const tempData = [
     description: 'test test tets',
     category: 'meal',
     id: '3',
+    isAvailable: 'available',
+    ownerId: '',
   },
   {
     name: 'test 4',
@@ -109,8 +143,19 @@ const tempData = [
     price: 40,
     category: 'meal',
     id: '4',
+    isAvailable: 'available',
+    ownerId: '',
   },
-  { name: 'test 5', image: 'lal', price: 10, description: 'test test tets', id: '5' },
+  {
+    name: 'test 5',
+    image: 'lal',
+    price: 10,
+    description: 'test test tets',
+    category: 'meal',
+    id: '5',
+    isAvailable: 'available',
+    ownerId: '',
+  },
   {
     name: 'test 6',
     image: 'lala',
@@ -118,6 +163,8 @@ const tempData = [
     price: 40,
     category: 'meal',
     id: '6',
+    isAvailable: 'available',
+    ownerId: '',
   },
   {
     name: 'test 7',
@@ -126,6 +173,8 @@ const tempData = [
     category: 'meal',
     description: 'test test tets',
     id: '7',
+    isAvailable: 'available',
+    ownerId: '',
   },
   {
     name: 'test 8',
@@ -134,6 +183,8 @@ const tempData = [
     price: 40,
     category: 'meal',
     id: '8',
+    isAvailable: 'available',
+    ownerId: '',
   },
   {
     name: 'test 9',
@@ -142,6 +193,8 @@ const tempData = [
     description: 'test test tets',
     category: 'meal',
     id: '9',
+    isAvailable: 'available',
+    ownerId: '',
   },
   {
     name: 'test 10',
@@ -150,6 +203,8 @@ const tempData = [
     price: 40,
     category: 'meal',
     id: '10',
+    isAvailable: 'available',
+    ownerId: '',
   },
   {
     name: 'test 11',
@@ -158,6 +213,8 @@ const tempData = [
     price: 40,
     category: 'meal',
     id: '11',
+    isAvailable: 'available',
+    ownerId: '',
   },
 ]
 
@@ -182,6 +239,31 @@ const openManageDish = (value: IDish) => {
 
 const editMeal = (value: IDish) => {
   console.log(value)
+}
+
+const openAddDish = () => {
+  openAdd.value = true
+  // Очищуємо дані для нової страви
+  Object.assign(newDish.value, {
+    name: '',
+    image: '',
+    price: undefined,
+    description: '',
+    category: '',
+    id: '',
+  })
+  document.body.style.overflow = 'hidden'
+}
+
+const addMeal = (value: IDish) => {
+  // Генеруємо новий ID
+  const newId = (tempData.length + 1).toString()
+  const newMeal = { ...value, id: newId, ownerId: '' }
+
+  // Додаємо нову страву до списку
+  tempData.push(newMeal)
+
+  console.log('Added new meal:', newMeal)
 }
 </script>
 

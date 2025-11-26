@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full">
     <input
-      required
+      :type="inputType ? inputType : 'text'"
       v-model="userInfo"
       :autocomplete="autocomplete"
       @input="handleInput($event)"
@@ -23,19 +23,20 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
 const props = defineProps<{
-  modelValue: string
+  modelValue: string | number | undefined
   type: string
   v: {
     $invalid: boolean
     $dirty: boolean
     $touch: () => void
   }
+  inputType?: string
   error?: string
   autocomplete?: string
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', val: string): void
+  (e: 'update:modelValue', val: string | number): void
 }>()
 
 const userInfo = ref(props.modelValue)
@@ -44,8 +45,8 @@ const handleInput = (event: Event) => {
   props.v.$touch()
   const target = event.target as HTMLInputElement
   if (!target) return
-  userInfo.value = target.value
-  emit('update:modelValue', target.value)
+  userInfo.value = props.type === 'price' ? Number(target.value) : target.value
+  emit('update:modelValue', userInfo.value)
 }
 
 const { InvalidCredentials, EmailInUse, EmailIsNotValid } = ErrorMessageEnum

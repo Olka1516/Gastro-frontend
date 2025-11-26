@@ -1,7 +1,10 @@
 export interface IDish {
-  name: string
-  image: string
-  price: number
-  description: string
   id: string
+  name: string
+  description: string
+  price: number
+  category: string
+  isAvailable: 'available' | 'unavailable'
+  image: string | File
+  ownerId?: string
 }

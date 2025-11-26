@@ -30,7 +30,7 @@
       <div id="gallery">
         <img
           v-if="previewUrl"
-          :src="previewUrl"
+          :src="previewUrl as string"
           id="previewImage"
           class="w-[calc(100vw-1200px)] h-[270px] rounded-2xl object-cover object-center max-[1200px]:w-full max-[1200px]:h-[240px]"
         />

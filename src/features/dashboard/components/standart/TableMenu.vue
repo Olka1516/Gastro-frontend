@@ -70,6 +70,7 @@
 <script setup lang="ts">
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modal/BaseDelete.vue'
+import { useStandartDashboardStore } from '@/stores/standartDashboard'
 import type { IDish } from '@/types/menu'
 import { reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -219,15 +220,26 @@ const tempData: IDish[] = [
 ]
 
 const { t } = useI18n()
+const standartDashboardStore = useStandartDashboardStore()
 
 const changeDeleteValue = (id: string) => {
   openDelete.value = true
   mealId.value = id
   document.body.style.overflow = 'hidden'
 }
-const deleteMeal = (value: boolean) => {
-  if (value) {
-    console.log('id', mealId.value)
+const deleteMeal = async (value: boolean) => {
+  if (value && mealId.value) {
+    const success = await standartDashboardStore.deleteDish(mealId.value)
+    if (success) {
+      // Видаляємо з локальних даних після успішного видалення
+      const index = tempData.findIndex((dish) => dish.id === mealId.value)
+      if (index !== -1) {
+        tempData.splice(index, 1)
+      }
+      console.log('Deleted meal with id:', mealId.value)
+    } else {
+      console.error('Failed to delete meal:', standartDashboardStore.error)
+    }
   }
 }
 
@@ -237,13 +249,21 @@ const openManageDish = (value: IDish) => {
   document.body.style.overflow = 'hidden'
 }
 
-const editMeal = (value: IDish) => {
-  console.log(value)
+const editMeal = async (value: IDish) => {
+  const success = await standartDashboardStore.editDish(value)
+  if (success) {
+    // Оновлюємо локальні дані після успішного редагування
+    const index = tempData.findIndex((dish) => dish.id === value.id)
+    if (index !== -1) {
+      tempData[index] = { ...value }
+    }
+  } else {
+    console.error('Failed to edit meal:', standartDashboardStore.error)
+  }
 }
 
 const openAddDish = () => {
   openAdd.value = true
-  // Очищуємо дані для нової страви
   Object.assign(newDish.value, {
     name: '',
     image: '',
@@ -255,15 +275,20 @@ const openAddDish = () => {
   document.body.style.overflow = 'hidden'
 }
 
-const addMeal = (value: IDish) => {
-  // Генеруємо новий ID
-  const newId = (tempData.length + 1).toString()
-  const newMeal = { ...value, id: newId, ownerId: '' }
-
-  // Додаємо нову страву до списку
-  tempData.push(newMeal)
-
-  console.log('Added new meal:', newMeal)
+const addMeal = async (value: IDish) => {
+  const success = await standartDashboardStore.addDish(value)
+  if (success) {
+    // Оновлюємо локальні дані після успішного додавання
+    const newMeal = {
+      ...value,
+      id: Date.now().toString(), // Тимчасовий ID, поки не отримаємо з бекенду
+      ownerId: 'current-user-id',
+    }
+    tempData.push(newMeal)
+    console.log('Added new meal:', newMeal)
+  } else {
+    console.error('Failed to add meal:', standartDashboardStore.error)
+  }
 }
 </script>
 

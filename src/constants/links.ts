@@ -5,6 +5,8 @@ export const ENDPOINTS = {
   CHECK_AUTH: '/users/check',
   PUT_FREE_PLAN: `users/put-free-plan`,
   GET_USER_DETAILS: `dashboard/get-details`,
+  ADD_DISH: `dashboard/dishes`,
+  EDIT_DISH: (id: string) => `dashboard/dishes/${id}`,
 }
 
 export const LINK_TEMPLATES = {

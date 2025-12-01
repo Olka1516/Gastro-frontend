@@ -39,14 +39,58 @@ const emit = defineEmits<{
   (e: 'update:modelValue', val: string | number): void
 }>()
 
-const userInfo = ref(props.modelValue)
+const userInfo = ref<string | number>(
+  props.type === 'price' ? (props.modelValue ?? '') : (props.modelValue ?? ''),
+)
 
 const handleInput = (event: Event) => {
   props.v.$touch()
   const target = event.target as HTMLInputElement
   if (!target) return
-  userInfo.value = props.type === 'price' ? Number(target.value) : target.value
-  emit('update:modelValue', userInfo.value)
+
+  if (props.type === 'price') {
+    const inputValue = target.value
+
+    let filteredValue = ''
+    let hasDecimalSeparator = false
+    let hasMinus = false
+
+    for (let i = 0; i < inputValue.length; i++) {
+      const char = inputValue[i]
+
+      if (char >= '0' && char <= '9') {
+        filteredValue += char
+      } else if ((char === '.' || char === ',') && !hasDecimalSeparator) {
+        filteredValue += char
+        hasDecimalSeparator = true
+      } else if (char === '-' && i === 0 && !hasMinus) {
+        filteredValue += char
+        hasMinus = true
+      }
+    }
+
+    userInfo.value = filteredValue
+
+    if (
+      filteredValue === '' ||
+      filteredValue === '.' ||
+      filteredValue === ',' ||
+      filteredValue === '-' ||
+      filteredValue === '-.' ||
+      filteredValue === '-,'
+    ) {
+      emit('update:modelValue', 0)
+      return
+    }
+
+    const normalizedValue = filteredValue.replace(',', '.')
+    const numValue = parseFloat(normalizedValue)
+
+    emit('update:modelValue', isNaN(numValue) ? 0 : numValue)
+  } else {
+    userInfo.value = target.value
+    emit('update:modelValue', target.value)
+  }
 }
 
 const { InvalidCredentials, EmailInUse, EmailIsNotValid } = ErrorMessageEnum
@@ -60,8 +104,19 @@ const isInfoInvalid = () => {
 
 watch(
   () => props.modelValue,
-  () => {
-    userInfo.value = props.modelValue
+  (newValue) => {
+    if (props.type === 'price') {
+      if (newValue === undefined || newValue === null || newValue === '') {
+        userInfo.value = ''
+      } else if (typeof newValue === 'number') {
+        userInfo.value = newValue.toString()
+      } else {
+        userInfo.value = String(newValue)
+      }
+    } else {
+      userInfo.value = newValue ?? ''
+    }
   },
+  { immediate: true },
 )
 </script>

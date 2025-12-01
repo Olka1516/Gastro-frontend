@@ -12,12 +12,35 @@ export const putUserFreePlan = async () => {
   return data.data
 }
 
+export const getUserDishes = async () => {
+  const data = await http.get(ENDPOINTS.GET_USER_DISHES)
+  return data.data
+}
+
+const generateFormDish = (dishData: IDish) => {
+  const formData = new FormData()
+  if (dishData.image) formData.append('image', dishData.image)
+  formData.append('name', dishData.name)
+  formData.append('description', dishData.description)
+  formData.append('price', dishData.price.toString())
+  formData.append('category', dishData.category)
+  formData.append('isAvailable', dishData.isAvailable)
+
+  return formData
+}
+
 export const addDishForUser = async (dishData: IDish) => {
-  const data = await http.post(ENDPOINTS.ADD_DISH, dishData)
+  const formData = generateFormDish(dishData)
+  const data = await http.post(ENDPOINTS.ADD_DISH, formData)
   return data.data
 }
 
 export const editDishForUser = async (dishData: IDish) => {
-  const data = await http.put(ENDPOINTS.EDIT_DISH(dishData.id), dishData)
+  const formData = generateFormDish(dishData)
+  const data = await http.put(ENDPOINTS.EDIT_DISH(dishData.id), formData)
   return data.data
+}
+
+export const deleteDishById = async (dishId: string) => {
+  await http.delete(ENDPOINTS.DELETE_DISH(dishId))
 }

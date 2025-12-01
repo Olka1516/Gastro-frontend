@@ -35,7 +35,7 @@
               </div>
               <div class="relative">
                 <BaseText
-                  v-model="data.name"
+                  v-model="formData.name"
                   :v="v$.name"
                   type="name"
                   :error="error"
@@ -45,7 +45,7 @@
               </div>
               <div class="relative">
                 <BaseText
-                  v-model="data.price"
+                  v-model="formData.price"
                   :v="v$.price"
                   type="price"
                   :error="error"
@@ -55,7 +55,7 @@
               </div>
               <div class="relative">
                 <BaseSelect
-                  v-model:category="data.category"
+                  v-model:category="formData.category"
                   :all-selections="category"
                   type="dashboard.tableHead.category"
                   :v="v$.category"
@@ -64,7 +64,7 @@
               </div>
               <div class="relative">
                 <BaseText
-                  v-model="data.description"
+                  v-model="formData.description"
                   :v="v$.description"
                   type="description"
                   :error="error"
@@ -75,7 +75,7 @@
 
               <div class="relative">
                 <BaseAvailabilitySelect
-                  v-model:availability="data.isAvailable"
+                  v-model:availability="formData.isAvailable"
                   :all-selections="availabilityOptions"
                   type="dashboard.availability"
                   :v="v$.isAvailable"
@@ -125,7 +125,7 @@ const data = reactive<IDish>({
   description: '',
   category: '',
   id: '',
-  isAvailable: 'available', // Зберігаємо як string для select
+  isAvailable: 'available',
   ownerId: '',
 })
 
@@ -141,9 +141,17 @@ const rules = {
   isAvailable: { required },
 }
 
-const v$ = useVuelidate(rules, data)
+const formData = reactive({
+  name: '',
+  image: '' as string | File,
+  price: undefined,
+  description: '',
+  category: '',
+  isAvailable: 'available' as 'available' | 'unavailable',
+})
 
-// Визначаємо чи це режим редагування (якщо є ID) чи додавання
+const v$ = useVuelidate(rules, formData)
+
 const isEditMode = computed(() => !!dish.value?.id)
 
 const closeModal = () => {
@@ -153,25 +161,63 @@ const closeModal = () => {
 
 const handleNextStep = async () => {
   const isFormCorrect = await v$.value.$validate()
-  console.log('isFormCorrect', isFormCorrect)
-  console.log('data', data)
   if (!isFormCorrect) return
+
+  // Копіюємо дані з formData в data перед відправкою
+  Object.assign(data, formData)
+
   closeModal()
   emit('handleProcess', data)
 }
 
 const handleImageUpdate = (image: File) => {
   data.image = image
+  formData.image = image
+}
+
+const syncDataFromDish = (dishValue: IDish) => {
+  data.name = ''
+  data.image = ''
+  data.price = undefined
+  data.description = ''
+  data.category = ''
+  data.id = ''
+  data.isAvailable = 'available'
+  data.ownerId = ''
+
+  Object.assign(data, dishValue)
+
+  // Синхронізуємо formData з data для валідації
+  formData.name = data.name
+  formData.image = data.image
+  formData.price = data.price
+  formData.description = data.description
+  formData.category = data.category
+  formData.isAvailable = data.isAvailable
 }
 
 watch(
   dish,
   (newDish) => {
     if (newDish) {
-      Object.assign(data, newDish)
+      syncDataFromDish(newDish)
     }
   },
-  { deep: true },
+  { deep: true, immediate: true },
+)
+watch(open, (isOpen) => {
+  if (isOpen && dish.value) {
+    syncDataFromDish(dish.value)
+    v$.value.$reset()
+  }
+})
+
+// Синхронізуємо formData.image з data.image для валідації
+watch(
+  () => data.image,
+  (newImage) => {
+    formData.image = newImage
+  },
 )
 watch(
   () => props.error,

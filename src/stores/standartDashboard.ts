@@ -1,4 +1,9 @@
-import { addDishForUser, editDishForUser } from '@/services/dashboard'
+import {
+  addDishForUser,
+  deleteDishById,
+  editDishForUser,
+  getUserDishes,
+} from '@/services/dashboard'
 import type { TRequestError } from '@/types'
 import type { IDish } from '@/types/menu'
 import { defineStore } from 'pinia'
@@ -35,21 +40,8 @@ export const useStandartDashboardStore = defineStore('standartDashboard', () => 
   // Видалення страви
   const deleteDish = async (dishId: string) => {
     try {
-      error.value = ''
-
-      // Тут буде API запит на бекенд
-      // const response = await api.delete(`/dishes/${dishId}`)
-
-      // Поки що симулюємо успішний запит
-      const index = dishes.value.findIndex((dish) => dish.id === dishId)
-      if (index !== -1) {
-        dishes.value.splice(index, 1)
-        console.log('Dish deleted successfully:', dishId)
-        return true
-      } else {
-        error.value = 'Страву не знайдено'
-        return false
-      }
+      await deleteDishById(dishId)
+      return { success: true }
     } catch (err) {
       const message = err as TRequestError
       return { success: false, error: message.response?.data.message }
@@ -59,11 +51,9 @@ export const useStandartDashboardStore = defineStore('standartDashboard', () => 
   // Отримання всіх страв
   const fetchDishes = async () => {
     try {
-      // Тут буде API запит на бекенд
-      // const response = await api.get('/dishes')
-      // dishes.value = response.data
+      const response = await getUserDishes()
+      dishes.value = response.dishes
       return { success: true }
-      console.log('Dishes fetched successfully')
     } catch (err) {
       const message = err as TRequestError
       return { success: false, error: message.response?.data.message }

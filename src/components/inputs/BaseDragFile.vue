@@ -22,7 +22,7 @@
         for="fileElem"
         class="border border-[#dc5b41] text-white py-2 px-4 cursor-pointer transition"
       >
-        Choose image
+        {{ t('inputs.chooseImage') }}
       </label>
     </form>
 
@@ -40,7 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   v?: {
@@ -50,9 +53,7 @@ const props = defineProps<{
   url: string | File | null
 }>()
 
-const text = ref(
-  'Upload images using the file selection dialog or by dragging the desired images into the highlighted area',
-)
+const text = ref(t('inputs.uploadText'))
 
 const isHighlighted = ref(false)
 const isImageChoosen = ref(false)
@@ -98,14 +99,17 @@ const preventDefaults = (e: DragEvent) => {
 const handleFiles = (files: FileList) => {
   if (10485760 < files[0].size) {
     isHeavy.value = true
-    text.value = 'The image size is too large, please choose an image less than 10 MB'
+    text.value = t('inputs.imageTooLarge')
     return
   }
   if (!files[0].type.includes('image')) {
     isHeavy.value = true
-    text.value = 'This is not a photo, please upload a picture'
+    text.value = t('inputs.notAnImage')
     return
   }
+  // Якщо файл валідний, скидаємо помилки
+  isHeavy.value = false
+  text.value = t('inputs.uploadText')
   uploadedFile.value = files[0]
   uploadFile(files[0])
   previewFile(files[0])
@@ -121,10 +125,18 @@ const previewFile = (file: File) => {
 }
 
 const setImage = () => {
-  if (!props.url) return
+  if (!props.url) {
+    isImageChoosen.value = false
+    previewUrl.value = ''
+    isHeavy.value = false
+    text.value = t('inputs.uploadText')
+    return
+  }
   if (typeof props.url === 'string') {
     isImageChoosen.value = true
     previewUrl.value = props.url
+    isHeavy.value = false
+    text.value = t('inputs.uploadText')
   }
 }
 

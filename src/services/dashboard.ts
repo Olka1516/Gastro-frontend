@@ -1,6 +1,6 @@
 import { ENDPOINTS } from '@/constants'
 import http from '@/http'
-import type { IDish } from '@/types/menu'
+import type { IDish, ICategory } from '@/types/menu'
 
 export const getUserDetailsByUserId = async () => {
   const data = await http.get(ENDPOINTS.GET_USER_DETAILS)
@@ -22,7 +22,7 @@ const generateFormDish = (dishData: IDish) => {
   if (dishData.image) formData.append('image', dishData.image)
   formData.append('name', dishData.name)
   formData.append('description', dishData.description)
-  formData.append('price', dishData.price.toString())
+  formData.append('price', dishData.price!.toString())
   formData.append('category', dishData.category)
   formData.append('isAvailable', dishData.isAvailable)
 
@@ -43,4 +43,24 @@ export const editDishForUser = async (dishData: IDish) => {
 
 export const deleteDishById = async (dishId: string) => {
   await http.delete(ENDPOINTS.DELETE_DISH(dishId))
+}
+
+// Categories CRUD methods
+export const getUserCategories = async () => {
+  const data = await http.get(ENDPOINTS.GET_USER_CATEGORIES)
+  return data.data
+}
+
+export const addCategoryForUser = async (categoryData: ICategory) => {
+  const data = await http.post(ENDPOINTS.ADD_CATEGORY, categoryData)
+  return data.data
+}
+
+export const editCategoryForUser = async (categoryData: ICategory) => {
+  const data = await http.put(ENDPOINTS.EDIT_CATEGORY(categoryData.id), categoryData)
+  return data.data
+}
+
+export const deleteCategoryById = async (categoryId: string) => {
+  await http.delete(ENDPOINTS.DELETE_CATEGORY(categoryId))
 }

@@ -23,12 +23,18 @@
           <template v-for="(value, key) in data" :key="key">
             <img
               v-if="key === 'image' && typeof value === 'string'"
-              class="w-30 px-4 py-2 block mx-auto"
+              class="w-35 h-30 object-cover object-center px-4 py-2 block mx-auto"
               :src="value"
               alt=""
             />
             <td v-else-if="tableHead.includes(key)" class="px-4 py-2 text-white text-sm">
-              {{ key === 'price' ? Number(value).toFixed(2) : value }}
+              {{
+                key === 'price'
+                  ? Number(value).toFixed(2)
+                  : key === 'category'
+                    ? getCategoryName(value as string)
+                    : value
+              }}
             </td>
           </template>
           <td class="px-4 py-2">
@@ -52,7 +58,6 @@
       text="dashboard.editText"
       v-model:dish="editDish"
       v-model:openManage="openManage"
-      :category="tempCategory"
       :error
       @handleProcess="(value) => editMeal(value)"
     />
@@ -60,7 +65,6 @@
       text="dashboard.addText"
       v-model:dish="newDish"
       v-model:openManage="openAdd"
-      :category="tempCategory"
       :error
       @handleProcess="(value) => addMeal(value)"
     />
@@ -70,12 +74,13 @@
 <script setup lang="ts">
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modal/BaseDelete.vue'
+import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { useStandartDashboardStore } from '@/stores/standartDashboard'
 import type { IDish } from '@/types/menu'
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import ManageDish from '../general/ManageDish.vue'
-import { defaultDish } from './utils/default'
+import ManageDish from '../../general/ManageDish.vue'
+import { defaultDish } from '../utils/default'
 
 const size = 5
 const openDelete = ref(false)
@@ -87,11 +92,25 @@ const editDish = ref<IDish>(defaultDish())
 const newDish = ref<IDish>(defaultDish())
 const paginationPage = ref(1)
 const tableHead = ['name', 'price', 'category', 'image', 'settings']
-const tempCategory = reactive(['meal', 'breakfast', 'diner'])
 const dishes = ref<IDish[]>([])
 
 const { t } = useI18n()
 const standartDashboardStore = useStandartDashboardStore()
+const categoriesDashboardStore = useCategoriesDashboardStore()
+
+// Маппінг ID -> назва категорії
+const categoryNameMap = computed(() => {
+  const map = new Map<string, string>()
+  categoriesDashboardStore.categories.forEach((cat) => {
+    map.set(cat.id, cat.name)
+  })
+  return map
+})
+
+// Функція для отримання назви категорії по ID
+const getCategoryName = (categoryId: string): string => {
+  return categoryNameMap.value.get(categoryId) || categoryId
+}
 
 const changeDeleteValue = (id: string) => {
   openDelete.value = true
@@ -148,7 +167,7 @@ const getDishes = async () => {
 }
 
 onMounted(async () => {
-  await getDishes()
+  await Promise.all([getDishes(), categoriesDashboardStore.fetchCategories()])
 })
 </script>
 

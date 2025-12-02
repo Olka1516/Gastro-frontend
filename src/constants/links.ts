@@ -9,6 +9,10 @@ export const ENDPOINTS = {
   ADD_DISH: `dashboard/dishes`,
   DELETE_DISH: (id: string) => `dashboard/dishes/${id}`,
   EDIT_DISH: (id: string) => `dashboard/dishes/${id}`,
+  GET_USER_CATEGORIES: `dashboard/categories`,
+  ADD_CATEGORY: `dashboard/categories`,
+  DELETE_CATEGORY: (id: string) => `dashboard/categories/${id}`,
+  EDIT_CATEGORY: (id: string) => `dashboard/categories/${id}`,
 }
 
 export const LINK_TEMPLATES = {

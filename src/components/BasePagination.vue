@@ -32,11 +32,10 @@
 </template>
 
 <script setup lang="ts">
-import type { IDish } from '@/types/menu'
 import { computed } from 'vue'
 
 const props = defineProps<{ size: number }>()
-const datas = defineModel<IDish[]>('datas', { default: [] })
+const datas = defineModel<any[]>('datas', { default: [] })
 const paginationPage = defineModel<number>('paginationPage', { default: 1 })
 
 const dots = '...'

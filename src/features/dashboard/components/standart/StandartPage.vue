@@ -1,22 +1,41 @@
 <template>
   <div :class="['grid transition-all duration-300', sidebarStyle]">
-    <BaseSidebar :navs @handleProcess="(value) => getSidebarStyle(value)" :userInfo />
-    <component :is="TableMenu" />
+    <BaseSidebar
+      :navs="navs"
+      :userInfo
+      @handleProcess="(value) => getSidebarStyle(value)"
+      @handleNav="handleNav"
+    />
+    <component :is="activeNav.component" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import BaseSidebar from '../general/BaseSidebar.vue'
 import type { IUserData } from '@/types'
-import TableMenu from './TableMenu.vue'
+import { computed, ref } from 'vue'
+import type { IBaseSidebarData } from '../../types'
+import BaseSidebar from '../general/BaseSidebar.vue'
+import Categories from './components/CategoriesBlock.vue'
+import TableMenu from './components/TableMenu.vue'
 
 defineProps<{ userInfo: IUserData }>()
-const navs = ['dashboard.standart.navs.home', 'dashboard.standart.navs.menu']
+
+const navs = [
+  { name: 'dashboard.standart.navs.home', component: Categories },
+  { name: 'dashboard.standart.navs.menu', component: TableMenu },
+  { name: 'dashboard.standart.navs.categories', component: Categories },
+]
+
+const activeNav = ref<IBaseSidebarData>(navs[0])
+
 const isSidebarClosed = ref(false)
 
 const getSidebarStyle = (value: boolean) => {
   isSidebarClosed.value = value
+}
+
+const handleNav = (data: IBaseSidebarData) => {
+  activeNav.value = data
 }
 
 const sidebarStyle = computed(() => {

@@ -55,8 +55,8 @@
               </div>
               <div class="relative">
                 <BaseSelect
-                  v-model:category="formData.category"
-                  :all-selections="category"
+                  v-model:category="selectedCategoryName"
+                  :all-selections="categoryNames"
                   type="dashboard.tableHead.category"
                   :v="v$.category"
                 />
@@ -103,13 +103,14 @@ import BaseDragFile from '@/components/inputs/BaseDragFile.vue'
 import BaseSelect from '@/components/inputs/BaseSelect.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
+import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import type { IDish } from '@/types/menu'
 import useVuelidate from '@vuelidate/core'
 import { numeric, required } from '@vuelidate/validators'
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const props = defineProps<{ text: string; error: string; category: string[] }>()
+const props = defineProps<{ text: string; error: string }>()
 
 const { t } = useI18n()
 const open = defineModel('openManage')
@@ -130,6 +131,40 @@ const data = reactive<IDish>({
 })
 
 const availabilityOptions = ['available', 'unavailable']
+const categoriesDashboardStore = useCategoriesDashboardStore()
+
+// Отримуємо категорії з store
+const categoryNames = computed(() => categoriesDashboardStore.categories.map((cat) => cat.name))
+
+// Маппінг назва -> ID
+const categoryIdMap = computed(() => {
+  const map = new Map<string, string>()
+  categoriesDashboardStore.categories.forEach((cat) => {
+    map.set(cat.name, cat.id)
+  })
+  return map
+})
+
+// Маппінг ID -> назва
+const categoryNameMap = computed(() => {
+  const map = new Map<string, string>()
+  categoriesDashboardStore.categories.forEach((cat) => {
+    map.set(cat.id, cat.name)
+  })
+  return map
+})
+
+// Вибрана назва категорії для відображення
+const selectedCategoryName = computed({
+  get: () => {
+    if (!formData.category) return ''
+    return categoryNameMap.value.get(formData.category) || formData.category
+  },
+  set: (name: string) => {
+    const categoryId = categoryIdMap.value.get(name) || name
+    formData.category = categoryId
+  },
+})
 
 const issue = ref('')
 const rules = {
@@ -192,7 +227,16 @@ const syncDataFromDish = (dishValue: IDish) => {
   formData.image = data.image
   formData.price = data.price
   formData.description = data.description
-  formData.category = data.category
+  // data.category може бути ID або назвою - перевіряємо та зберігаємо ID
+  if (data.category) {
+    // Якщо це ID (є в мапі), залишаємо як є, інакше шукаємо ID за назвою
+    const categoryId = categoryNameMap.value.has(data.category)
+      ? data.category
+      : categoryIdMap.value.get(data.category) || data.category
+    formData.category = categoryId
+  } else {
+    formData.category = ''
+  }
   formData.isAvailable = data.isAvailable
 }
 
@@ -205,11 +249,20 @@ watch(
   },
   { deep: true, immediate: true },
 )
-watch(open, (isOpen) => {
-  if (isOpen && dish.value) {
-    syncDataFromDish(dish.value)
-    v$.value.$reset()
+watch(open, async (isOpen) => {
+  if (isOpen) {
+    // Завантажуємо категорії при відкритті модального вікна
+    await categoriesDashboardStore.fetchCategories()
+    if (dish.value) {
+      syncDataFromDish(dish.value)
+      v$.value.$reset()
+    }
   }
+})
+
+onMounted(async () => {
+  // Завантажуємо категорії при монтуванні компонента
+  await categoriesDashboardStore.fetchCategories()
 })
 
 // Синхронізуємо formData.image з data.image для валідації

@@ -8,3 +8,10 @@ export interface IDish {
   image: string | File
   ownerId?: string
 }
+
+export interface ICategory {
+  id: string
+  name: string
+  description?: string
+  ownerId?: string
+}

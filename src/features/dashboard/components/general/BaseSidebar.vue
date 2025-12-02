@@ -12,8 +12,10 @@
     <nav>
       <h2 :class="[animateElement, 'text-white text-xl font-bold']">{{ userInfo.placeName }}</h2>
       <ul>
-        <li v-for="value in navs" :key="value">
-          <a :class="animateElement" href="/dashboard">{{ t(value) }}</a>
+        <li v-for="data in navs" :key="data.name">
+          <button :class="animateElement" @click="$emit('handleNav', data)">
+            {{ t(data.name) }}
+          </button>
         </li>
       </ul>
     </nav>
@@ -24,11 +26,13 @@
 import type { IUserData } from '@/types'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import type { IBaseSidebarData } from '../../types'
 
 const { t } = useI18n()
-defineProps<{ navs: string[]; userInfo: IUserData }>()
+defineProps<{ navs: IBaseSidebarData[]; userInfo: IUserData }>()
 const emit = defineEmits<{
   (e: 'handleProcess', value: boolean): void
+  (e: 'handleNav', data: IBaseSidebarData): void
 }>()
 
 const isClose = ref(false)

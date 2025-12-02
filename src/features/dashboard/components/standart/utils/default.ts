@@ -1,4 +1,4 @@
-import type { IDish } from '@/types/menu'
+import type { IDish, ICategory } from '@/types/menu'
 
 export const defaultDish = (): IDish => ({
   name: '',
@@ -8,5 +8,12 @@ export const defaultDish = (): IDish => ({
   category: '',
   id: '',
   isAvailable: 'available',
+  ownerId: '',
+})
+
+export const defaultCategory = (): ICategory => ({
+  name: '',
+  description: '',
+  id: '',
   ownerId: '',
 })

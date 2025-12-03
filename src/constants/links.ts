@@ -4,6 +4,7 @@ export const ENDPOINTS = {
   REGISTRATION: '/users/register',
   CHECK_AUTH: '/users/check',
   PUT_FREE_PLAN: `users/put-free-plan`,
+  UPDATE_USER: `users/update`,
   GET_USER_DETAILS: `dashboard/get-details`,
   GET_USER_DISHES: `dashboard/dishes`,
   ADD_DISH: `dashboard/dishes`,

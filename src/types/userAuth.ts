@@ -17,3 +17,8 @@ export interface IUserData {
   planDate: Date | null
   status: EStatus | null
 }
+
+export interface IUpdateUserData {
+  placeName: string
+  email: string
+}

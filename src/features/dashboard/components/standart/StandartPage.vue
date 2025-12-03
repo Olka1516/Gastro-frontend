@@ -3,27 +3,35 @@
     <BaseSidebar
       :navs="navs"
       :userInfo
+      :activeNav="activeNav"
       @handleProcess="(value) => getSidebarStyle(value)"
       @handleNav="handleNav"
     />
-    <component :is="activeNav.component" />
+    <component :is="activeNav.component" @navigateTo="navigateTo" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { IUserData } from '@/types'
-import { computed, ref } from 'vue'
+import { computed, markRaw, ref } from 'vue'
 import type { IBaseSidebarData } from '../../types'
 import BaseSidebar from '../general/BaseSidebar.vue'
 import Categories from './components/CategoriesBlock.vue'
+import HomeBlock from './components/HomeBlock.vue'
+import SettingsBlock from './components/SettingsBlock.vue'
 import TableMenu from './components/TableMenu.vue'
 
 defineProps<{ userInfo: IUserData }>()
 
 const navs = [
-  { name: 'dashboard.standart.navs.home', component: Categories },
-  { name: 'dashboard.standart.navs.menu', component: TableMenu },
-  { name: 'dashboard.standart.navs.categories', component: Categories },
+  { name: 'dashboard.standart.navs.home', component: markRaw(HomeBlock), image: 'home' },
+  { name: 'dashboard.standart.navs.menu', component: markRaw(TableMenu), image: 'table' },
+  { name: 'dashboard.standart.navs.categories', component: markRaw(Categories), image: 'category' },
+  {
+    name: 'dashboard.standart.navs.settings',
+    component: markRaw(SettingsBlock),
+    image: 'settings',
+  },
 ]
 
 const activeNav = ref<IBaseSidebarData>(navs[0])
@@ -36,6 +44,13 @@ const getSidebarStyle = (value: boolean) => {
 
 const handleNav = (data: IBaseSidebarData) => {
   activeNav.value = data
+}
+
+const navigateTo = (key: string) => {
+  const nav = navs.find((n) => n.name.includes(key))
+  if (nav) {
+    activeNav.value = nav
+  }
 }
 
 const sidebarStyle = computed(() => {

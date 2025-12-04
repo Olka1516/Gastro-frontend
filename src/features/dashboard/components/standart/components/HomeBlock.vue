@@ -1,5 +1,12 @@
 <template>
   <div class="p-12 flex flex-col gap-8 min-h-screen bg-[#0f0f11]">
+    <!-- Loading State -->
+    <div
+      v-if="loading"
+      class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50"
+    >
+      <BaseLoader />
+    </div>
     <!-- Welcome Header -->
     <div class="flex flex-col gap-4">
       <h1 class="text-white text-4xl font-bold">
@@ -135,10 +142,11 @@
 
 <script setup lang="ts">
 import { getImage } from '@/common/functions'
+import BaseLoader from '@/components/BaseLoader.vue'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { useStandartDashboardStore } from '@/stores/standartDashboard'
 import { useUserStore } from '@/stores/user'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -150,6 +158,7 @@ defineEmits<{
   (e: 'navigateTo', key: string): void
 }>()
 
+const loading = ref(true)
 const userInfo = computed(() => userStore.$state)
 
 const totalDishes = computed(() => standartDashboardStore.dishes.length)
@@ -193,10 +202,15 @@ const getIconPath = (imageName: string) => {
 }
 
 onMounted(async () => {
-  await Promise.all([
-    standartDashboardStore.fetchDishes(),
-    categoriesDashboardStore.fetchCategories(),
-  ])
+  loading.value = true
+  try {
+    await Promise.all([
+      standartDashboardStore.fetchDishes(),
+      categoriesDashboardStore.fetchCategories(),
+    ])
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 

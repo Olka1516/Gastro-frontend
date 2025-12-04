@@ -6,6 +6,7 @@ const router = createRouter({
   routes: [
     { path: '/', component: () => import('../features/landing/LandingPage.vue') },
     { path: '/dashboard', component: () => import('../features/dashboard/DashboardPage.vue') },
+    { path: '/menu/:id', component: () => import('../features/showcase/AppBlock.vue') },
   ],
 })
 

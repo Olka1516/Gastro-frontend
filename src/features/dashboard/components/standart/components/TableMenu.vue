@@ -1,5 +1,13 @@
 <template>
   <div class="p-12 flex flex-col gap-8 min-h-screen bg-[#0f0f11]">
+    <!-- Loading State -->
+    <div
+      v-if="loading"
+      class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50"
+    >
+      <BaseLoader />
+    </div>
+
     <!-- Header -->
     <div class="flex items-center justify-between w-full">
       <div class="flex flex-col gap-2">
@@ -193,6 +201,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modal/BaseDelete.vue'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
@@ -204,6 +213,7 @@ import ManageDish from '../../general/ManageDish.vue'
 import { defaultDish } from '../utils/default'
 
 const size = 6
+const loading = ref(true)
 const openDelete = ref(false)
 const openManage = ref(false)
 const openAdd = ref(false)
@@ -296,7 +306,12 @@ const getDishes = async () => {
 }
 
 onMounted(async () => {
-  await Promise.all([getDishes(), categoriesDashboardStore.fetchCategories()])
+  loading.value = true
+  try {
+    await Promise.all([getDishes(), categoriesDashboardStore.fetchCategories()])
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 

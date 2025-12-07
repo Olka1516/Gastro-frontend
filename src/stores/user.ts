@@ -1,6 +1,7 @@
 import {
   getUserAuthorized,
   getUserDetailsByUserId,
+  getUserStatus,
   logOutUser,
   putUserFreePlan,
   signInByUserData,
@@ -58,6 +59,10 @@ export const useUserStore = defineStore('counter', () => {
     resetState()
   }
 
+  const getStatus = async (placeName: string) => {
+    return await getUserStatus(placeName)
+  }
+
   const getUserDetails = async () => {
     const data = await getUserDetailsByUserId()
     updateState(data.user)
@@ -80,6 +85,7 @@ export const useUserStore = defineStore('counter', () => {
     signIn,
     signUp,
     getUserDetails,
+    getStatus,
     putFreePlan,
     updateUser,
     logOut,

@@ -22,7 +22,7 @@
 
       <div
         v-if="selectStatus"
-        class="absolute left-0 top-full mt-2 w-full max-h-60 overflow-y-auto border border-gray-200 bg-[#1a191f] rounded-lg shadow-md z-10"
+        class="absolute left-0 top-full mt-2 w-full max-h-38 overflow-y-auto border border-gray-200 bg-[#1a191f] rounded-lg shadow-md z-10"
       >
         <h5
           v-for="key in allSelections"

@@ -49,18 +49,18 @@
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
-import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
-import { useStandartDashboardStore } from '@/stores/standartDashboard'
 import { useUserStore } from '@/stores/user'
 import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import CategorySection from './components/CategorySection.vue'
+import { useShowcaseStore } from '@/stores/showcaseStore'
+import { useRoute } from 'vue-router'
 
 const { t } = useI18n()
+const route = useRoute()
 const userStore = useUserStore()
-const standartDashboardStore = useStandartDashboardStore()
-const categoriesDashboardStore = useCategoriesDashboardStore()
+const showcaseStore = useShowcaseStore()
 
 const loading = ref(true)
 const dishes = ref<IDish[]>([])
@@ -70,7 +70,7 @@ const userInfo = computed(() => userStore.$state)
 const categoriesWithDishes = computed(() => {
   const availableDishes = dishes.value.filter((d) => d.isAvailable === 'available')
 
-  return categoriesDashboardStore.categories
+  return showcaseStore.categories
     .map((category) => ({
       ...category,
       dishCount: availableDishes.filter((d) => d.category === category.id).length,
@@ -80,18 +80,18 @@ const categoriesWithDishes = computed(() => {
 })
 
 const handleDishClick = (dish: IDish) => {
-  // Here you can add modal or navigation logic for dish details
   console.log('Dish clicked:', dish)
 }
 
 const fetchData = async () => {
   loading.value = true
+  const placeName = route.params.id as string
   try {
     await Promise.all([
-      standartDashboardStore.fetchDishes(),
-      categoriesDashboardStore.fetchCategories(),
+      showcaseStore.fetchDishes(placeName),
+      showcaseStore.fetchCategories(placeName),
     ])
-    dishes.value = standartDashboardStore.dishes
+    dishes.value = showcaseStore.dishes
   } finally {
     loading.value = false
   }

@@ -3,7 +3,7 @@
     :class="getHeaderBG().value"
     class="w-full fixed z-1000 h-20 grid grid-cols-[200px_minmax(0,1fr)_200px] justify-items-center justify-center px-46 items-center transition-colors duration-500"
   >
-    <div>
+    <div v-if="!props.isMenuPage">
       <a href="/" class="logo" aria-label="На головну">
         <span class="text-white"> Gastro </span>
       </a>
@@ -13,16 +13,24 @@
       <ul class="flex gap-18">
         <li v-for="nav in navigations" :key="nav">
           <a
+            v-if="!props.isMenuPage"
             :class="[linkColor(nav).value, 'transition-colors duration-300']"
             class="transition-colors duration-500"
             @click="setActiveNav(nav)"
             :href="`#${nav.toLowerCase()}`"
             >{{ t(`navs.${nav.toLowerCase()}`) }}</a
           >
+          <a
+            v-else
+            :class="[linkColor(nav).value, 'transition-colors duration-300']"
+            class="transition-colors duration-500"
+            :href="`#${nav.toLowerCase()}`"
+            >{{ t(`navs.${nav.toLowerCase()}`) }}</a
+          >
         </li>
       </ul>
     </nav>
-    <nav aria-label="Головна навігація">
+    <nav v-if="!props.isMenuPage" aria-label="Головна навігація">
       <ul class="flex gap-8" v-if="!store.isUserAuthorized">
         <li>
           <button
@@ -81,7 +89,12 @@ import { useRouter } from 'vue-router'
 
 const store = useUserStore()
 const router = useRouter()
-const props = defineProps<{ limit: number; navigations: string[]; activeSection: string }>()
+const props = defineProps<{
+  limit: number
+  navigations: string[]
+  activeSection: string
+  isMenuPage?: boolean
+}>()
 const { t } = useI18n()
 const active = ref(props.activeSection)
 const isLimit = ref(true)

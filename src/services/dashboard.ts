@@ -17,6 +17,11 @@ export const getUserDishes = async () => {
   return data.data
 }
 
+export const getUserStatus = async (placeName: string) => {
+  const data = await http.get(ENDPOINTS.GET_USER_STATUS(placeName))
+  return data.data
+}
+
 const generateFormDish = (dishData: IDish) => {
   const formData = new FormData()
   if (dishData.image) formData.append('image', dishData.image)

@@ -14,6 +14,9 @@ export const ENDPOINTS = {
   ADD_CATEGORY: `dashboard/categories`,
   DELETE_CATEGORY: (id: string) => `dashboard/categories/${id}`,
   EDIT_CATEGORY: (id: string) => `dashboard/categories/${id}`,
+  GET_USER_STATUS: (placeName: string) => `showcase/get-plan-status/${placeName}`,
+  GET_MENU_DISHES: (placeName: string) => `showcase/get-dishes/${placeName}`,
+  GET_MENU_CATEGORIES: (placeName: string) => `showcase/get-categories/${placeName}`,
 }
 
 export const LINK_TEMPLATES = {

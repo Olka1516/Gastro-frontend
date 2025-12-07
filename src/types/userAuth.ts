@@ -22,3 +22,9 @@ export interface IUpdateUserData {
   placeName: string
   email: string
 }
+
+export interface IUserStatus {
+  placeName: string
+  status: EStatus
+  planName: EPlan
+}

@@ -22,4 +22,5 @@ export const ENDPOINTS = {
 export const LINK_TEMPLATES = {
   DASHBOARD: '/dashboard',
   MENU: (placeName: string) => `/menu/${placeName}`,
+  GET_USER_DETAILS: `dashboard/get-details`,
 }

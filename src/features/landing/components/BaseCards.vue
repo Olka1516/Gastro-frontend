@@ -59,6 +59,8 @@
 import { ref, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Plan } from '../types'
+import SignUpModal from './modals/SignUpModal.vue'
+import type { ModalKey, Plan } from '../types'
 import { loadStripe } from '@stripe/stripe-js'
 import { getCheckoutId } from '@/services'
 import { plans } from '../constants'
@@ -117,6 +119,20 @@ const nextStep = async (value: Plan) => {
   } else {
     await loadCheckout(value)
   }
+}
+
+const activeStyle = (name: ModalKey) => {
+  return [
+    'px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer',
+    activeModal.value === name
+      ? 'bg-blue-600 text-white shadow-md'
+      : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+  ]
+}
+
+const closeModal = () => {
+  open.value = false
+  document.body.style.overflow = ''
 }
 </script>
 

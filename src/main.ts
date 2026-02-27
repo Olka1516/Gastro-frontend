@@ -9,6 +9,8 @@ import Toast, { POSITION, type PluginOptions } from 'vue-toastification'
 import 'leaflet/dist/leaflet.css'
 import 'vue-toastification/dist/index.css'
 
+import 'leaflet/dist/leaflet.css'
+
 const app = createApp(App)
 const options: PluginOptions = {
   position: POSITION.TOP_RIGHT,

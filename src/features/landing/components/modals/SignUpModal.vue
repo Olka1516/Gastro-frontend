@@ -1,8 +1,8 @@
 <template>
-  <h2 class="text-2xl font-semibold text-gray-800 text-center mb-6">{{ t('landing.signUp') }}</h2>
+  <h2 class="text-2xl font-semibold text-white text-center mb-6">{{ t('landing.signUp') }}</h2>
 
-  <form class="space-y-4" @submit.prevent="submit" autocomplete="on">
-    <div>
+  <form class="space-y-6" @submit.prevent="submit" autocomplete="on">
+    <div class="relative">
       <BaseText
         v-model="userData.email"
         :v="v$.email"
@@ -13,7 +13,7 @@
       <ErrorMessage :v="v$.email" :error="error" />
     </div>
 
-    <div>
+    <div class="relative">
       <BaseText
         v-model="userData.placeName"
         :v="v$.placeName"
@@ -24,7 +24,7 @@
       <ErrorMessage :v="v$.placeName" :error="error" />
     </div>
 
-    <div>
+    <div class="relative">
       <BasePassword
         v-model="userData.password"
         :v="v$.password"
@@ -34,7 +34,7 @@
       <ErrorMessage :v="v$.password" />
     </div>
 
-    <div>
+    <div class="relative">
       <BasePassword
         v-model="userData.confirmPassword"
         :v="v$.confirmPassword"
@@ -46,7 +46,7 @@
 
     <button
       type="submit"
-      class="cursor-pointer w-full py-2 mt-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
+      class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold rounded-lg shadow-md hover:bg-[#dc5b34] transition"
     >
       {{ t('button.signUp') }}
     </button>
@@ -72,6 +72,9 @@ const userData = reactive({
   password: '',
   confirmPassword: '',
 })
+const emit = defineEmits<{
+  (e: 'closeModal'): void
+}>()
 
 const error = ref('')
 
@@ -97,7 +100,7 @@ const submit = async () => {
       password,
       placeName,
     })
-    // TODO: to pay
+    emit('closeModal')
   } catch (err) {
     const message = err as TRequestError
     error.value = message.response?.data.message || ''

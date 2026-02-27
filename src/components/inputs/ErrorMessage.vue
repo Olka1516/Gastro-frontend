@@ -1,6 +1,6 @@
 <template>
-  <div v-if="isError" class="mt-1">
-    <small class="text-sm text-red-500 font-medium">
+  <div v-if="isError" class="mt-1 absolute top-8">
+    <small class="text-[10px] text-red-500 font-medium">
       {{ getError() }}
     </small>
   </div>

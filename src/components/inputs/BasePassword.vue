@@ -10,7 +10,7 @@
       @input="handleInput($event)"
       :placeholder="t(`inputs.${props.type}`)"
       :class="[
-        'w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition',
+        'w-full text-white px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition',
         isPasswordInvalid()
           ? 'border-red-500 focus:ring-red-400'
           : 'border-gray-300 focus:ring-blue-500',

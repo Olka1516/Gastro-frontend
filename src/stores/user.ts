@@ -1,23 +1,26 @@
 import {
   getUserAuthorized,
   getUserDetailsByUserId,
+  getUserStatus,
+  logOutUser,
   putUserFreePlan,
   signInByUserData,
   signUpByUserData,
+  updateUserData,
 } from '@/services'
-import type { UserSignIn, UserSignUp } from '@/types'
+import type { IUpdateUserData, IUserData, UserSignIn, UserSignUp } from '@/types'
 import { defineStore } from 'pinia'
 import { reactive, ref, toRefs } from 'vue'
 
 export const useUserStore = defineStore('counter', () => {
   const isUserAuthorized = ref(false)
-  const defaultState = () => ({
+  const defaultState = (): IUserData => ({
     email: '',
     placeName: '',
     id: '',
-    planName: '',
-    planDate: '',
-    status: '',
+    planName: null,
+    planDate: null,
+    status: null,
   })
 
   const state = reactive(defaultState())
@@ -27,7 +30,7 @@ export const useUserStore = defineStore('counter', () => {
     isUserAuthorized.value = false
   }
 
-  const updateState = (user: UserSignIn) => {
+  const updateState = (user: IUserData | UserSignIn) => {
     Object.assign(state, user)
     isUserAuthorized.value = true
   }
@@ -51,6 +54,15 @@ export const useUserStore = defineStore('counter', () => {
     updateState(data.user)
   }
 
+  const logOut = () => {
+    logOutUser()
+    resetState()
+  }
+
+  const getStatus = async (placeName: string) => {
+    return await getUserStatus(placeName)
+  }
+
   const getUserDetails = async () => {
     const data = await getUserDetailsByUserId()
     updateState(data.user)
@@ -61,6 +73,11 @@ export const useUserStore = defineStore('counter', () => {
     updateState(data.user)
   }
 
+  const updateUser = async (userData: IUpdateUserData) => {
+    const data = await updateUserData(userData)
+    updateState(data.user)
+  }
+
   return {
     ...toRefs(state),
     isUserAuthorized,
@@ -68,6 +85,9 @@ export const useUserStore = defineStore('counter', () => {
     signIn,
     signUp,
     getUserDetails,
+    getStatus,
     putFreePlan,
+    updateUser,
+    logOut,
   }
 })

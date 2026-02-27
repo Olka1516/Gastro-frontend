@@ -18,12 +18,13 @@
         {{ t('landing.readyTemplatesDescription') }}
       </p>
 
-      <button
+      <a
+        href="#plans"
         class="cursor-pointer text-[#fff] bg-[#dc5b41] px-8 py-2 opacity-0 animate-fade-in"
         style="animation-delay: 1.9s"
       >
         {{ t('button.buyNow') }}
-      </button>
+      </a>
     </div>
   </main>
 </template>

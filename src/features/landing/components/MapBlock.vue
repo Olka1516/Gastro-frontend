@@ -17,9 +17,9 @@
         </div>
         <hr class="fade-item w-full border-[#403f43]" />
         <p class="fade-item text-white text-xl">{{ t('landing.bookTable') }}</p>
-        <button class="cursor-pointer fade-item text-[#fff] bg-[#dc5b41] px-8 py-2">
+        <a href="#plans" class="cursor-pointer fade-item text-[#fff] bg-[#dc5b41] px-8 py-2">
           {{ t('button.reserveNow') }}
-        </button>
+        </a>
       </div>
 
       <div class="flex flex-col gap-2 p-12 items-start w-140">

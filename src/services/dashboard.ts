@@ -1,5 +1,6 @@
 import { ENDPOINTS } from '@/constants'
 import http from '@/http'
+import type { IDish, ICategory } from '@/types/menu'
 
 export const getUserDetailsByUserId = async () => {
   const data = await http.get(ENDPOINTS.GET_USER_DETAILS)
@@ -9,4 +10,62 @@ export const getUserDetailsByUserId = async () => {
 export const putUserFreePlan = async () => {
   const data = await http.put(ENDPOINTS.PUT_FREE_PLAN)
   return data.data
+}
+
+export const getUserDishes = async () => {
+  const data = await http.get(ENDPOINTS.GET_USER_DISHES)
+  return data.data
+}
+
+export const getUserStatus = async (placeName: string) => {
+  const data = await http.get(ENDPOINTS.GET_USER_STATUS(placeName))
+  return data.data
+}
+
+const generateFormDish = (dishData: IDish) => {
+  const formData = new FormData()
+  if (dishData.image) formData.append('image', dishData.image)
+  formData.append('name', dishData.name)
+  formData.append('description', dishData.description)
+  formData.append('price', dishData.price!.toString())
+  formData.append('category', dishData.category)
+  formData.append('isAvailable', dishData.isAvailable)
+
+  return formData
+}
+
+export const addDishForUser = async (dishData: IDish) => {
+  const formData = generateFormDish(dishData)
+  const data = await http.post(ENDPOINTS.ADD_DISH, formData)
+  return data.data
+}
+
+export const editDishForUser = async (dishData: IDish) => {
+  const formData = generateFormDish(dishData)
+  const data = await http.put(ENDPOINTS.EDIT_DISH(dishData.id), formData)
+  return data.data
+}
+
+export const deleteDishById = async (dishId: string) => {
+  await http.delete(ENDPOINTS.DELETE_DISH(dishId))
+}
+
+// Categories CRUD methods
+export const getUserCategories = async () => {
+  const data = await http.get(ENDPOINTS.GET_USER_CATEGORIES)
+  return data.data
+}
+
+export const addCategoryForUser = async (categoryData: ICategory) => {
+  const data = await http.post(ENDPOINTS.ADD_CATEGORY, categoryData)
+  return data.data
+}
+
+export const editCategoryForUser = async (categoryData: ICategory) => {
+  const data = await http.put(ENDPOINTS.EDIT_CATEGORY(categoryData.id), categoryData)
+  return data.data
+}
+
+export const deleteCategoryById = async (categoryId: string) => {
+  await http.delete(ENDPOINTS.DELETE_CATEGORY(categoryId))
 }

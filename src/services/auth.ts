@@ -1,6 +1,6 @@
-import { type UserSignIn, type UserSignUp } from '@/types'
-import http from '../http'
 import { ENDPOINTS, STORAGE_KEYS } from '@/constants'
+import { type IUpdateUserData, type UserSignIn, type UserSignUp } from '@/types'
+import http from '../http'
 
 const setTokens = (refreshToken: string, accessToken: string) => {
   localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken)
@@ -21,6 +21,11 @@ export const signInByUserData = async (user: UserSignIn) => {
 
 export const getUserAuthorized = async () => {
   const data = await http.post(ENDPOINTS.CHECK_AUTH)
+  return data.data
+}
+
+export const updateUserData = async (userData: IUpdateUserData) => {
+  const data = await http.put(ENDPOINTS.UPDATE_USER, userData)
   return data.data
 }
 

@@ -12,7 +12,7 @@ export const plans = [
     currency: '$',
   },
   {
-    name: 'pro',
+    name: 'premium',
     price: 30.0,
     subscribe: 'month',
     currency: '$',

@@ -5,3 +5,8 @@ export type Product = {
 }
 
 export type ModalKey = 'signUp' | 'signIn'
+
+export type Plan = {
+  name: string
+  price: number
+}

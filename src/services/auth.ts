@@ -10,10 +10,18 @@ const setTokens = (refreshToken: string, accessToken: string) => {
 export const signUpByUserData = async (user: UserSignUp) => {
   const data = await http.post(ENDPOINTS.REGISTRATION, user)
   setTokens(data.data.tokens.refreshToken, data.data.tokens.accessToken)
+  return data.data
 }
+
 export const signInByUserData = async (user: UserSignIn) => {
   const data = await http.post(ENDPOINTS.LOGIN, user)
   setTokens(data.data.tokens.refreshToken, data.data.tokens.accessToken)
+  return data.data
+}
+
+export const getUserAuthorized = async () => {
+  const data = await http.post(ENDPOINTS.CHECK_AUTH)
+  return data.data
 }
 
 export const logOutUser = () => {

@@ -37,7 +37,6 @@ API.interceptors.response.use(
         localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken)
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`
-
         return API(originalRequest)
       } catch (error) {
         if (error instanceof AxiosError && error.response?.status === 403) {

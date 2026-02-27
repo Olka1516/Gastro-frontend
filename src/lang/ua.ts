@@ -105,11 +105,27 @@ export default {
       navs: {},
     },
     standart: {
+      qrCode: {
+        description: 'QR код для вашого закладу',
+        instruction:
+          'Роздрукуйте або покажіть QR код клієнтам, щоб вони могли швидко переглянути ваше меню',
+        menuLink: 'Посилання на меню',
+        howToUse: 'Як використовувати',
+        step1: 'Роздрукуйте QR код або покажіть його на екрані',
+        step2: 'Клієнти відсканують QR код своїм телефоном',
+        step3: 'Вони автоматично перейдуть на сторінку вашого меню',
+        openMenu: 'Відкрити меню',
+        copyError: 'Не вдалося скопіювати посилання',
+        downloadError: 'Не вдалося завантажити QR код',
+        generationError: 'Не вдалося згенерувати QR код',
+        noPlaceName: 'Назва закладу не вказана',
+      },
       navs: {
         home: 'Головна',
         menu: 'Меню',
         categories: 'Категорії',
         settings: 'Налаштування',
+        qrCode: 'QR код',
       },
     },
     home: {
@@ -123,6 +139,7 @@ export default {
       quickAction: 'Швидка дія',
       manageMenu: 'Керувати меню',
       addEditDishes: 'Додавайте та редагуйте страви',
+      link: 'Посилання',
       quickLinks: 'Швидкі посилання',
       links: {
         menu: {
@@ -223,6 +240,8 @@ export default {
     logOut: 'Вийти',
     yes: 'Так',
     no: 'Ні',
+    download: 'Скачати',
+    copy: 'Скопіювати',
   },
   errors: {
     email: {

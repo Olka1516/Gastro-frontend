@@ -11,4 +11,3 @@ export const plans: Record<EPlan, Component> = {
   [EPlan.premium]: markRaw(StandartShowcasePage), // For now, same as standart
   [EPlan.free]: markRaw(StandartShowcasePage), // For now, same as standart
 }
-

@@ -1,8 +1,8 @@
 import { EPlan } from '@/types'
-import { markRaw } from 'vue'
 import type { Component } from 'vue'
-import StandartShowcasePage from '../standart/StandartShowcasePage.vue'
+import { markRaw } from 'vue'
 import FreeShowcasePage from '../free/FreeShowcasePage.vue'
+import StandartShowcasePage from '../standart/StandartShowcasePage.vue'
 // TODO: Add other plan components when created
 // import ProPage from '../pro/ProPage.vue'
 

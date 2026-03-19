@@ -9,6 +9,7 @@ export enum ErrorMessageEnum {
   PlaceInUse = 'placeTaken',
   PassMissMach = 'passMissMatch',
   InvalidCredentials = 'invalidCredentials',
+  FreePlanItemsLimit = 'freePlanItemsLimit',
 }
 
 export enum EStatus {

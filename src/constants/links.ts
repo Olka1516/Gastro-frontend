@@ -1,3 +1,8 @@
+import { spaceToUnderscore, underscoreToSpace } from '@/utils/textHelpers'
+
+const encodePlaceNameForApi = (placeName: string) =>
+  encodeURIComponent(underscoreToSpace(placeName).trim())
+
 export const ENDPOINTS = {
   STRIPE_CHECKOUT: '/stripe/getCheckoutId',
   LOGIN: '/users/login',
@@ -14,12 +19,12 @@ export const ENDPOINTS = {
   ADD_CATEGORY: `dashboard/categories`,
   DELETE_CATEGORY: (id: string) => `dashboard/categories/${id}`,
   EDIT_CATEGORY: (id: string) => `dashboard/categories/${id}`,
-  GET_USER_STATUS: (placeName: string) => `showcase/get-plan-status/${placeName}`,
-  GET_MENU_DISHES: (placeName: string) => `showcase/get-dishes/${placeName}`,
-  GET_MENU_CATEGORIES: (placeName: string) => `showcase/get-categories/${placeName}`,
+  GET_USER_STATUS: (placeName: string) => `showcase/get-plan-status/${encodePlaceNameForApi(placeName)}`,
+  GET_MENU_DISHES: (placeName: string) => `showcase/get-dishes/${encodePlaceNameForApi(placeName)}`,
+  GET_MENU_CATEGORIES: (placeName: string) => `showcase/get-categories/${encodePlaceNameForApi(placeName)}`,
 }
 
 export const LINK_TEMPLATES = {
   DASHBOARD: '/dashboard',
-  MENU: (placeName: string) => `/menu/${placeName}`,
+  MENU: (placeName: string) => `/menu/${spaceToUnderscore(placeName)}`,
 }

@@ -98,6 +98,8 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ManageCategory from '../../general/ManageCategory.vue'
 import { defaultCategory } from '@/features/dashboard/utils/default'
+import { ErrorMessageEnum } from '@/types'
+import { notificationStore } from '@/stores/notificationStore'
 
 const size = 6
 const loading = ref(true)
@@ -113,6 +115,7 @@ const categoriesList = ref<ICategory[]>([])
 
 const { t } = useI18n()
 const categoriesDashboardStore = useCategoriesDashboardStore()
+const toastStore = notificationStore()
 
 const changeDeleteValue = (id: string) => {
   openDelete.value = true
@@ -152,19 +155,22 @@ const openAddCategory = () => {
   document.body.style.overflow = 'hidden'
 }
 
-const addCategoryHandler = async (value: ICategory) => {
-  const success = await categoriesDashboardStore.addCategory(value)
-  if (success) {
-    await getCategories()
-  } else {
-    console.error('Failed to add category:', categoriesDashboardStore.error)
-  }
-}
-
 const getCategories = async () => {
   const { success } = await categoriesDashboardStore.fetchCategories()
   if (success) {
     categoriesList.value = categoriesDashboardStore.categories
+  }
+}
+
+const addCategoryHandler = async (value: ICategory) => {
+  const response = await categoriesDashboardStore.addCategory(value)
+  if (response.success) {
+    await getCategories()
+  } else {
+    if (response.error === ErrorMessageEnum.FreePlanItemsLimit) {
+      toastStore.sendError(t('dashboard.categories.freePlanItemsLimit'))
+    }
+    console.error('Failed to add category:', categoriesDashboardStore.error)
   }
 }
 

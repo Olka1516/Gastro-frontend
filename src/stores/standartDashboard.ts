@@ -13,7 +13,6 @@ export const useStandartDashboardStore = defineStore('standartDashboard', () => 
   const dishes = ref<IDish[]>([])
   const error = ref('')
 
-  // Додавання нової страви
   const addDish = async (dishData: IDish) => {
     try {
       await addDishForUser(dishData)
@@ -25,7 +24,6 @@ export const useStandartDashboardStore = defineStore('standartDashboard', () => 
     }
   }
 
-  // Редагування існуючої страви
   const editDish = async (dishData: IDish) => {
     try {
       await editDishForUser(dishData)
@@ -37,7 +35,6 @@ export const useStandartDashboardStore = defineStore('standartDashboard', () => 
     }
   }
 
-  // Видалення страви
   const deleteDish = async (dishId: string) => {
     try {
       await deleteDishById(dishId)
@@ -48,7 +45,6 @@ export const useStandartDashboardStore = defineStore('standartDashboard', () => 
     }
   }
 
-  // Отримання всіх страв
   const fetchDishes = async () => {
     try {
       const response = await getUserDishes()

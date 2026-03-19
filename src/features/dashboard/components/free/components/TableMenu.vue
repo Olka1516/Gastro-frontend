@@ -133,12 +133,12 @@ import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modal/BaseDelete.vue'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
-import { useStandartDashboardStore } from '@/stores/standartDashboard'
 import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { defaultDish } from '@/features/dashboard/utils/default'
 import ManageDish from '../../general/ManageDish.vue'
+import { defaultDish } from '@/features/dashboard/utils/default'
+import { useFreeDashboardStore } from '@/stores/freeDashboard'
 
 const size = 6
 const loading = ref(true)
@@ -153,7 +153,7 @@ const paginationPage = ref(1)
 const dishes = ref<IDish[]>([])
 
 const { t } = useI18n()
-const standartDashboardStore = useStandartDashboardStore()
+const freeDashboardStore = useFreeDashboardStore()
 const categoriesDashboardStore = useCategoriesDashboardStore()
 
 const categoryNameMap = computed(() => {
@@ -184,11 +184,11 @@ const changeDeleteValue = (id: string) => {
 
 const deleteMeal = async (value: boolean) => {
   if (value && mealId.value) {
-    const success = await standartDashboardStore.deleteDish(mealId.value)
+    const success = await freeDashboardStore.deleteDish(mealId.value)
     if (success) {
       await getDishes()
     } else {
-      console.error('Failed to delete meal:', standartDashboardStore.error)
+      console.error('Failed to delete meal:', freeDashboardStore.error)
     }
   }
 }
@@ -200,11 +200,11 @@ const openManageDish = (value: IDish) => {
 }
 
 const editMeal = async (value: IDish) => {
-  const success = await standartDashboardStore.editDish(value)
+  const success = await freeDashboardStore.editDish(value)
   if (success) {
     await getDishes()
   } else {
-    console.error('Failed to edit meal:', standartDashboardStore.error)
+    console.error('Failed to edit meal:', freeDashboardStore.error)
   }
 }
 
@@ -215,18 +215,18 @@ const openAddDish = () => {
 }
 
 const addMeal = async (value: IDish) => {
-  const success = await standartDashboardStore.addDish(value)
+  const success = await freeDashboardStore.addDish(value)
   if (success) {
     await getDishes()
   } else {
-    console.error('Failed to add meal:', standartDashboardStore.error)
+    console.error('Failed to add meal:', freeDashboardStore.error)
   }
 }
 
 const getDishes = async () => {
-  const { success } = await standartDashboardStore.fetchDishes()
+  const { success } = await freeDashboardStore.fetchDishes()
   if (success) {
-    dishes.value = standartDashboardStore.dishes
+    dishes.value = freeDashboardStore.dishes
   }
 }
 

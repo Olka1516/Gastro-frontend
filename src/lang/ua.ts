@@ -128,6 +128,15 @@ export default {
         qrCode: 'QR код',
       },
     },
+    free: {
+      navs: {
+        home: 'Головна',
+        menu: 'Меню',
+        categories: 'Категорії',
+        qrCode: 'QR код',
+        settings: 'Налаштування',
+      },
+    },
     home: {
       welcome: 'Вітаємо в { placeName }!',
       subtitle: 'Керуйте вашим меню та слідкуйте за статистикою закладу',
@@ -192,6 +201,7 @@ export default {
       category: 'Категорія',
       noCategoriesDescription:
         'Створіть категорії для організації вашого меню. Це допоможе клієнтам легше знайти потрібні страви.',
+      freePlanItemsLimit: 'Ви досягли обмеження на кількість категорій для безплатного плану',
     },
     editText: 'Оновити дані',
     addText: 'Додати страву',

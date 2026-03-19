@@ -8,6 +8,6 @@ import StandartShowcasePage from '../standart/StandartShowcasePage.vue'
 
 export const plans: Record<EPlan, Component> = {
   [EPlan.standart]: markRaw(StandartShowcasePage),
-  [EPlan.premium]: markRaw(StandartShowcasePage), // For now, same as standart
-  [EPlan.free]: markRaw(StandartShowcasePage), // For now, same as standart
+  [EPlan.premium]: markRaw(StandartShowcasePage),
+  [EPlan.free]: markRaw(StandartShowcasePage), 
 }

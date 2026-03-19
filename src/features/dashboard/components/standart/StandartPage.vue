@@ -1,26 +1,21 @@
 <template>
   <div :class="['grid transition-all duration-300', sidebarStyle]">
-    <BaseSidebar
-      :navs="navs"
-      :userInfo
-      :activeNav="activeNav"
-      @handleProcess="(value) => getSidebarStyle(value)"
-      @handleNav="handleNav"
-    />
+    <BaseSidebar :navs="navs" :userInfo :activeNav="activeNav" @handleProcess="(value) => getSidebarStyle(value)"
+      @handleNav="handleNav" />
     <component :is="activeNav.component" @navigateTo="navigateTo" />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { IUserData } from '@/types'  
+import type { IUserData } from '@/types'
 import { computed, markRaw, ref } from 'vue'
 import type { IBaseSidebarData } from '../../types'
 import BaseSidebar from '../general/BaseSidebar.vue'
 import Categories from './components/CategoriesBlock.vue'
 import HomeBlock from './components/HomeBlock.vue'
-import SettingsBlock from './components/SettingsBlock.vue'
+import SettingsBlock from '../general/SettingsBlock.vue'
 import TableMenu from './components/TableMenu.vue'
-import QRCodeBlock from './components/QRCodeBlock.vue'
+import QRCodeBlock from '../general/QRCodeBlock.vue'
 
 defineProps<{ userInfo: IUserData }>()
 

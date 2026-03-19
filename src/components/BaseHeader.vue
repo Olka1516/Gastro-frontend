@@ -100,13 +100,6 @@ const active = ref(props.activeSection)
 const isLimit = ref(true)
 const open = ref(false)
 const activeModal = ref<ModalKey>('signUp')
-import { computed, onMounted, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-
-const props = defineProps<{ limit: number; navigations: string[]; activeSection: string }>()
-const { t } = useI18n()
-const active = ref(props.navigations[0])
-const isLimit = ref(true)
 
 const options = {
   root: document.querySelector('#scrollArea'),

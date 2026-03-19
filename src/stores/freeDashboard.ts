@@ -1,21 +1,21 @@
 import {
-  addCategoryForUser,
-  deleteCategoryById,
-  editCategoryForUser,
-  getUserCategories,
+  addDishForUser,
+  deleteDishById,
+  editDishForUser,
+  getUserDishes,
 } from '@/services/dashboard'
 import type { TRequestError } from '@/types'
-import type { ICategory } from '@/types/menu'
+import type { IDish } from '@/types/menu'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useCategoriesDashboardStore = defineStore('categoriesDashboard', () => {
-  const categories = ref<ICategory[]>([])
+export const useFreeDashboardStore = defineStore('freeDashboard', () => {
+  const dishes = ref<IDish[]>([])
   const error = ref('')
 
-  const addCategory = async (categoryData: ICategory) => {
+  const addDish = async (dishData: IDish) => {
     try {
-      await addCategoryForUser(categoryData)
+      await addDishForUser(dishData)
 
       return { success: true }
     } catch (err) {
@@ -24,9 +24,9 @@ export const useCategoriesDashboardStore = defineStore('categoriesDashboard', ()
     }
   }
 
-  const editCategory = async (categoryData: ICategory) => {
+  const editDish = async (dishData: IDish) => {
     try {
-      await editCategoryForUser(categoryData)
+      await editDishForUser(dishData)
 
       return { success: true }
     } catch (err) {
@@ -35,9 +35,9 @@ export const useCategoriesDashboardStore = defineStore('categoriesDashboard', ()
     }
   }
 
-  const deleteCategory = async (categoryId: string) => {
+  const deleteDish = async (dishId: string) => {
     try {
-      await deleteCategoryById(categoryId)
+      await deleteDishById(dishId)
       return { success: true }
     } catch (err) {
       const message = err as TRequestError
@@ -45,10 +45,10 @@ export const useCategoriesDashboardStore = defineStore('categoriesDashboard', ()
     }
   }
 
-  const fetchCategories = async () => {
+  const fetchDishes = async () => {
     try {
-      const response = await getUserCategories()
-      categories.value = response.categories
+      const response = await getUserDishes()
+      dishes.value = response.dishes
       return { success: true }
     } catch (err) {
       const message = err as TRequestError
@@ -57,11 +57,11 @@ export const useCategoriesDashboardStore = defineStore('categoriesDashboard', ()
   }
 
   return {
-    categories,
+    dishes,
     error,
-    addCategory,
-    editCategory,
-    deleteCategory,
-    fetchCategories,
+    addDish,
+    editDish,
+    deleteDish,
+    fetchDishes,
   }
 })

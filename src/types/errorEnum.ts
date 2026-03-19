@@ -25,17 +25,4 @@ export enum EPlan {
   premium = 'premium',
 }
 
-export enum EStatus {
-  pending = 'pending',
-  complete = 'complete',
-  error = 'error',
-  cancelled = 'cancelled',
-}
-
-export enum EPlan {
-  free = 'free',
-  standart = 'standart',
-  premium = 'premium',
-}
-
 export type TRequestError = AxiosError<{ message: string }>

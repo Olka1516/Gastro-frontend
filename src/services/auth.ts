@@ -25,7 +25,25 @@ export const getUserAuthorized = async () => {
 }
 
 export const updateUserData = async (userData: IUpdateUserData) => {
-  const data = await http.put(ENDPOINTS.UPDATE_USER, userData)
+  const shouldUseFormData = userData.logo instanceof File
+
+  const payload = shouldUseFormData
+    ? (() => {
+        const formData = new FormData()
+        formData.append('placeName', userData.placeName)
+        formData.append('email', userData.email)
+        if (userData.menuBackgroundColor) {
+          formData.append('menuBackgroundColor', userData.menuBackgroundColor)
+        }
+        if (userData.menuIconColor) {
+          formData.append('menuIconColor', userData.menuIconColor)
+        }
+        if(userData.logo) formData.append('logo', userData.logo)
+        return formData
+      })()
+    : userData
+
+  const data = await http.put(ENDPOINTS.UPDATE_USER, payload)
   return data.data
 }
 

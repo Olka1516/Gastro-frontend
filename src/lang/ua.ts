@@ -195,6 +195,7 @@ export default {
       addFirstDish: 'Додайте першу страву до меню',
       total: 'Всього страв',
       noDescription: 'Опис не додано',
+      freePlanItemsLimit: 'Ви досягли обмеження на кількість страв для безплатного плану',
     },
     categories: {
       subtitle: 'Організуйте меню за категоріями',
@@ -202,6 +203,12 @@ export default {
       noCategoriesDescription:
         'Створіть категорії для організації вашого меню. Це допоможе клієнтам легше знайти потрібні страви.',
       freePlanItemsLimit: 'Ви досягли обмеження на кількість категорій для безплатного плану',
+    },
+    settings: {
+      menuBackgroundColor: 'Колір фону меню',
+      menuIconColor: 'Колір іконок меню',
+      logo: 'Логотип закладу',
+      dataSuccessUpdated: 'Дані було успішно оновлено',
     },
     editText: 'Оновити дані',
     addText: 'Додати страву',

@@ -17,6 +17,9 @@ export const useUserStore = defineStore('counter', () => {
   const defaultState = (): IUserData => ({
     email: '',
     placeName: '',
+    menuBackgroundColor: '#0f0f11',
+    menuIconColor: '#dc5b41',
+    logo: '',
     id: '',
     planName: null,
     planDate: null,

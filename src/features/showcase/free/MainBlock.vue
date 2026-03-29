@@ -29,18 +29,21 @@
       <CategorySection v-for="category in categoriesWithDishes" :key="category.id" :category="category" :dishes="dishes"
         @dish-click="handleDishClick" />
     </div>
+
+    <DishDetailsModal :dish="selectedDish" :category-name="selectedDishCategoryName" @close="closeDishModal" />
   </div>
 </template>
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
+import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useUserStore } from '@/stores/user'
 import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import CategorySection from './components/CategorySection.vue'
-import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useRoute } from 'vue-router'
+import DishDetailsModal from '../components/DishDetailsModal.vue'
+import CategorySection from './components/CategorySection.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -49,8 +52,14 @@ const showcaseStore = useShowcaseStore()
 
 const loading = ref(true)
 const dishes = ref<IDish[]>([])
+const selectedDish = ref<IDish | null>(null)
 
 const userInfo = computed(() => userStore.$state)
+const selectedDishCategoryName = computed(() => {
+  if (!selectedDish.value) return ''
+  const category = showcaseStore.categories.find((item) => item.id === selectedDish.value?.category)
+  return category?.name || selectedDish.value.category
+})
 
 const categoriesWithDishes = computed(() => {
   const availableDishes = dishes.value.filter((d) => d.isAvailable === 'available')
@@ -65,7 +74,13 @@ const categoriesWithDishes = computed(() => {
 })
 
 const handleDishClick = (dish: IDish) => {
-  console.log('Dish clicked:', dish)
+  selectedDish.value = dish
+  document.body.style.overflow = 'hidden'
+}
+
+const closeDishModal = () => {
+  selectedDish.value = null
+  document.body.style.overflow = ''
 }
 
 const fetchData = async () => {

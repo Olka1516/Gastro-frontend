@@ -12,6 +12,9 @@ export interface UserSignUp extends UserSignIn {
 export interface IUserData {
   email: string
   placeName: string
+  menuBackgroundColor: string
+  menuIconColor: string
+  logo?: string
   id: string
   planName: EPlan | null
   planDate: Date | null
@@ -21,6 +24,9 @@ export interface IUserData {
 export interface IUpdateUserData {
   placeName: string
   email: string
+  menuBackgroundColor?: string
+  menuIconColor?: string
+  logo?: File | string | null
 }
 
 export interface IUserStatus {

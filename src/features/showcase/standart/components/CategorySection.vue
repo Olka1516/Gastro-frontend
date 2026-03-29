@@ -2,8 +2,7 @@
   <section :id="category.id" class="scroll-mt-24">
     <div class="mb-8">
       <div class="flex items-center gap-4 mb-2">
-        <div
-          class="w-12 h-12 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-xl flex items-center justify-center shadow-lg">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" :style="iconBadgeStyle">
           <img src="@/assets/images/icons/category.svg" alt="category" class="w-6 h-6"
             style="filter: brightness(0) invert(1)" />
         </div>
@@ -14,11 +13,19 @@
           </p>
         </div>
       </div>
-      <div class="h-px bg-gradient-to-r from-[#dc5b41]/50 via-[#dc5b41]/30 to-transparent mt-4"></div>
+      <div class="h-px mt-4" :style="separatorStyle"></div>
     </div>
 
     <div v-if="categoryDishes.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <DishCard v-for="dish in categoryDishes" :key="dish.id" :dish="dish" @click="handleDishClick" />
+      <DishCard
+        v-for="dish in categoryDishes"
+        :key="dish.id"
+        :dish="dish"
+        :is-liked="likedDishIds.includes(dish.id)"
+        :menu-icon-color="menuIconColor"
+        @click="handleDishClick"
+        @toggle-like="handleToggleLike"
+      />
     </div>
 
     <div v-else
@@ -39,10 +46,13 @@ const { t } = useI18n()
 const props = defineProps<{
   category: ICategory
   dishes: IDish[]
+  likedDishIds: string[]
+  menuIconColor: string
 }>()
 
 const emit = defineEmits<{
   (e: 'dishClick', dish: IDish): void
+  (e: 'toggleLike', dishId: string): void
 }>()
 
 const categoryDishes = computed(() => {
@@ -51,8 +61,42 @@ const categoryDishes = computed(() => {
   )
 })
 
+const hexToRgba = (hex: string, alpha: number) => {
+  const normalized = hex.replace('#', '')
+  const fullHex =
+    normalized.length === 3
+      ? normalized
+          .split('')
+          .map((char) => char + char)
+          .join('')
+      : normalized
+
+  const isHex = /^[0-9a-f]{6}$/i.test(fullHex)
+  if (!isHex) return `rgba(220, 91, 65, ${alpha})`
+
+  const r = parseInt(fullHex.slice(0, 2), 16)
+  const g = parseInt(fullHex.slice(2, 4), 16)
+  const b = parseInt(fullHex.slice(4, 6), 16)
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+const iconBadgeStyle = computed(() => ({
+  backgroundColor: props.menuIconColor || '#dc5b41',
+}))
+
+const separatorStyle = computed(() => ({
+  background: `linear-gradient(to right, ${hexToRgba(props.menuIconColor || '#dc5b41', 0.5)}, ${hexToRgba(
+    props.menuIconColor || '#dc5b41',
+    0.3,
+  )}, transparent)`,
+}))
+
 const handleDishClick = (dish: IDish) => {
   emit('dishClick', dish)
+}
+
+const handleToggleLike = (dishId: string) => {
+  emit('toggleLike', dishId)
 }
 </script>
 

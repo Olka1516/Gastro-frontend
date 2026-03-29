@@ -139,6 +139,8 @@ import { useI18n } from 'vue-i18n'
 import ManageDish from '../../general/ManageDish.vue'
 import { defaultDish } from '@/features/dashboard/utils/default'
 import { useFreeDashboardStore } from '@/stores/freeDashboard'
+import { ErrorMessageEnum } from '@/types'
+import { notificationStore } from '@/stores'
 
 const size = 6
 const loading = ref(true)
@@ -155,6 +157,7 @@ const dishes = ref<IDish[]>([])
 const { t } = useI18n()
 const freeDashboardStore = useFreeDashboardStore()
 const categoriesDashboardStore = useCategoriesDashboardStore()
+const toastStore = notificationStore()
 
 const categoryNameMap = computed(() => {
   const map = new Map<string, string>()
@@ -215,10 +218,13 @@ const openAddDish = () => {
 }
 
 const addMeal = async (value: IDish) => {
-  const success = await freeDashboardStore.addDish(value)
-  if (success) {
+  const response = await freeDashboardStore.addDish(value)
+  if (response.success) {
     await getDishes()
   } else {
+    if (response.error === ErrorMessageEnum.FreePlanItemsLimit) {
+      toastStore.sendError(t('dashboard.menu.freePlanItemsLimit'))
+    }
     console.error('Failed to add meal:', freeDashboardStore.error)
   }
 }

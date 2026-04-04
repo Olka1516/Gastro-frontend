@@ -15,9 +15,9 @@
     </div>
 
     <div v-if="!loading && categoriesWithDishes.length === 0"
-      class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-3xl border border-[#2a2930] p-20 text-center">
+      class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] p-20 text-center">
       <div class="flex flex-col items-center gap-6">
-        <div class="w-32 h-32 rounded-3xl flex items-center justify-center" :style="iconBadgeStyle">
+        <div class="w-32 h-32 rounded-lg flex items-center justify-center" :style="iconBadgeStyle">
           <span class="text-6xl">🍽️</span>
         </div>
         <h3 class="text-white text-3xl font-bold">{{ t('showcase.noMenuAvailable') }}</h3>
@@ -93,8 +93,7 @@ const loadingStyle = computed(() => ({
 }))
 
 const iconBadgeStyle = computed(() => ({
-  backgroundColor: menuIconColor.value,
-  boxShadow: `0 20px 60px ${hexToRgba(menuIconColor.value, 0.3)}`,
+  backgroundColor: menuIconColor.value
 }))
 const selectedDishCategoryName = computed(() => {
   if (!selectedDish.value) return ''

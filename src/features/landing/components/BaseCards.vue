@@ -1,45 +1,28 @@
 <template>
   <div>
     <div
-      class="bg-[#0f0f11] h-[calc(100vh-50px)] flex flex-col gap-14 justify-center items-center relative overflow-hidden"
-    >
+      class="bg-[#0f0f11] h-[calc(100vh-50px)] flex flex-col gap-14 justify-center items-center relative overflow-hidden">
       <h2 class="text-[#fff] text-3xl font-bold">{{ t('landing.priceAndPlans') }}</h2>
       <div class="flex w-[calc(100%-104px)] gap-12 justify-center">
-        <div
-          class="bg-[#1a191f] w-80 p-8 flex flex-col gap-4 items-center transition duration-400 ease-in"
-          v-for="(value, i) in plans"
-          :class="visible && i === visibilityId ? 'scale-115' : 'scale-100'"
-          :key="value.name"
-          @mouseenter="changeVisibility(true, i)"
-          @mouseleave="changeVisibility(false, -1)"
-        >
-          <img
-            :src="getImage(`../features/landing/assets/images/landing/plan_${i + 1}.png`)"
-            alt=""
-          />
+        <div class="bg-[#1a191f] w-80 p-8 flex flex-col gap-4 items-center transition duration-400 rounded-lg ease-in"
+          v-for="(value, i) in plans" :class="visible && i === visibilityId ? 'scale-115' : 'scale-100'"
+          :key="value.name" @mouseenter="changeVisibility(true, i)" @mouseleave="changeVisibility(false, -1)">
+          <img :src="getImage(`../features/landing/assets/images/landing/plan_${i + 1}.png`)" alt="" />
           <h4 class="text-xl font-bold text-[#dc5b41]">{{ t(`plans.${value.name}.name`) }}</h4>
           <h5 v-if="value.price" class="text-2xl text-[#fff]">
             {{ value.currency }}{{ value.price }} / {{ t(`subscribe.${value.subscribe}`) }}
           </h5>
           <h5 v-else class="text-2xl text-[#fff]">Free</h5>
           <div class="flex flex-col gap-2 items-center">
-            <p
-              v-for="item in tm(`plans.${value.name}.details`)"
-              class="text-[#ccc] text-sm"
-              :key="item"
-            >
+            <p v-for="item in tm(`plans.${value.name}.details`)" class="text-[#ccc] text-sm" :key="item">
               {{ rt(item) }}
             </p>
           </div>
-          <button
-            :class="
-              visible && i === visibilityId
-                ? 'opacity-100 translate-y-2'
-                : 'opacity-0 translate-y-5'
-            "
-            class="cursor-pointer text-[#fff] bg-[#dc5b41] px-8 py-2 transition duration-300 ease-in"
-            @click="nextStep(value)"
-          >
+          <button :class="visible && i === visibilityId
+            ? 'opacity-100 translate-y-2'
+            : 'opacity-0 translate-y-5'
+            " class="cursor-pointer text-[#fff] bg-[#dc5b41] px-8 py-2 rounded-lg transition duration-300 ease-in"
+            @click="nextStep(value)">
             {{ t('button.choose') }}
           </button>
         </div>
@@ -47,11 +30,8 @@
     </div>
 
     <AuthTeleportModals v-model:open="open" @handleProcess="nextStep(plan)" />
-    <BaseDelete
-      text="landing.changePlan"
-      v-model:openDelete="openDelete"
-      @handleProcess="(value) => setFreePlan(value)"
-    />
+    <BaseDelete text="landing.changePlan" v-model:openDelete="openDelete"
+      @handleProcess="(value) => setFreePlan(value)" />
   </div>
 </template>
 

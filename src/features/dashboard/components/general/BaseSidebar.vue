@@ -48,7 +48,7 @@
 
               <div :class="[
                 'w-5 h-5 flex items-center justify-center flex-shrink-0 transition-transform duration-200',
-                isActive(data) ? 'scale-110' : 'group-hover:scale-110',
+                isActive(data) ? 'scale-100' : 'group-hover:scale-105',
                 isClose ? 'mx-auto' : '',
               ]">
                 <img v-if="data.image" :src="getIconPath(data.image)" :alt="t(data.name)" :class="['w-5 h-5']"

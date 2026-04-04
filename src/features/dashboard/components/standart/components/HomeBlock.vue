@@ -17,78 +17,14 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div
-        class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-6 rounded-2xl border border-[#2a2930] hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-105 cursor-pointer group">
-        <div class="flex items-start justify-between">
-          <div class="flex flex-col gap-2">
-            <p class="text-gray-400 text-sm">{{ t('dashboard.home.totalDishes') }}</p>
-            <h3 class="text-white text-4xl font-bold">{{ totalDishes }}</h3>
-            <div class="flex gap-2 text-xs mt-2">
-              <span class="text-green-500">
-                ✓ {{ availableDishes }} {{ t('dashboard.home.available') }}
-              </span>
-              <span class="text-gray-500">
-                ✗ {{ unavailableDishes }} {{ t('dashboard.home.unavailable') }}
-              </span>
-            </div>
-          </div>
-          <div
-            class="w-12 h-12 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-            <img src="@/assets/images/icons/table.svg" alt="dishes" class="w-6 h-6"
-              style="filter: brightness(0) invert(1)" />
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-6 rounded-2xl border border-[#2a2930] hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-105 cursor-pointer group">
-        <div class="flex items-start justify-between">
-          <div class="flex flex-col gap-2">
-            <p class="text-gray-400 text-sm">{{ t('dashboard.home.totalCategories') }}</p>
-            <h3 class="text-white text-4xl font-bold">{{ totalCategories }}</h3>
-            <p class="text-gray-500 text-xs mt-2">{{ t('dashboard.home.organized') }}</p>
-          </div>
-          <div
-            class="w-12 h-12 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-            <img src="@/assets/images/icons/category.svg" alt="categories" class="w-6 h-6"
-              style="filter: brightness(0) invert(1)" />
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] p-6 rounded-2xl hover:scale-105 transition-all duration-300 cursor-pointer group relative overflow-hidden"
-        @click="$emit('navigateTo', 'menu')">
-        <div class="relative z-10 flex flex-col gap-2">
-          <p class="text-white/90 text-sm font-medium">{{ t('dashboard.home.quickAction') }}</p>
-          <h3 class="text-white text-2xl font-bold">{{ t('dashboard.home.manageMenu') }}</h3>
-          <p class="text-white/80 text-xs mt-2">{{ t('dashboard.home.addEditDishes') }}</p>
-        </div>
-        <div
-          class="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500">
-        </div>
-      </div>
+      <DashboardCard v-for="card in cards" :key="card.id" v-bind="card"
+        @click="card.id && $emit('navigateTo', card.navigateKey)" />
     </div>
 
     <div class="flex flex-col gap-4 mt-4">
       <h2 class="text-white text-2xl font-bold">{{ t('dashboard.home.quickLinks') }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <button v-for="link in quickLinks" :key="link.key" @click="$emit('navigateTo', link.key)"
-          class="bg-[#1a191f] p-6 rounded-xl border border-[#2a2930] hover:border-[#dc5b41] transition-all duration-300 hover:translate-y-[-4px] group">
-          <div class="flex items-center gap-4">
-            <div
-              class="w-12 h-12 bg-[#2a2930] rounded-lg flex items-center justify-center group-hover:bg-[#dc5b41]/20 transition-all duration-300">
-              <img :src="getIconPath(link.icon)" :alt="link.key" class="w-6 h-6" style="
-                  filter: brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%)
-                    hue-rotate(341deg) brightness(98%) contrast(87%);
-                " />
-            </div>
-            <div class="flex flex-col items-start">
-              <h4 class="text-white font-semibold text-left">{{ t(link.title) }}</h4>
-              <p class="text-gray-400 text-xs text-left">{{ t(link.description) }}</p>
-            </div>
-          </div>
-        </button>
+        <DashboardQuickLinks :links="quickLinks" @navigateTo="$emit('navigateTo', $event)" />
       </div>
     </div>
 
@@ -110,14 +46,16 @@
 </template>
 
 <script setup lang="ts">
-import { getImage } from '@/common/functions'
-import { LINK_TEMPLATES } from '@/constants'
 import BaseLoader from '@/components/BaseLoader.vue'
+import { LINK_TEMPLATES } from '@/constants'
+import type { DashboardCardBind } from '@/features/dashboard/types'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { useStandartDashboardStore } from '@/stores/standartDashboard'
 import { useUserStore } from '@/stores/user'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import DashboardCard from './DashboardCard.vue'
+import DashboardQuickLinks from './DashboardQuickLinks.vue'
 
 const { t } = useI18n()
 const userStore = useUserStore()
@@ -167,9 +105,52 @@ const quickLinks = [
   },
 ]
 
-const getIconPath = (imageName: string) => {
-  return getImage(`../assets/images/icons/${imageName}.svg`)
-}
+// icon path resolution is now handled inside DashboardQuickLinks
+
+const cards = computed<DashboardCardBind[]>(() => {
+  return [
+    {
+      id: 'dishes',
+      navigateKey: 'menu',
+      variant: 'dark',
+      clickable: true,
+      hoverScale: true,
+      title: t('dashboard.home.totalDishes'),
+      value: totalDishes.value,
+      showAvailability: true,
+      availableCount: availableDishes.value,
+      unavailableCount: unavailableDishes.value,
+      availableText: t('dashboard.home.available'),
+      unavailableText: t('dashboard.home.unavailable'),
+      iconSrc: '../assets/images/icons/table.svg',
+      iconAlt: 'dishes',
+    },
+    {
+      id: 'categories',
+      navigateKey: 'categories',
+      variant: 'dark',
+      clickable: true,
+      hoverScale: true,
+      title: t('dashboard.home.totalCategories'),
+      value: totalCategories.value,
+      showSubtitle: true,
+      subtitle: t('dashboard.home.organized'),
+      iconSrc: '../assets/images/icons/category.svg',
+      iconAlt: 'categories',
+    },
+    {
+      id: 'quick',
+      navigateKey: 'menu',
+      variant: 'accent',
+      clickable: true,
+      hoverScale: true,
+      showQuick: true,
+      quickTopText: t('dashboard.home.quickAction'),
+      quickHeading: t('dashboard.home.manageMenu'),
+      quickDescription: t('dashboard.home.addEditDishes'),
+    },
+  ]
+})
 
 onMounted(async () => {
   loading.value = true

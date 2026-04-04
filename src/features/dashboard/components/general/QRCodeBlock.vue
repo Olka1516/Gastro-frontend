@@ -22,8 +22,7 @@
         class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-3xl border border-[#2a2930] p-8 md:p-12 shadow-xl">
         <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
           <div class="flex-shrink-0">
-            <div
-              class="bg-white p-6 rounded-2xl shadow-2xl relative group hover:scale-105 transition-transform duration-300">
+            <div class="bg-white p-6 rounded-lg shadow-2xl relative group transition-transform duration-300">
               <img v-if="qrCode" :src="qrCode" alt="QR Code" class="w-64 h-64 block" />
               <div v-if="!qrCode" class="w-64 h-64 bg-gray-100 rounded-xl flex items-center justify-center">
                 <BaseLoader />
@@ -55,7 +54,7 @@
                     {{ menuUrl }}
                   </p>
                   <button @click="copyToClipboard" :class="[
-                    'px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 flex-shrink-0',
+                    'px-8 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 flex-shrink-0',
                     copied
                       ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                       : 'bg-[#dc5b41]/20 text-[#dc5b41] hover:bg-[#dc5b41]/30 border border-[#dc5b41]/30',
@@ -88,12 +87,12 @@
 
             <div class="flex flex-col sm:flex-row gap-4">
               <button @click="downloadQRCode"
-                class="flex-1 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-6 py-4 cursor-pointer rounded-2xl hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-3 group shadow-[0_8px_30px_rgb(220,91,65,0.4)] hover:shadow-[0_8px_40px_rgb(220,91,65,0.6)]">
+                class="flex-1 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-8 py-2 cursor-pointer rounded-lg hover:scale-102 transition-all duration-300 font-semibold flex items-center justify-center gap-3 group">
                 <img src="@/assets/images/icons/download.svg" alt="download" class="w-5 h-5" />
                 {{ t('button.download') }}
               </button>
               <a :href="menuUrl" target="_blank" rel="noopener noreferrer"
-                class="flex-1 text-white border-2 border-[#dc5b41] px-6 py-4 cursor-pointer rounded-2xl hover:bg-[#dc5b41]/10 transition-all duration-300 font-semibold flex items-center justify-center gap-3 group">
+                class="flex-1 text-white border-2 border-[#dc5b41] px-8 py-2 cursor-pointer rounded-lg hover:scale-102 hover:bg-[#dc5b41]/10 transition-all duration-300 font-semibold flex items-center justify-center gap-3 group">
                 <img src="@/assets/images/icons/link.svg" alt="arrow-right" class="w-5 h-5" />
                 {{ t('dashboard.standart.qrCode.openMenu') }}
               </a>

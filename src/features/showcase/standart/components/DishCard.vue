@@ -1,10 +1,10 @@
 <template>
   <div
-    class="dish-card bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-2xl border border-[#2a2930] overflow-hidden transition-all duration-300 hover:scale-[1.02] group shadow-lg cursor-pointer"
+    class="dish-card bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] overflow-hidden transition-all duration-300 hover:scale-102 group shadow-lg cursor-pointer"
     :style="dishCardStyle" @click="handleClick">
     <div class="relative h-48 overflow-hidden">
       <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name"
-        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
       <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-transparent to-transparent"></div>
 
       <button type="button" :class="[
@@ -98,10 +98,3 @@ const priceBadgeStyle = computed(() => ({
   )})`,
 }))
 </script>
-
-<style scoped>
-.dish-card:hover {
-  border-color: var(--menu-icon-color-alpha-50);
-  box-shadow: 0 20px 60px var(--menu-icon-color-alpha-20);
-}
-</style>

@@ -2,7 +2,7 @@
   <section :id="category.id" class="scroll-mt-24">
     <div class="mb-8">
       <div class="flex items-center gap-4 mb-2">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg" :style="iconBadgeStyle">
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center shadow-lg" :style="iconBadgeStyle">
           <img src="@/assets/images/icons/category.svg" alt="category" class="w-6 h-6"
             style="filter: brightness(0) invert(1)" />
         </div>
@@ -17,15 +17,8 @@
     </div>
 
     <div v-if="categoryDishes.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <DishCard
-        v-for="dish in categoryDishes"
-        :key="dish.id"
-        :dish="dish"
-        :is-liked="likedDishIds.includes(dish.id)"
-        :menu-icon-color="menuIconColor"
-        @click="handleDishClick"
-        @toggle-like="handleToggleLike"
-      />
+      <DishCard v-for="dish in categoryDishes" :key="dish.id" :dish="dish" :is-liked="likedDishIds.includes(dish.id)"
+        :menu-icon-color="menuIconColor" @click="handleDishClick" @toggle-like="handleToggleLike" />
     </div>
 
     <div v-else
@@ -66,9 +59,9 @@ const hexToRgba = (hex: string, alpha: number) => {
   const fullHex =
     normalized.length === 3
       ? normalized
-          .split('')
-          .map((char) => char + char)
-          .join('')
+        .split('')
+        .map((char) => char + char)
+        .join('')
       : normalized
 
   const isHex = /^[0-9a-f]{6}$/i.test(fullHex)

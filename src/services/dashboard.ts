@@ -1,5 +1,6 @@
 import { ENDPOINTS } from '@/constants'
 import http from '@/http'
+import type { IShowcasePlacedOrder, ShowcaseOrderStatusFilter } from '@/types/showcaseOrder'
 import type { IDish, ICategory } from '@/types/menu'
 
 export const getUserDetailsByUserId = async () => {
@@ -50,7 +51,6 @@ export const deleteDishById = async (dishId: string) => {
   await http.delete(ENDPOINTS.DELETE_DISH(dishId))
 }
 
-// Categories CRUD methods
 export const getUserCategories = async () => {
   const data = await http.get(ENDPOINTS.GET_USER_CATEGORIES)
   return data.data
@@ -68,4 +68,16 @@ export const editCategoryForUser = async (categoryData: ICategory) => {
 
 export const deleteCategoryById = async (categoryId: string) => {
   await http.delete(ENDPOINTS.DELETE_CATEGORY(categoryId))
+}
+
+export const getShowcaseOrdersForOwner = async (params?: {
+  status?: ShowcaseOrderStatusFilter
+}): Promise<IShowcasePlacedOrder[]> => {
+  const query = params?.status && params.status !== 'all' ? { status: params.status } : undefined
+  const { data } = await http.get<{ orders?: IShowcasePlacedOrder[] } | IShowcasePlacedOrder[]>(
+    ENDPOINTS.GET_SHOWCASE_ORDERS,
+    { params: query },
+  )
+  if (Array.isArray(data)) return data
+  return data.orders ?? []
 }

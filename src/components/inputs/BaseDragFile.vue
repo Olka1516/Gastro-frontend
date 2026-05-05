@@ -1,39 +1,24 @@
 <template>
-  <div
-    id="drop-area"
-    @dragenter="handleDragEnter"
-    @dragover="handleDragOver"
-    @dragleave="handleDragLeave"
+  <div id="drop-area" @dragenter="handleDragEnter" @dragover="handleDragOver" @dragleave="handleDragLeave"
     @drop="handleDrop"
-    class="flex items-center justify-center text-center w-full h-[280px] border-2 border-dashed rounded-xl transition-colors duration-200 max-[1200px]:p-1 max-[1200px]:grid max-[1200px]:w-[60%] max-[540px]:w-full"
+    class="flex items-center justify-center text-center w-full h-[280px] border-2 border-dashed rounded-xl transition-colors duration-200 max-[1200px]:p-1 max-[1200px]:grid"
     :class="{
       'border-red-500': isInfoInvalid,
       'border-[#dc5b41]': isHighlighted,
       'border-white': !isInfoInvalid && !isHighlighted,
-    }"
-  >
-    <form
-      v-if="!isImageChoosen"
-      class="flex flex-col justify-center items-center gap-5 px-6 max-[1200px]:p-6"
-    >
+    }">
+    <form v-if="!isImageChoosen" class="flex flex-col justify-center items-center gap-5 px-6 max-[1200px]:p-6">
       <p class="text-white">{{ text }}</p>
       <input type="file" id="fileElem" accept="image/*" @change="handleFileInput" class="hidden" />
-      <label
-        for="fileElem"
-        class="border border-[#dc5b41] text-white py-2 px-4 cursor-pointer transition"
-      >
+      <label for="fileElem" class="border border-[#dc5b41] text-white py-2 px-4 cursor-pointer transition">
         {{ t('inputs.chooseImage') }}
       </label>
     </form>
 
     <div v-if="isImageChoosen || props.url">
       <div id="gallery">
-        <img
-          v-if="previewUrl"
-          :src="previewUrl as string"
-          id="previewImage"
-          class="w-[calc(100vw-1200px)] h-[270px] rounded-2xl object-cover object-center max-[1200px]:w-full max-[1200px]:h-[240px]"
-        />
+        <img v-if="previewUrl" :src="previewUrl as string" id="previewImage"
+          class="w-[calc(100vw-1200px)] h-[270px] rounded-2xl object-cover object-center max-[1200px]:w-full max-[1200px]:h-[240px]" />
       </div>
     </div>
   </div>

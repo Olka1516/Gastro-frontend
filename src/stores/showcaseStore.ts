@@ -1,5 +1,5 @@
-import { getMenuCategories, getMenuDishes } from '@/services/showcase'
-import type { TRequestError } from '@/types'
+import { getMenuCategories, getMenuDishes, getPlaceBranding } from '@/services/showcase'
+import type { IPlaceBranding, TRequestError } from '@/types'
 import type { ICategory, IDish } from '@/types/menu'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -7,6 +7,7 @@ import { ref } from 'vue'
 export const useShowcaseStore = defineStore('showcaseStore', () => {
   const dishes = ref<IDish[]>([])
   const categories = ref<ICategory[]>([])
+  const placeBranding = ref<IPlaceBranding | null>(null)
 
   const fetchDishes = async (placeName: string) => {
     try {
@@ -30,10 +31,24 @@ export const useShowcaseStore = defineStore('showcaseStore', () => {
     }
   }
 
+  const fetchPlaceBranding = async (placeName: string) => {
+    try {
+      const data = await getPlaceBranding(placeName)
+      placeBranding.value = data
+      return { success: true as const }
+    } catch (err) {
+      const message = err as TRequestError
+      placeBranding.value = null
+      return { success: false as const, error: message.response?.data.message }
+    }
+  }
+
   return {
     dishes,
     categories,
+    placeBranding,
     fetchDishes,
     fetchCategories,
+    fetchPlaceBranding,
   }
 })

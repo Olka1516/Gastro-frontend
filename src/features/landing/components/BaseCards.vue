@@ -46,7 +46,7 @@ import { useUserStore } from '@/stores'
 import { EPlan } from '@/types'
 import { useRouter } from 'vue-router'
 import { getImage } from '@/common/functions'
-import AuthTeleportModals from './modals/AuthTeleportModals.vue'
+import AuthTeleportModals from '@/components/modals/auth/AuthTeleportModals.vue'
 import { LINK_TEMPLATES } from '@/constants'
 import BaseDelete from '@/components/modal/BaseDelete.vue'
 

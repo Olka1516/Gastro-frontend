@@ -19,12 +19,21 @@ export const ENDPOINTS = {
   ADD_CATEGORY: `dashboard/categories`,
   DELETE_CATEGORY: (id: string) => `dashboard/categories/${id}`,
   EDIT_CATEGORY: (id: string) => `dashboard/categories/${id}`,
-  GET_USER_STATUS: (placeName: string) => `showcase/get-plan-status/${encodePlaceNameForApi(placeName)}`,
+  GET_USER_STATUS: (placeName: string) =>
+    `showcase/get-plan-status/${encodePlaceNameForApi(placeName)}`,
   GET_MENU_DISHES: (placeName: string) => `showcase/get-dishes/${encodePlaceNameForApi(placeName)}`,
-  GET_MENU_CATEGORIES: (placeName: string) => `showcase/get-categories/${encodePlaceNameForApi(placeName)}`,
+  GET_MENU_CATEGORIES: (placeName: string) =>
+    `showcase/get-categories/${encodePlaceNameForApi(placeName)}`,
+  GET_PLACE_BRANDING: (placeName: string) =>
+    `showcase/get-place-branding/${encodePlaceNameForApi(placeName)}`,
+  POST_SHOWCASE_ORDER: (placeName: string) =>
+    `showcase/place-order/${encodePlaceNameForApi(placeName)}`,
+  /** Authenticated owner: list incoming showcase orders for the current place */
+  GET_SHOWCASE_ORDERS: `dashboard/showcase-orders`,
 }
 
 export const LINK_TEMPLATES = {
   DASHBOARD: '/dashboard',
   MENU: (placeName: string) => `/menu/${spaceToUnderscore(placeName)}`,
+  MENU_CHECKOUT: (placeSlug: string) => `/menu/${placeSlug}/checkout`,
 }

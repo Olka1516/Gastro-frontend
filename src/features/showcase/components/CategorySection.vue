@@ -17,8 +17,17 @@
     </div>
 
     <div v-if="categoryDishes.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <DishCard v-for="dish in categoryDishes" :key="dish.id" :dish="dish" :is-liked="likedDishIds.includes(dish.id)"
-        :menu-icon-color="menuIconColor" @click="handleDishClick" @toggle-like="handleToggleLike" />
+      <DishCard
+        v-for="dish in categoryDishes"
+        :key="dish.id"
+        :dish="dish"
+        :is-liked="likedDishIds.includes(dish.id)"
+        :menu-icon-color="menuIconColor"
+        :show-add-to-cart="showAddToCart"
+        :category-name="category.name"
+        @click="handleDishClick"
+        @toggle-like="handleToggleLike"
+      />
     </div>
 
     <div v-else
@@ -36,12 +45,16 @@ import DishCard from './DishCard.vue'
 
 const { t } = useI18n()
 
-const props = defineProps<{
-  category: ICategory
-  dishes: IDish[]
-  likedDishIds: string[]
-  menuIconColor: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    category: ICategory
+    dishes: IDish[]
+    likedDishIds: string[]
+    menuIconColor: string
+    showAddToCart?: boolean
+  }>(),
+  { showAddToCart: false },
+)
 
 const emit = defineEmits<{
   (e: 'dishClick', dish: IDish): void

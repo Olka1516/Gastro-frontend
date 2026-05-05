@@ -1,5 +1,7 @@
 import type { EPlan, EStatus } from './errorEnum'
 
+export type ModalKey = 'signUp' | 'signIn'
+
 export interface UserSignIn {
   email: string
   password: string

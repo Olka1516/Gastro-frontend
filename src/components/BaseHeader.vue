@@ -1,8 +1,10 @@
 <template>
   <header :class="[
-    'w-full fixed z-1000 h-20 grid justify-items-center justify-center px-46 items-center transition-colors duration-500',
+    'w-full fixed z-1000 h-20 grid items-center justify-center px-46 transition-colors duration-500',
     getHeaderBG().value,
-    !props.isMenuPage ? 'grid-cols-[200px_minmax(0,1fr)_200px]' : 'grid-cols-[0fr_1fr]',
+    !props.isMenuPage
+      ? 'grid-cols-[200px_minmax(0,1fr)_200px] justify-items-center'
+      : 'grid-cols-[minmax(0,1fr)_auto] justify-items-stretch',
   ]">
     <div v-if="!props.isMenuPage">
       <a href="/" class="logo" aria-label="На головну">
@@ -10,21 +12,28 @@
       </a>
     </div>
 
-    <nav aria-label="Головна навігація">
-      <ul class="flex gap-18">
-        <li v-for="nav in navigations" :key="nav">
-          <a v-if="!props.isMenuPage" :class="[linkColor(nav).value, 'transition-colors duration-300']"
-            class="transition-colors duration-500" @click="setActiveNav(nav)" :href="`#${nav.toLowerCase()}`">{{
-              t(`navs.${nav.toLowerCase()}`) }}</a>
+    <nav class="flex min-w-0" aria-label="Головна навігація">
+      <ul class="flex flex-nowrap items-center gap-18">
+        <li v-for="nav in navigations" :key="nav" class="shrink-0">
+          <RouterLink v-if="props.isMenuPage && props.showcaseNavBasePath" :to="showcaseNavTo(nav)" :class="[
+            showcaseLinkClass(nav).value,
+            'inline-block whitespace-nowrap transition-colors duration-500',
+          ]">
+            {{ t(`navs.${nav.toLowerCase()}`) }}
+          </RouterLink>
+          <a v-else-if="!props.isMenuPage" :class="[linkColor(nav).value, 'transition-colors duration-300']"
+            class="inline-block whitespace-nowrap transition-colors duration-500" @click="setActiveNav(nav)"
+            :href="`#${nav.toLowerCase()}`">{{ t(`navs.${nav.toLowerCase()}`) }}</a>
           <a v-else :class="[linkColor(nav).value, 'transition-colors duration-300']"
-            class="transition-colors duration-500" :href="`#${nav.toLowerCase()}`">{{ t(`navs.${nav.toLowerCase()}`)
-            }}</a>
+            class="inline-block whitespace-nowrap transition-colors duration-500" :href="`#${nav.toLowerCase()}`">{{
+              t(`navs.${nav.toLowerCase()}`) }}</a>
         </li>
       </ul>
     </nav>
 
     <nav v-if="props.isMenuPage && (props.isPremiumMenu || store.isUserAuthorized)"
-      class="flex w-[200px] flex-wrap items-center justify-end gap-12 justify-self-end" aria-label="Меню закладу">
+      class="flex w-auto shrink-0 flex-nowrap items-center justify-end gap-12 justify-self-end"
+      aria-label="Меню закладу">
       <button v-if="props.isPremiumMenu" type="button"
         class="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#dc5b41]"
         :aria-label="t('showcase.premium.cart')" @click="cartModalOpen = true">
@@ -84,10 +93,11 @@ import type { ModalKey } from '@/types'
 import { useUserStore } from '@/stores'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const store = useUserStore()
 const router = useRouter()
+const route = useRoute()
 const props = withDefaults(
   defineProps<{
     limit: number
@@ -95,8 +105,9 @@ const props = withDefaults(
     activeSection: string
     isMenuPage?: boolean
     isPremiumMenu?: boolean
+    showcaseNavBasePath?: string
   }>(),
-  { isMenuPage: false, isPremiumMenu: false },
+  { isMenuPage: false, isPremiumMenu: false, showcaseNavBasePath: undefined },
 )
 
 const { t } = useI18n()
@@ -124,6 +135,33 @@ const linkColor = (key: string) => {
     return 'text-white'
   })
 }
+
+const normalizePath = (path: string) => path.replace(/\/$/, '') || '/'
+
+const showcaseNavTo = (nav: string) => {
+  const base = props.showcaseNavBasePath
+  if (!base) return '/'
+  const key = nav.toLowerCase()
+  if (key === 'menu') return normalizePath(base)
+  if (key === 'orders') return `${normalizePath(base)}/orders`
+  return { hash: `#${key}` }
+}
+
+const showcaseLinkClass = (nav: string) =>
+  computed(() => {
+    const base = props.showcaseNavBasePath
+    if (!base) return 'text-white'
+    const path = normalizePath(route.path)
+    const menuRoot = normalizePath(base)
+    const key = nav.toLowerCase()
+    if (key === 'menu') {
+      return path === menuRoot ? 'text-[#dc5b41]' : 'text-white'
+    }
+    if (key === 'orders') {
+      return path === `${menuRoot}/orders` ? 'text-[#dc5b41]' : 'text-white'
+    }
+    return 'text-white'
+  })
 
 const getHeaderBG = () => {
   return computed(() =>

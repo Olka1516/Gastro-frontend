@@ -27,6 +27,13 @@ export default {
         cancelled: 'Cancelled',
         all: 'All',
       },
+      modalTitle: 'Order details',
+      changeStatus: 'New status',
+      modalCancel: 'Cancel',
+      modalSave: 'Save',
+      modalSaving: 'Saving…',
+      statusUpdated: 'Order status updated.',
+      statusUpdateFailed: 'Could not update order status. Please try again.',
     },
   },
   toasts: {
@@ -78,6 +85,10 @@ export default {
       required: 'Enter the delivery address',
     },
   },
+  navs: {
+    menu: 'Menu',
+    orders: 'My orders',
+  },
   showcase: {
     premium: {
       cart: 'Cart',
@@ -109,6 +120,12 @@ export default {
       backToMenu: 'Back to menu',
       addToCart: 'Add to cart',
       removeFromCart: 'Remove from cart',
+      orderHistoryTitle: 'Order history',
+      orderHistoryHint: 'Orders you place on this menu are saved on this device only.',
+      orderHistoryEmpty: 'No orders yet. After you complete checkout, your order will show up here.',
+      orderHistoryPlacedAt: 'Placed',
+      orderHistoryId: 'Order ID',
+      orderHistoryFromCart: 'Placed from cart (saved on this device)',
     },
   },
 }

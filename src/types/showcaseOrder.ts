@@ -48,3 +48,19 @@ export const linesToOrderPayload = (lines: IShowcaseCartLine[]): IShowcaseOrderL
     name: l.dish.name,
     categoryName: l.dish.categoryName,
   }))
+
+export interface IShowcaseLocalOrderHistoryLine {
+  name: string
+  quantity: number
+  unitPrice: number
+  categoryName: string
+}
+
+export interface IShowcaseLocalOrderHistoryEntry {
+  id: string
+  placedAt: string
+  total: number
+  lines: IShowcaseLocalOrderHistoryLine[]
+  customerSummary: string
+  source?: 'cart' | 'server'
+}

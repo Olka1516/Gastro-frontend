@@ -28,12 +28,13 @@ export const ENDPOINTS = {
     `showcase/get-place-branding/${encodePlaceNameForApi(placeName)}`,
   POST_SHOWCASE_ORDER: (placeName: string) =>
     `showcase/place-order/${encodePlaceNameForApi(placeName)}`,
-  /** Authenticated owner: list incoming showcase orders for the current place */
   GET_SHOWCASE_ORDERS: `dashboard/showcase-orders`,
+  PATCH_SHOWCASE_ORDER: (orderId: string) => `dashboard/showcase-orders/${orderId}`,
 }
 
 export const LINK_TEMPLATES = {
   DASHBOARD: '/dashboard',
   MENU: (placeName: string) => `/menu/${spaceToUnderscore(placeName)}`,
   MENU_CHECKOUT: (placeSlug: string) => `/menu/${placeSlug}/checkout`,
+  MENU_ORDERS: (placeSlug: string) => `/menu/${placeSlug}/orders`,
 }

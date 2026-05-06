@@ -6,6 +6,7 @@
       :active-section="activeSection"
       :is-menu-page="true"
       :is-premium-menu="true"
+      :showcase-nav-base-path="menuBasePath"
     />
 
     <MainBlock />
@@ -17,12 +18,15 @@
 <script setup lang="ts">
 import BaseFooter from '@/components/BaseFooter.vue'
 import BaseHeader from '@/components/BaseHeader.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import MainBlock from './MainBlock.vue'
 
+const route = useRoute()
 const activeSection = ref('')
+const navs = ['menu', 'orders']
 
-const navs = ['menu']
+const menuBasePath = computed(() => `/menu/${String(route.params.id ?? '')}`)
 </script>
 
 <style scoped></style>

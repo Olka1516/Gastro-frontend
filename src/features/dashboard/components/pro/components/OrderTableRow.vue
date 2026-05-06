@@ -1,5 +1,12 @@
 <template>
-  <tr class="border-b border-white/5 transition-colors hover:bg-white/[0.03] last:border-0">
+  <tr
+    class="cursor-pointer border-b border-white/5 transition-colors hover:bg-white/[0.03] last:border-0"
+    tabindex="0"
+    role="button"
+    @click="emit('select', order)"
+    @keydown.enter.prevent="emit('select', order)"
+    @keydown.space.prevent="emit('select', order)"
+  >
     <td class="whitespace-nowrap px-5 py-4 text-gray-300">
       {{ formatOrderDate(order.createdAt) }}
     </td>
@@ -45,6 +52,10 @@ import { inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 defineProps<{ order: IShowcasePlacedOrder }>()
+
+const emit = defineEmits<{
+  (e: 'select', order: IShowcasePlacedOrder): void
+}>()
 
 const { t } = useI18n()
 const { formatOrderDate, formatCustomerName, formatLinesSummary, statusBadgeClass } =

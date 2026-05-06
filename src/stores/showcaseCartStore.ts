@@ -1,5 +1,9 @@
 import type { IDish } from '@/types/menu'
 import type { IShowcaseCartLine, IShowcaseCartDishSnapshot, ShowcaseCartLineStatus } from '@/types/showcaseCart'
+import {
+  SHOWCASE_ORDER_HISTORY_UPDATED_EVENT,
+  canonicalShowcasePlaceSlug,
+} from '@/utils/showcaseOrderHistoryStorage'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -154,7 +158,14 @@ export const useShowcaseCartStore = defineStore('showcaseCart', () => {
         changed = true
       }
     }
-    if (changed) persist()
+    if (changed) {
+      persist()
+      window.dispatchEvent(
+        new CustomEvent(SHOWCASE_ORDER_HISTORY_UPDATED_EVENT, {
+          detail: { placeSlug: canonicalShowcasePlaceSlug(placeSlug.value) },
+        }),
+      )
+    }
   }
 
   return {

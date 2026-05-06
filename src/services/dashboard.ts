@@ -1,6 +1,10 @@
 import { ENDPOINTS } from '@/constants'
 import http from '@/http'
-import type { IShowcasePlacedOrder, ShowcaseOrderStatusFilter } from '@/types/showcaseOrder'
+import type {
+  IShowcasePlacedOrder,
+  ShowcaseOrderStatus,
+  ShowcaseOrderStatusFilter,
+} from '@/types/showcaseOrder'
 import type { IDish, ICategory } from '@/types/menu'
 
 export const getUserDetailsByUserId = async () => {
@@ -80,4 +84,11 @@ export const getShowcaseOrdersForOwner = async (params?: {
   )
   if (Array.isArray(data)) return data
   return data.orders ?? []
+}
+
+export const patchShowcaseOrderStatus = async (
+  orderId: string,
+  status: ShowcaseOrderStatus,
+): Promise<void> => {
+  await http.patch(ENDPOINTS.PATCH_SHOWCASE_ORDER(orderId), { status })
 }

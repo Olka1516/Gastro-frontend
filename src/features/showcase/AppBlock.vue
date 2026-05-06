@@ -12,9 +12,7 @@
     </div>
 
 
-    <div v-else-if="data?.status">
-      <component :is="plans[data.planName!]" />
-    </div>
+    <RouterView v-else-if="data?.status" />
 
     <div v-else-if="store.planName && store.status === EStatus.pending"
       class="min-h-screen flex items-center justify-center px-8">
@@ -35,11 +33,11 @@
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
+import { showcasePlanContextKey } from '@/features/showcase/types/showcasePlanContext'
 import { useUserStore } from '@/stores'
-import { EStatus, type IUserStatus } from '@/types'
-import { onMounted, ref } from 'vue'
+import { EPlan, EStatus, type IUserStatus } from '@/types'
+import { computed, onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { plans } from './constants/plans'
 import { useRoute } from 'vue-router'
 
 const { t } = useI18n()
@@ -48,6 +46,16 @@ const data = ref<IUserStatus | null>(null)
 const loading = ref(true)
 const error = ref(false)
 const store = useUserStore()
+
+const showcasePlanContext = computed(() => {
+  if (!data.value?.status || !data.value.planName) return null
+  return {
+    planName: data.value.planName as EPlan,
+    placeSlug: String(route.params.id ?? ''),
+  }
+})
+
+provide(showcasePlanContextKey, showcasePlanContext)
 
 onMounted(async () => {
   try {

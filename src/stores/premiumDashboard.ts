@@ -4,10 +4,15 @@ import {
   editDishForUser,
   getShowcaseOrdersForOwner,
   getUserDishes,
+  patchShowcaseOrderStatus,
 } from '@/services/dashboard'
 import type { TRequestError } from '@/types'
 import type { IDish } from '@/types/menu'
-import type { IShowcasePlacedOrder, ShowcaseOrderStatusFilter } from '@/types/showcaseOrder'
+import type {
+  IShowcasePlacedOrder,
+  ShowcaseOrderStatus,
+  ShowcaseOrderStatusFilter,
+} from '@/types/showcaseOrder'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -81,6 +86,21 @@ export const usePremiumDashboardStore = defineStore('premiumDashboard', () => {
     return fetchShowcaseOrders()
   }
 
+  const updateShowcaseOrderStatus = async (orderId: string, status: ShowcaseOrderStatus) => {
+    try {
+      await patchShowcaseOrderStatus(orderId, status)
+      ordersError.value = ''
+      await fetchShowcaseOrders()
+      return { success: true as const }
+    } catch (err) {
+      const message = err as TRequestError
+      return {
+        success: false as const,
+        error: message.response?.data?.message,
+      }
+    }
+  }
+
   return {
     dishes,
     error,
@@ -93,5 +113,6 @@ export const usePremiumDashboardStore = defineStore('premiumDashboard', () => {
     fetchDishes,
     fetchShowcaseOrders,
     setOrdersStatusFilter,
+    updateShowcaseOrderStatus,
   }
 })

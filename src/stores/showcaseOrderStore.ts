@@ -2,6 +2,11 @@ import { i18n } from '@/lang'
 import { postShowcaseOrder } from '@/services/showcase'
 import type { TRequestError } from '@/types/errorEnum'
 import type { IShowcaseOrderCustomer, IShowcaseOrderLinePayload } from '@/types/showcaseOrder'
+import {
+  appendShowcaseOrderHistory,
+  customerSummaryForHistory,
+  linesSnapshotForHistory,
+} from '@/utils/showcaseOrderHistoryStorage'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { notificationStore } from './notificationStore'
@@ -26,6 +31,8 @@ export const useShowcaseOrderStore = defineStore('showcaseOrder', () => {
     lines: IShowcaseOrderLinePayload[]
     total: number
   }) => {
+    const store = notificationStore()
+
     loading.value = true
     lastError.value = null
     lastPlacedOrderId.value = null
@@ -38,19 +45,27 @@ export const useShowcaseOrderStore = defineStore('showcaseOrder', () => {
       })
       if (typeof id === 'string') {
         lastPlacedOrderId.value = id
+        appendShowcaseOrderHistory(params.placeSlug, {
+          id,
+          placedAt: new Date().toISOString(),
+          total: params.total,
+          lines: linesSnapshotForHistory(params.lines),
+          customerSummary: customerSummaryForHistory(params.customer),
+          source: 'server',
+        })
       }
 
       const cartStore = useShowcaseCartStore()
       cartStore.markInCartLinesAsOrdered()
 
-      notificationStore().sendSuccess('toasts.checkoutOrderSuccess')
+      store.sendSuccess('toasts.checkoutOrderSuccess')
       return { success: true as const, orderId: typeof id === 'string' ? id : undefined }
     } catch (err) {
       const axiosErr = err as TRequestError
       const message = axiosErr.response?.data?.message
       lastError.value = typeof message === 'string' ? message : null
 
-      notificationStore().sendError(toastKeyForShowcaseOrderApiError(message))
+      store.sendError(toastKeyForShowcaseOrderApiError(message))
       return { success: false as const }
     } finally {
       loading.value = false

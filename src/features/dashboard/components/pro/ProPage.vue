@@ -14,6 +14,7 @@ import BaseSidebar from '../general/BaseSidebar.vue'
 import Categories from './components/CategoriesBlock.vue'
 import HomeBlock from './components/HomeBlock.vue'
 import OrdersBlock from './components/OrdersBlock.vue'
+import ReservationsBlock from './components/ReservationsBlock.vue'
 import SettingsBlock from './components/SettingsBlock.vue'
 import TableMenu from './components/TableMenu.vue'
 import QRCodeBlock from '../general/QRCodeBlock.vue'
@@ -27,6 +28,11 @@ const navs = [
     name: 'dashboard.standart.navs.orders',
     component: markRaw(OrdersBlock),
     image: 'tools-kitchen',
+  },
+  {
+    name: 'dashboard.standart.navs.reservations',
+    component: markRaw(ReservationsBlock),
+    image: 'clock',
   },
   { name: 'dashboard.standart.navs.categories', component: markRaw(Categories), image: 'category' },
   { name: 'dashboard.standart.navs.qrCode', component: markRaw(QRCodeBlock), image: 'qrCode' },

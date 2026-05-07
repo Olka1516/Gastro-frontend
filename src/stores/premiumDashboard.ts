@@ -3,8 +3,10 @@ import {
   deleteDishById,
   editDishForUser,
   getShowcaseOrdersForOwner,
+  getTableReservationsForOwner,
   getUserDishes,
   patchShowcaseOrderStatus,
+  patchTableReservation,
 } from '@/services/dashboard'
 import type { TRequestError } from '@/types'
 import type { IDish } from '@/types/menu'
@@ -13,6 +15,12 @@ import type {
   ShowcaseOrderStatus,
   ShowcaseOrderStatusFilter,
 } from '@/types/showcaseOrder'
+import type {
+  IPatchTableReservationBody,
+  ITableReservation,
+  TableReservationStatus,
+  TableReservationStatusFilter,
+} from '@/types/tableReservation'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -22,6 +30,9 @@ export const usePremiumDashboardStore = defineStore('premiumDashboard', () => {
   const showcaseOrders = ref<IShowcasePlacedOrder[]>([])
   const ordersError = ref('')
   const ordersStatusFilter = ref<ShowcaseOrderStatusFilter>('pending')
+  const tableReservations = ref<ITableReservation[]>([])
+  const reservationsError = ref('')
+  const reservationsStatusFilter = ref<TableReservationStatusFilter>('pending')
 
   const addDish = async (dishData: IDish) => {
     try {
@@ -101,6 +112,55 @@ export const usePremiumDashboardStore = defineStore('premiumDashboard', () => {
     }
   }
 
+  const sortReservationsDesc = (list: ITableReservation[]) =>
+    [...list].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
+  const fetchTableReservations = async () => {
+    try {
+      const list = await getTableReservationsForOwner({
+        status: reservationsStatusFilter.value,
+      })
+      tableReservations.value = sortReservationsDesc(list)
+      reservationsError.value = ''
+      return { success: true as const }
+    } catch (err) {
+      const message = err as TRequestError
+      reservationsError.value = message.response?.data?.message ?? ''
+      tableReservations.value = []
+      return { success: false as const, error: message.response?.data?.message }
+    }
+  }
+
+  const updateTableReservation = async (reservationId: string, body: IPatchTableReservationBody) => {
+    try {
+      await patchTableReservation(reservationId, body)
+      reservationsError.value = ''
+      await fetchTableReservations()
+      return { success: true as const }
+    } catch (err) {
+      const message = err as TRequestError
+      await fetchTableReservations()
+      return {
+        success: false as const,
+        error: message.response?.data?.message,
+      }
+    }
+  }
+
+  const updateTableReservationStatus = async (
+    reservationId: string,
+    status: TableReservationStatus,
+    reschedule?: { visitDate?: string; visitTime?: string },
+  ) => {
+    const body: IPatchTableReservationBody = { status, ...reschedule }
+    return updateTableReservation(reservationId, body)
+  }
+
+  const setReservationsStatusFilter = async (value: TableReservationStatusFilter) => {
+    reservationsStatusFilter.value = value
+    return fetchTableReservations()
+  }
+
   return {
     dishes,
     error,
@@ -114,5 +174,12 @@ export const usePremiumDashboardStore = defineStore('premiumDashboard', () => {
     fetchShowcaseOrders,
     setOrdersStatusFilter,
     updateShowcaseOrderStatus,
+    tableReservations,
+    reservationsError,
+    reservationsStatusFilter,
+    fetchTableReservations,
+    setReservationsStatusFilter,
+    updateTableReservation,
+    updateTableReservationStatus,
   }
 })

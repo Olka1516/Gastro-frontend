@@ -30,7 +30,6 @@ export type ShowcaseOrderStatus = (typeof SHOWCASE_ORDER_STATUSES)[number]
 
 export type ShowcaseOrderStatusFilter = ShowcaseOrderStatus | 'all'
 
-/** Order as returned for the owner dashboard (GET list). */
 export interface IShowcasePlacedOrder {
   id: string
   createdAt?: string

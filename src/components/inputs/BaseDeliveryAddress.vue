@@ -1,17 +1,10 @@
 <template>
   <div class="relative w-full">
-    <input
-      v-model="localValue"
-      type="text"
-      :autocomplete="autocomplete ?? 'street-address'"
-      :placeholder="t('inputs.deliveryAddress')"
-      :class="[
+    <input v-model="localValue" type="text" :autocomplete="autocomplete ?? 'street-address'"
+      :placeholder="t('inputs.deliveryAddress')" :class="[
         'w-full text-white px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition',
         isInfoInvalid() ? 'border-red-500 focus:ring-red-400' : 'border-gray-300 focus:ring-blue-500',
-      ]"
-      @input="handleInput"
-    />
-    <!-- Місце для майбутнього API пошуку адреси (підказки, кнопка пошуку) -->
+      ]" @input="handleInput" />
     <div class="address-autocomplete-anchor mt-1 empty:hidden" />
   </div>
 </template>

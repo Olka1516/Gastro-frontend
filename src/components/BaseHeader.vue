@@ -144,6 +144,7 @@ const showcaseNavTo = (nav: string) => {
   const key = nav.toLowerCase()
   if (key === 'menu') return normalizePath(base)
   if (key === 'orders') return `${normalizePath(base)}/orders`
+  if (key === 'reserve') return `${normalizePath(base)}/reserve`
   return { hash: `#${key}` }
 }
 
@@ -159,6 +160,9 @@ const showcaseLinkClass = (nav: string) =>
     }
     if (key === 'orders') {
       return path === `${menuRoot}/orders` ? 'text-[#dc5b41]' : 'text-white'
+    }
+    if (key === 'reserve') {
+      return path === `${menuRoot}/reserve` ? 'text-[#dc5b41]' : 'text-white'
     }
     return 'text-white'
   })

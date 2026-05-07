@@ -5,6 +5,11 @@ import type {
   ShowcaseOrderStatus,
   ShowcaseOrderStatusFilter,
 } from '@/types/showcaseOrder'
+import type {
+  IPatchTableReservationBody,
+  ITableReservation,
+  TableReservationStatusFilter,
+} from '@/types/tableReservation'
 import type { IDish, ICategory } from '@/types/menu'
 
 export const getUserDetailsByUserId = async () => {
@@ -91,4 +96,24 @@ export const patchShowcaseOrderStatus = async (
   status: ShowcaseOrderStatus,
 ): Promise<void> => {
   await http.patch(ENDPOINTS.PATCH_SHOWCASE_ORDER(orderId), { status })
+}
+
+export const getTableReservationsForOwner = async (params?: {
+  status?: TableReservationStatusFilter
+}): Promise<ITableReservation[]> => {
+  const query =
+    params?.status && params.status !== 'all' ? { status: params.status } : undefined
+  const { data } = await http.get<{ reservations?: ITableReservation[] } | ITableReservation[]>(
+    ENDPOINTS.GET_TABLE_RESERVATIONS,
+    { params: query },
+  )
+  if (Array.isArray(data)) return data
+  return data.reservations ?? []
+}
+
+export const patchTableReservation = async (
+  reservationId: string,
+  body: IPatchTableReservationBody,
+): Promise<void> => {
+  await http.patch(ENDPOINTS.PATCH_TABLE_RESERVATION(reservationId), body)
 }

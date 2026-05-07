@@ -60,9 +60,9 @@ const fetchOrders = async () => {
   loading.value = false
 }
 
-const onStatusFilterChange = async (value: ShowcaseOrderStatusFilter) => {
+const onStatusFilterChange = async (value: string) => {
   loading.value = true
-  await premiumStore.setOrdersStatusFilter(value)
+  await premiumStore.setOrdersStatusFilter(value as ShowcaseOrderStatusFilter)
   loading.value = false
 }
 

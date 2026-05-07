@@ -105,8 +105,6 @@ const quickLinks = [
   },
 ]
 
-// icon path resolution is now handled inside DashboardQuickLinks
-
 const cards = computed<DashboardCardBind[]>(() => {
   return [
     {

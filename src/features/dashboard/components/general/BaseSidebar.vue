@@ -148,14 +148,11 @@ const getIconPath = (imageName: string) => {
 
 const getIconStyle = (nav: IBaseSidebarData) => {
   if (isActive(nav)) {
-    // Active state: use accent color #dc5b41
-    // Filter to convert black SVG to accent color
     return {
       filter:
         'brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%) hue-rotate(341deg) brightness(98%) contrast(87%)',
     }
   }
-  // Default state: white
   return {
     filter: 'brightness(0) invert(1)',
   }
@@ -227,7 +224,6 @@ const getIconStyle = (nav: IBaseSidebarData) => {
   background: transparent;
 }
 
-/* Smooth transitions for width changes */
 aside {
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

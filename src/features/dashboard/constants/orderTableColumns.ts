@@ -1,4 +1,3 @@
-/** Column metadata for the owner orders table (headers + shared cell layout hints). */
 export type OrderTableColumn = {
   key: string
   labelKey: string

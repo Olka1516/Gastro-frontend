@@ -24,7 +24,7 @@ import MainBlock from './MainBlock.vue'
 
 const route = useRoute()
 const activeSection = ref('')
-const navs = ['menu', 'orders']
+const navs = ['menu', 'orders', 'reserve']
 
 const menuBasePath = computed(() => `/menu/${String(route.params.id ?? '')}`)
 </script>

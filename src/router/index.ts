@@ -25,6 +25,11 @@ const router = createRouter({
           name: 'showcase-checkout',
           component: () => import('../features/showcase/ShowcaseCheckoutPage.vue'),
         },
+        {
+          path: 'reserve',
+          name: 'showcase-place-reserve',
+          component: () => import('../features/showcase/ShowcaseReservePage.vue'),
+        },
       ],
     },
   ],

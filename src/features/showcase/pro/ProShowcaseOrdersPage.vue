@@ -23,7 +23,7 @@ const router = useRouter()
 const ctx = inject(showcasePlanContextKey)
 
 const activeSection = ref('')
-const navs = ['menu', 'orders']
+const navs = ['menu', 'orders', 'reserve']
 
 const menuBasePath = computed(() => `/menu/${String(route.params.id ?? '')}`)
 

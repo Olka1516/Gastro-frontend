@@ -1,9 +1,9 @@
-/** Fallback for vue-i18n; locale defaults to `ua` in `lang/index.ts` */
 export default {
   dashboard: {
     standart: {
       navs: {
         orders: 'Orders',
+        reservations: 'Table reservations',
       },
     },
     orders: {
@@ -35,14 +35,56 @@ export default {
       statusUpdated: 'Order status updated.',
       statusUpdateFailed: 'Could not update order status. Please try again.',
     },
+    reservations: {
+      title: 'Reservation requests',
+      subtitle:
+        'Requests from your premium menu booking form. Change status — when email is wired up, guests get notified.',
+      loadError: 'Could not load reservations. Please try again later.',
+      emptyTitle: 'No reservation requests yet',
+      emptyHint: 'When guests submit the form from your premium menu, entries will show up here.',
+      colReceived: 'Received',
+      colVisit: 'Visit',
+      colParty: 'Party',
+      colGuest: 'Guest',
+      colContact: 'Contact',
+      colComment: 'Notes',
+      colStatus: 'Status',
+      status: {
+        pending: 'Pending',
+        confirmed: 'Confirmed',
+        declined: 'Declined',
+        rescheduled: 'Rescheduled',
+        all: 'All',
+      },
+      statusToast: 'Status saved. An email update will be sent.',
+      statusUpdateFailed: 'Could not update status. Please try again.',
+      rescheduleCurrentSlot: 'Current visit',
+      rescheduleHint: 'Set the new visit date and time for this reschedule.',
+      rescheduleNewDate: 'New date',
+      rescheduleNewTime: 'New time',
+      rescheduleSave: 'Save reschedule',
+      rescheduleCancel: 'Cancel',
+      rescheduleValidation: 'Please choose both a date and a time for the reschedule.',
+    },
   },
   toasts: {
     checkoutOrderSuccess: 'Order placed successfully',
     checkoutOrderError: 'Could not place the order. Please try again.',
+    reserveRequestSent:
+      'Request sent. The venue will confirm by email once the server is connected.',
+    reserveRequestError: 'Could not send the request. Please try again.',
+  },
+  apiTableReservation: {
+    tableReservationNotAvailable:
+      'Reservations are not available for this menu (premium required).',
+    tableReservationInvalidSlot: 'Pick another time or date — this slot is unavailable.',
+    tableReservationRateLimit: 'Too many attempts. Please try again later.',
+    invalidCredentials: 'Menu not found or unavailable.',
   },
   apiShowcaseOrder: {
     showcaseOrderingNotAvailable: 'Ordering is not available for this menu.',
-    showcaseOrderTotalMismatch: 'The total does not match your cart. Refresh the page and try again.',
+    showcaseOrderTotalMismatch:
+      'The total does not match your cart. Refresh the page and try again.',
     showcaseOrderDishInvalid: 'Some items are no longer available. Refresh the menu and cart.',
     showcaseOrderRateLimit: 'Too many order attempts. Please try again later.',
     invalidCredentials: 'Menu not found or unavailable.',
@@ -65,6 +107,10 @@ export default {
     chooseImage: 'Choose image',
     imageTooLarge: 'Image too large',
     notAnImage: 'Not an image',
+    reserveDate: 'Pick a date',
+    reserveTime: 'Time',
+    partySize: 'Party size',
+    reserveComment: 'Occasion, kids, seating preferences…',
   },
   errors: {
     email: {
@@ -84,10 +130,14 @@ export default {
     address: {
       required: 'Enter the delivery address',
     },
+    reserve: {
+      partySize: 'Enter party size from 1 to 50',
+    },
   },
   navs: {
     menu: 'Menu',
     orders: 'My orders',
+    reserve: 'Reserve a table',
   },
   showcase: {
     premium: {
@@ -118,11 +168,24 @@ export default {
       checkoutSubmitting: 'Sending…',
       checkoutFormSection: 'Contact & delivery',
       backToMenu: 'Back to menu',
+      reserveTitle: 'Reserve a table',
+      reserveSubtitle:
+        'Submit this form — the venue sees it in the dashboard and can confirm your visit.',
+      reserveFormSection: 'Reservation details',
+      reserveDate: 'Visit date',
+      reserveTime: 'Time',
+      reservePartySize: 'Party size',
+      reserveEmail: 'Email for confirmation and status updates',
+      reserveComment: 'Comment (optional)',
+      reserveLegalHint: 'By submitting, you agree to be contacted about this reservation.',
+      reserveSubmit: 'Send request',
+      reserveSubmitting: 'Sending…',
       addToCart: 'Add to cart',
       removeFromCart: 'Remove from cart',
       orderHistoryTitle: 'Order history',
       orderHistoryHint: 'Orders you place on this menu are saved on this device only.',
-      orderHistoryEmpty: 'No orders yet. After you complete checkout, your order will show up here.',
+      orderHistoryEmpty:
+        'No orders yet. After you complete checkout, your order will show up here.',
       orderHistoryPlacedAt: 'Placed',
       orderHistoryId: 'Order ID',
       orderHistoryFromCart: 'Placed from cart (saved on this device)',

@@ -1,5 +1,9 @@
 import type { IDish } from '@/types/menu'
-import type { IShowcaseCartLine, IShowcaseCartDishSnapshot, ShowcaseCartLineStatus } from '@/types/showcaseCart'
+import type {
+  IShowcaseCartLine,
+  IShowcaseCartDishSnapshot,
+  ShowcaseCartLineStatus,
+} from '@/types/showcaseCart'
 import {
   SHOWCASE_ORDER_HISTORY_UPDATED_EVENT,
   canonicalShowcasePlaceSlug,
@@ -9,8 +13,7 @@ import { computed, ref } from 'vue'
 
 const storageKey = (placeSlug: string) => `showcase-cart:${placeSlug}`
 
-const isRecord = (x: unknown): x is Record<string, unknown> =>
-  typeof x === 'object' && x !== null
+const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null
 
 const isValidLine = (x: unknown): x is IShowcaseCartLine => {
   if (!isRecord(x)) return false
@@ -148,7 +151,6 @@ export const useShowcaseCartStore = defineStore('showcaseCart', () => {
     persist()
   }
 
-  /** Після успішного оформлення на бекенді — позначити всі позиції з кошика як замовлені */
   const markInCartLinesAsOrdered = () => {
     if (!placeSlug.value) return
     let changed = false

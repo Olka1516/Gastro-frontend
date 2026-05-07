@@ -1,25 +1,14 @@
 <template>
   <Teleport to="body">
-    <Transition
-      enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 scale-90"
-      enter-to-class="opacity-100 scale-100"
-      leave-active-class="transition duration-200 ease-in"
-      leave-from-class="opacity-100 scale-100"
-      leave-to-class="opacity-0 scale-90"
-    >
-      <div
-        v-if="open"
-        class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px]"
-      >
+    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 scale-90"
+      enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
+      <div v-if="open" class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px]">
         <div
-          class="relative border border-[#dc5b41] w-full max-w-md max-h-[90vh] rounded-2xl shadow-2xl bg-black/80 overflow-hidden flex flex-col"
-        >
+          class="relative border border-[#dc5b41] w-full max-w-md max-h-[90vh] rounded-2xl shadow-2xl bg-black/80 overflow-hidden flex flex-col">
           <div class="flex-shrink-0 relative p-6 pb-0">
-            <button
-              @click="closeModal"
-              class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition"
-            >
+            <button @click="closeModal"
+              class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition">
               ✕
             </button>
 
@@ -34,59 +23,32 @@
                 <BaseDragFile :url="data.image" :v="v$.image" @update="handleImageUpdate" />
               </div>
               <div class="relative">
-                <BaseText
-                  v-model="formData.name"
-                  :v="v$.name"
-                  type="name"
-                  :error="error"
-                  autocomplete="name"
-                />
+                <BaseText v-model="formData.name" :v="v$.name" type="name" :error="error" autocomplete="name" />
                 <ErrorMessage :v="v$.name" :error="error" />
               </div>
               <div class="relative">
-                <BaseText
-                  v-model="formData.price"
-                  :v="v$.price"
-                  type="price"
-                  :error="error"
-                  autocomplete="price"
-                />
+                <BaseText v-model="formData.price" :v="v$.price" type="price" :error="error" autocomplete="price" />
                 <ErrorMessage :v="v$.price" :error="error" />
               </div>
               <div class="relative">
-                <BaseSelect
-                  v-model:category="selectedCategoryName"
-                  :all-selections="categoryNames"
-                  type="dashboard.tableHead.category"
-                  :v="v$.category"
-                />
+                <BaseSelect v-model:category="selectedCategoryName" :all-selections="categoryNames"
+                  type="dashboard.tableHead.category" :v="v$.category" />
                 <ErrorMessage :v="v$.category" :error="error" />
               </div>
               <div class="relative">
-                <BaseText
-                  v-model="formData.description"
-                  :v="v$.description"
-                  type="description"
-                  :error="error"
-                  autocomplete="description"
-                />
+                <BaseText v-model="formData.description" :v="v$.description" type="description" :error="error"
+                  autocomplete="description" />
                 <ErrorMessage :v="v$.description" :error="error" />
               </div>
 
               <div class="relative">
-                <BaseAvailabilitySelect
-                  v-model:availability="formData.isAvailable"
-                  :all-selections="availabilityOptions"
-                  type="dashboard.availability"
-                  :v="v$.isAvailable"
-                />
+                <BaseAvailabilitySelect v-model:availability="formData.isAvailable"
+                  :all-selections="availabilityOptions" type="dashboard.availability" :v="v$.isAvailable" />
                 <ErrorMessage :v="v$.isAvailable" :error="error" />
               </div>
 
-              <button
-                type="submit"
-                class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold shadow-md hover:bg-[#dc5b34] transition"
-              >
+              <button type="submit"
+                class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold shadow-md hover:bg-[#dc5b34] transition">
                 {{ isEditMode ? t('button.edit') : t('button.add') }}
               </button>
             </form>
@@ -133,10 +95,8 @@ const data = reactive<IDish>({
 const availabilityOptions = ['available', 'unavailable']
 const categoriesDashboardStore = useCategoriesDashboardStore()
 
-// Отримуємо категорії з store
 const categoryNames = computed(() => categoriesDashboardStore.categories.map((cat) => cat.name))
 
-// Маппінг назва -> ID
 const categoryIdMap = computed(() => {
   const map = new Map<string, string>()
   categoriesDashboardStore.categories.forEach((cat) => {
@@ -145,7 +105,6 @@ const categoryIdMap = computed(() => {
   return map
 })
 
-// Маппінг ID -> назва
 const categoryNameMap = computed(() => {
   const map = new Map<string, string>()
   categoriesDashboardStore.categories.forEach((cat) => {
@@ -154,7 +113,6 @@ const categoryNameMap = computed(() => {
   return map
 })
 
-// Вибрана назва категорії для відображення
 const selectedCategoryName = computed({
   get: () => {
     if (!formData.category) return ''
@@ -198,7 +156,6 @@ const handleNextStep = async () => {
   const isFormCorrect = await v$.value.$validate()
   if (!isFormCorrect) return
 
-  // Копіюємо дані з formData в data перед відправкою
   Object.assign(data, formData)
 
   closeModal()
@@ -222,14 +179,11 @@ const syncDataFromDish = (dishValue: IDish) => {
 
   Object.assign(data, dishValue)
 
-  // Синхронізуємо formData з data для валідації
   formData.name = data.name
   formData.image = data.image
   formData.price = data.price
   formData.description = data.description
-  // data.category може бути ID або назвою - перевіряємо та зберігаємо ID
   if (data.category) {
-    // Якщо це ID (є в мапі), залишаємо як є, інакше шукаємо ID за назвою
     const categoryId = categoryNameMap.value.has(data.category)
       ? data.category
       : categoryIdMap.value.get(data.category) || data.category
@@ -251,7 +205,6 @@ watch(
 )
 watch(open, async (isOpen) => {
   if (isOpen) {
-    // Завантажуємо категорії при відкритті модального вікна
     await categoriesDashboardStore.fetchCategories()
     if (dish.value) {
       syncDataFromDish(dish.value)
@@ -261,11 +214,9 @@ watch(open, async (isOpen) => {
 })
 
 onMounted(async () => {
-  // Завантажуємо категорії при монтуванні компонента
   await categoriesDashboardStore.fetchCategories()
 })
 
-// Синхронізуємо formData.image з data.image для валідації
 watch(
   () => data.image,
   (newImage) => {

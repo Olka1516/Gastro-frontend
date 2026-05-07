@@ -1,7 +1,5 @@
-/** Позиція в кошику: ще в кошику або вже оформлене замовлення (для відображення / історії) */
 export type ShowcaseCartLineStatus = 'in_cart' | 'ordered'
 
-/** Знімок страви для збереження в localStorage (без File у image) */
 export interface IShowcaseCartDishSnapshot {
   id: string
   name: string

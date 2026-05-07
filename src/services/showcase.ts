@@ -1,6 +1,7 @@
 import { ENDPOINTS } from '@/constants'
 import type { IPlaceBranding } from '@/types'
 import type { IShowcaseOrderPayload } from '@/types/showcaseOrder'
+import type { ICreateTableReservationPayload } from '@/types/tableReservation'
 import http from '@/http'
 
 export const getPlaceBranding = async (placeName: string): Promise<IPlaceBranding> => {
@@ -23,5 +24,16 @@ export const postShowcaseOrder = async (
   payload: IShowcaseOrderPayload,
 ): Promise<{ id: string }> => {
   const { data } = await http.post<{ id: string }>(ENDPOINTS.POST_SHOWCASE_ORDER(placeSlug), payload)
+  return data
+}
+
+export const postTableReservation = async (
+  placeSlug: string,
+  payload: ICreateTableReservationPayload,
+): Promise<{ id: string }> => {
+  const { data } = await http.post<{ id: string }>(
+    ENDPOINTS.POST_SHOWCASE_TABLE_RESERVATION(placeSlug),
+    payload,
+  )
   return data
 }

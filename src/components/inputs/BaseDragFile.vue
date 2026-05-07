@@ -92,7 +92,6 @@ const handleFiles = (files: FileList) => {
     text.value = t('inputs.notAnImage')
     return
   }
-  // Якщо файл валідний, скидаємо помилки
   isHeavy.value = false
   text.value = t('inputs.uploadText')
   uploadedFile.value = files[0]

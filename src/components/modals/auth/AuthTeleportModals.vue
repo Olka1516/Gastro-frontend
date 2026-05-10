@@ -51,7 +51,7 @@
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { ModalKey } from '../../types'
+import type { ModalKey } from '@/types'
 import SignUpModal from './SignUpModal.vue'
 import SignInModal from './SignInModal.vue'
 

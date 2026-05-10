@@ -20,7 +20,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="flex flex-col gap-2">
-            <span class="text-sm text-gray-300">{{ t('dashboard.settings.menuBackgroundColor') }}</span>
+            <span class="text-sm text-gray-300">{{
+              t('dashboard.settings.menuBackgroundColor')
+            }}</span>
             <div class="flex items-center gap-2">
               <input v-model="formData.menuBackgroundColor" type="color"
                 class="h-11 w-14 min-w-14 rounded-lg border border-[#2a2930] bg-[#1a191f] p-1 cursor-pointer" />
@@ -88,10 +90,7 @@ const rules = {
 
 const v$ = useVuelidate(rules, formData)
 
-const normalizeColor = (
-  field: 'menuBackgroundColor' | 'menuIconColor',
-  fallbackColor: string,
-) => {
+const normalizeColor = (field: 'menuBackgroundColor' | 'menuIconColor', fallbackColor: string) => {
   const value = formData[field]?.trim().toLowerCase()
   const isHex = /^#([0-9a-f]{6}|[0-9a-f]{3})$/i.test(value)
   formData[field] = isHex ? value : fallbackColor
@@ -105,6 +104,8 @@ const handleSubmit = async () => {
     error.value = ''
     normalizeColor('menuBackgroundColor', DEFAULT_MENU_BG_COLOR)
     normalizeColor('menuIconColor', DEFAULT_MENU_ICON_COLOR)
+    console.log(formData.logo)
+
     await store.updateUser({
       placeName: formData.placeName,
       email: formData.email,

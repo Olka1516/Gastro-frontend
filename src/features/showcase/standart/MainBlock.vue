@@ -6,8 +6,10 @@
     </div>
 
     <div class="text-center mb-16">
+      <img v-if="logoUrl" :src="logoUrl" :alt="displayPlaceName || t('showcase.menu')"
+        class="mx-auto mb-6 h-20 w-auto max-w-[220px] object-contain" />
       <h1 class="text-white text-5xl font-bold mb-4">
-        {{ userInfo?.placeName || t('showcase.menu') }}
+        {{ displayPlaceName || t('showcase.menu') }}
       </h1>
       <p class="text-gray-400 text-lg max-w-2xl mx-auto">
         {{ t('showcase.welcomeDescription') }}
@@ -15,9 +17,9 @@
     </div>
 
     <div v-if="!loading && categoriesWithDishes.length === 0"
-      class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-3xl border border-[#2a2930] p-20 text-center">
+      class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] p-20 text-center">
       <div class="flex flex-col items-center gap-6">
-        <div class="w-32 h-32 rounded-3xl flex items-center justify-center" :style="iconBadgeStyle">
+        <div class="w-32 h-32 rounded-lg flex items-center justify-center" :style="iconBadgeStyle">
           <span class="text-6xl">🍽️</span>
         </div>
         <h3 class="text-white text-3xl font-bold">{{ t('showcase.noMenuAvailable') }}</h3>
@@ -38,30 +40,26 @@
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseStore } from '@/stores/showcaseStore'
-import { useUserStore } from '@/stores/user'
 import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import CategorySection from '../components/CategorySection.vue'
 import DishDetailsModal from '../components/DishDetailsModal.vue'
-import CategorySection from './components/CategorySection.vue'
 
 const { t } = useI18n()
 const route = useRoute()
-const userStore = useUserStore()
 const showcaseStore = useShowcaseStore()
-const DEFAULT_MENU_BG_COLOR = '#0f0f11'
-const DEFAULT_MENU_ICON_COLOR = '#dc5b41'
+
+const placeRouteKey = computed(() => String(route.params.id ?? ''))
+const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName } = useShowcasePlaceTheme(placeRouteKey)
 
 const loading = ref(true)
 const dishes = ref<IDish[]>([])
 const likedDishIds = ref<string[]>([])
 const selectedDish = ref<IDish | null>(null)
-
-const userInfo = computed(() => userStore.$state)
-const menuBackgroundColor = computed(() => userStore.menuBackgroundColor || DEFAULT_MENU_BG_COLOR)
-const menuIconColor = computed(() => userStore.menuIconColor || DEFAULT_MENU_ICON_COLOR)
 
 const hexToRgba = (hex: string, alpha: number) => {
   const normalized = hex.replace('#', '')
@@ -93,8 +91,7 @@ const loadingStyle = computed(() => ({
 }))
 
 const iconBadgeStyle = computed(() => ({
-  backgroundColor: menuIconColor.value,
-  boxShadow: `0 20px 60px ${hexToRgba(menuIconColor.value, 0.3)}`,
+  backgroundColor: menuIconColor.value
 }))
 const selectedDishCategoryName = computed(() => {
   if (!selectedDish.value) return ''
@@ -160,6 +157,7 @@ const fetchData = async () => {
     await Promise.all([
       showcaseStore.fetchDishes(placeName),
       showcaseStore.fetchCategories(placeName),
+      showcaseStore.fetchPlaceBranding(placeName),
     ])
     dishes.value = showcaseStore.dishes
   } finally {

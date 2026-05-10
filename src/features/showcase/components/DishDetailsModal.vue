@@ -4,7 +4,7 @@
       <div v-if="dish" class="fixed inset-0 z-[1100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
         @click="emit('close')">
         <div
-          class="w-full max-w-2xl bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-3xl border border-[#2a2930] overflow-hidden shadow-2xl"
+          class="w-full max-w-2xl bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] overflow-hidden shadow-2xl"
           @click.stop>
           <div class="relative h-64 bg-[#111]">
             <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name"
@@ -20,7 +20,7 @@
           <div class="p-6 md:p-8">
             <div class="flex items-start justify-between gap-4">
               <h3 class="text-white text-2xl md:text-3xl font-bold">{{ dish.name }}</h3>
-              <span class="px-4 py-2 rounded-xl text-white font-bold" :style="priceBadgeStyle">
+              <span class="px-4 py-2 rounded-lg text-white font-bold" :style="priceBadgeStyle">
                 ${{ Number(dish.price || 0).toFixed(2) }}
               </span>
             </div>

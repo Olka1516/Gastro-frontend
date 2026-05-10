@@ -1,17 +1,15 @@
 <template>
   <div
-    class="dish-card bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-2xl border border-[#2a2930] overflow-hidden transition-all duration-300 hover:scale-[1.02] group shadow-lg cursor-pointer"
+    class="dish-card bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] overflow-hidden transition-all duration-300 hover:scale-102 group shadow-lg cursor-pointer"
     :style="dishCardStyle" @click="handleClick">
     <div class="relative h-48 overflow-hidden">
       <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name"
-        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
       <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-transparent to-transparent"></div>
 
       <button type="button" :class="[
-        'absolute top-4 right-4 w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-200 z-10',
-        isLiked
-          ? 'text-white'
-          : 'bg-[#0f0f11]/70 border-white/20 text-white/80',
+        'absolute top-4 right-4 w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-200 z-10 cursor-pointer',
+        isLiked ? 'text-white' : 'bg-[#0f0f11]/70 border-white/20 text-white/80',
       ]" :style="likeButtonStyle" @click.stop="emit('toggleLike', dish.id)" aria-label="Like dish">
         <span class="text-lg leading-none">{{ isLiked ? '♥' : '♡' }}</span>
       </button>
@@ -28,6 +26,16 @@
           <span class="text-white text-lg font-bold">${{ Number(dish.price || 0).toFixed(2) }}</span>
         </div>
       </div>
+
+      <button v-if="showAddToCart" type="button" :class="[
+        'absolute bottom-4 right-4 w-10 h-10 rounded-full border flex items-center justify-center transition-all duration-200 z-10 cursor-pointer',
+        quantityInCart > 0 ? 'text-white' : 'bg-[#0f0f11]/70 border-white/20 text-white/80',
+      ]" :style="cartButtonStyle" :aria-label="quantityInCart > 0
+            ? t('showcase.premium.removeFromCart')
+            : t('showcase.premium.addToCart')
+          " @click.stop="handleCartToggle">
+        <img :src="quantityInCart > 0 ? iconSubtract : iconPlus" alt="" class="h-6 w-6 object-contain" />
+      </button>
     </div>
 
     <div class="p-5 flex flex-col gap-3">
@@ -40,22 +48,46 @@
 </template>
 
 <script setup lang="ts">
-import type { IDish } from '@/types/menu';
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import iconPlus from '@/assets/images/icons/plus.svg'
+import iconSubtract from '@/assets/images/icons/substract.svg'
+import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
+import type { IDish } from '@/types/menu'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const props = defineProps<{
-  dish: IDish
-  isLiked: boolean
-  menuIconColor: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    dish: IDish
+    isLiked: boolean
+    menuIconColor: string
+    showAddToCart?: boolean
+    categoryName?: string
+  }>(),
+  { showAddToCart: false, categoryName: '' },
+)
 
 const emit = defineEmits<{
   (e: 'click', dish: IDish): void
   (e: 'toggleLike', dishId: string): void
 }>()
+
+const cartStore = useShowcaseCartStore()
+
+const quantityInCart = computed(() => {
+  if (!props.showAddToCart) return 0
+  return cartStore.linesInCart.find((l) => l.dishId === props.dish.id)?.quantity ?? 0
+})
+
+const handleCartToggle = () => {
+  if (quantityInCart.value > 0) {
+    cartStore.decrementOrRemoveDish(props.dish.id)
+    return
+  }
+  const name = props.categoryName.trim() || props.dish.category
+  cartStore.addDish(props.dish, name)
+}
 
 const handleClick = () => {
   emit('click', props.dish)
@@ -97,11 +129,18 @@ const priceBadgeStyle = computed(() => ({
     0.85,
   )})`,
 }))
-</script>
 
-<style scoped>
-.dish-card:hover {
-  border-color: var(--menu-icon-color-alpha-50);
-  box-shadow: 0 20px 60px var(--menu-icon-color-alpha-20);
-}
-</style>
+const cartButtonStyle = computed(() => {
+  const c = props.menuIconColor || '#dc5b41'
+  if (quantityInCart.value > 0) {
+    return {
+      backgroundColor: hexToRgba('#0f0f11', 0.85),
+      borderColor: '#ef4444',
+    }
+  }
+  return {
+    backgroundColor: hexToRgba(c, 0.92),
+    borderColor: hexToRgba(c, 0.5),
+  }
+})
+</script>

@@ -48,7 +48,7 @@
 
               <div :class="[
                 'w-5 h-5 flex items-center justify-center flex-shrink-0 transition-transform duration-200',
-                isActive(data) ? 'scale-110' : 'group-hover:scale-110',
+                isActive(data) ? 'scale-100' : 'group-hover:scale-105',
                 isClose ? 'mx-auto' : '',
               ]">
                 <img v-if="data.image" :src="getIconPath(data.image)" :alt="t(data.name)" :class="['w-5 h-5']"
@@ -66,13 +66,20 @@
         </ul>
       </nav>
 
-      <div v-if="!isClose" :class="[
-        'mt-auto pt-4 border-t border-[#2a2930] transition-all duration-300',
-        animateElement,
-      ]">
-        <div class="text-center">
-          <p class="text-gray-500 text-xs">Gastro Dashboard</p>
-          <p class="text-gray-600 text-[10px] mt-1">v1.0.0</p>
+      <div :class="['flex flex-col', isClose ? 'gap-2' : '']">
+        <button type="button" :class="[
+          'cursor-pointer flex items-center rounded-lg border border-[#dc5b41]/60 text-gray-300 hover:text-white hover:bg-[#dc5b41]/15 transition-all duration-200 w-full gap-3 px-4 py-2.5',
+          ,
+          isClose ? 'justify-center' : '',
+        ]" :title="isClose ? t('button.logOut') : undefined" :aria-label="t('button.logOut')" @click="handleLogOut">
+          <img :src="getIconPath('logout')" :alt="t('button.logOut')" class="w-5 h-5" />
+          <span v-if="!isClose" class="font-medium text-sm">{{ t('button.logOut') }}</span>
+        </button>
+
+        <div :class="['transition-all duration-300 my-4 border-t border-[#2a2930]']"></div>
+        <div :class="['flex flex-col items-center', isClose ? 'w-full text-center px-0.5' : '']">
+          <p class="text-gray-500 text-xs leading-tight">Gastro Dashboard</p>
+          <p class="text-gray-600 text-[10px] mt-1 leading-tight">v1.0.0</p>
         </div>
       </div>
     </div>
@@ -81,12 +88,16 @@
 
 <script setup lang="ts">
 import { getImage } from '@/common/functions'
+import { useUserStore } from '@/stores'
 import type { IUserData } from '@/types'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import type { IBaseSidebarData } from '../../types'
 
 const { t } = useI18n()
+const store = useUserStore()
+const router = useRouter()
 
 const props = defineProps<{
   navs: IBaseSidebarData[]
@@ -110,7 +121,10 @@ const changeClose = () => {
   emit('handleProcess', isClose.value)
 }
 
-const animateElement = computed(() => (isClose.value ? 'hide-element' : 'show-element'))
+const handleLogOut = async () => {
+  store.logOut()
+  await router.push('/')
+}
 
 const isActive = (nav: IBaseSidebarData) => {
   return props.activeNav?.name === nav.name
@@ -134,14 +148,11 @@ const getIconPath = (imageName: string) => {
 
 const getIconStyle = (nav: IBaseSidebarData) => {
   if (isActive(nav)) {
-    // Active state: use accent color #dc5b41
-    // Filter to convert black SVG to accent color
     return {
       filter:
         'brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%) hue-rotate(341deg) brightness(98%) contrast(87%)',
     }
   }
-  // Default state: white
   return {
     filter: 'brightness(0) invert(1)',
   }
@@ -213,7 +224,6 @@ const getIconStyle = (nav: IBaseSidebarData) => {
   background: transparent;
 }
 
-/* Smooth transitions for width changes */
 aside {
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

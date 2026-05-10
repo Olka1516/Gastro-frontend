@@ -4,8 +4,6 @@ export type Product = {
   ingredients: string
 }
 
-export type ModalKey = 'signUp' | 'signIn'
-
 export type Plan = {
   name: string
   price: number

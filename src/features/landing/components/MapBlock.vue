@@ -1,15 +1,12 @@
 <template>
   <div ref="block" class="bg-[#0f0f11] h-[calc(100vh-50px)] flex relative overflow-hidden">
     <div class="fade-item absolute z-500 top-20 xl:left-60 flex md:left-20">
-      <div class="bg-[#1a191f] flex flex-col gap-6 p-12 items-start">
+      <div class="bg-[#1a191f] flex flex-col gap-6 p-12 items-start rounded-lg">
         <h3 class="fade-item text-white text-2xl font-bold">{{ t('landing.openTime') }}</h3>
         <hr class="fade-item w-full border-[#403f43]" />
         <div class="w-full flex flex-col gap-4">
-          <div
-            v-for="value in tm('landing.times')"
-            :key="value.day"
-            class="fade-item grid grid-cols-[80px_110px_115px] gap-8 items-center"
-          >
+          <div v-for="value in tm('landing.times')" :key="value.day"
+            class="fade-item grid grid-cols-[80px_110px_115px] gap-8 items-center">
             <h4 class="text-white text-xl">{{ rt(value.day) }}</h4>
             <hr class="w-full border-1 border-[#403f43]" />
             <h4 class="text-white text-xl">{{ rt(value.time) }}</h4>
@@ -17,7 +14,7 @@
         </div>
         <hr class="fade-item w-full border-[#403f43]" />
         <p class="fade-item text-white text-xl">{{ t('landing.bookTable') }}</p>
-        <a href="#plans" class="cursor-pointer fade-item text-[#fff] bg-[#dc5b41] px-8 py-2">
+        <a href="#plans" class="cursor-pointer fade-item text-[#fff] bg-[#dc5b41] px-8 py-2 rounded-lg">
           {{ t('button.reserveNow') }}
         </a>
       </div>
@@ -30,18 +27,9 @@
     </div>
 
     <div class="fade-item m-auto mb-25">
-      <VMap
-        style="height: 300px; width: calc(100vw - 284px)"
-        :center="[48.620485, -337.700137]"
-        :zoom="14"
-        :zoomControl="false"
-        :keyboard="false"
-        :boxZoom="false"
-        :scrollWheelZoom="false"
-        :doubleClickZoom="false"
-        :touchZoom="false"
-        :dragging="false"
-      >
+      <VMap class="rounded-lg" style="height: 300px; width: calc(100vw - 284px)" :center="[48.620485, -337.700137]"
+        :zoom="14" :zoomControl="false" :keyboard="false" :boxZoom="false" :scrollWheelZoom="false"
+        :doubleClickZoom="false" :touchZoom="false" :dragging="false">
         <VMapOsmTileLayer />
       </VMap>
     </div>

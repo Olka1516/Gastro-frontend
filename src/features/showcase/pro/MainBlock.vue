@@ -1,5 +1,10 @@
 <template>
-  <div id="menu" class="min-h-screen pb-24 pt-28 md:pt-32" :style="pageStyle">
+  <div
+    id="menu"
+    class="min-h-screen pb-24 pt-28 md:pt-32"
+    :style="pageStyle"
+    :data-menu-dish-layout="menuDishLayout"
+  >
     <div v-if="loading" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
       :style="loadingStyle">
       <BaseLoader />
@@ -40,9 +45,19 @@
       </div>
 
       <div v-else class="mx-auto max-w-6xl space-y-24 pb-16">
-        <CategorySection v-for="category in categoriesWithDishes" :key="category.id" :category="category"
-          :dishes="dishes" :liked-dish-ids="likedDishIds" :menu-icon-color="menuIconColor" :show-add-to-cart="true"
-          class="scroll-mt-28" @dish-click="handleDishClick" @toggle-like="handleToggleLike" />
+        <CategorySection
+          v-for="category in categoriesWithDishes"
+          :key="category.id"
+          :category="category"
+          :dishes="dishes"
+          :liked-dish-ids="likedDishIds"
+          :menu-icon-color="menuIconColor"
+          :menu-dish-layout="menuDishLayout"
+          :show-add-to-cart="true"
+          class="scroll-mt-28"
+          @dish-click="handleDishClick"
+          @toggle-like="handleToggleLike"
+        />
       </div>
     </div>
 
@@ -56,7 +71,9 @@ import BaseLoader from '@/components/BaseLoader.vue'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import { useShowcaseStore } from '@/stores/showcaseStore'
+import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
 import type { IDish } from '@/types/menu'
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -67,14 +84,15 @@ const { t } = useI18n()
 const route = useRoute()
 const showcaseStore = useShowcaseStore()
 const cartStore = useShowcaseCartStore()
+const wishlistStore = useShowcaseWishlistStore()
+const { likedDishIds } = storeToRefs(wishlistStore)
 
 const placeRouteKey = computed(() => String(route.params.id ?? ''))
-const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName } =
+const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName, menuDishLayout } =
   useShowcasePlaceTheme(placeRouteKey)
 
 const loading = ref(true)
 const dishes = ref<IDish[]>([])
-const likedDishIds = ref<string[]>([])
 const selectedDish = ref<IDish | null>(null)
 const activeCategoryId = ref<string | null>(null)
 
@@ -147,35 +165,8 @@ const closeDishModal = () => {
   document.body.style.overflow = ''
 }
 
-const likesStorageKey = computed(() => `showcase-likes:${String(route.params.id || '')}`)
-
-const loadLikedDishes = () => {
-  const raw = localStorage.getItem(likesStorageKey.value)
-  if (!raw) {
-    likedDishIds.value = []
-    return
-  }
-
-  try {
-    const parsed = JSON.parse(raw)
-    likedDishIds.value = Array.isArray(parsed)
-      ? parsed.filter((id): id is string => typeof id === 'string')
-      : []
-  } catch {
-    likedDishIds.value = []
-  }
-}
-
-const saveLikedDishes = () => {
-  localStorage.setItem(likesStorageKey.value, JSON.stringify(likedDishIds.value))
-}
-
 const handleToggleLike = (dishId: string) => {
-  const isLiked = likedDishIds.value.includes(dishId)
-  likedDishIds.value = isLiked
-    ? likedDishIds.value.filter((id) => id !== dishId)
-    : [...likedDishIds.value, dishId]
-  saveLikedDishes()
+  wishlistStore.toggle(dishId)
 }
 
 const updateActiveCategoryFromScroll = () => {
@@ -214,11 +205,12 @@ const fetchData = async () => {
 
 watch(placeRouteKey, (slug) => {
   cartStore.load(slug)
+  wishlistStore.load(slug)
 })
 
 onMounted(async () => {
   cartStore.load(placeRouteKey.value)
-  loadLikedDishes()
+  wishlistStore.load(placeRouteKey.value)
   await fetchData()
   updateActiveCategoryFromScroll()
   window.addEventListener('scroll', updateActiveCategoryFromScroll, { passive: true })

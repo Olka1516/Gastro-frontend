@@ -7,6 +7,7 @@
       :is-menu-page="true"
       :is-premium-menu="true"
       :showcase-nav-base-path="menuBasePath"
+      :show-wishlist="true"
     />
 
     <MainBlock />

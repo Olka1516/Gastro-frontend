@@ -10,11 +10,11 @@
       </h1>
       <div class="flex justify-between items-center gap-4 flex-wrap">
         <p class="text-gray-400 text-lg">{{ t('dashboard.home.subtitle') }}</p>
-        <RouterLink class="flex gap-3 items-center text-sky-600 cursor-pointer text-lg"
-          :to="LINK_TEMPLATES.MENU(userInfo.placeName)">
+        <a class="flex gap-3 items-center text-sky-600 cursor-pointer text-lg" :href="menuPublicHref" target="_blank"
+          rel="noopener noreferrer">
           {{ t('dashboard.home.link') }}
           <img src="@/assets/images/icons/link.svg" alt="menu link" />
-        </RouterLink>
+        </a>
       </div>
     </div>
 
@@ -72,7 +72,7 @@
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
-import { LINK_TEMPLATES } from '@/constants'
+import { getMenuPublicHrefForNewTab } from '@/constants'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { useFreeDashboardStore } from '@/stores/freeDashboard'
 import { useUserStore } from '@/stores/user'
@@ -90,6 +90,7 @@ const categoriesDashboardStore = useCategoriesDashboardStore()
 
 const loading = ref(true)
 const userInfo = computed(() => userStore.$state)
+const menuPublicHref = computed(() => getMenuPublicHrefForNewTab(userInfo.value.placeName))
 const totalDishes = computed(() => freeDashboardStore.dishes.length)
 const totalCategories = computed(() => categoriesDashboardStore.categories.length)
 const availableDishes = computed(

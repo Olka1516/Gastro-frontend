@@ -4,6 +4,57 @@ export default {
       navs: {
         orders: 'Orders',
         reservations: 'Table reservations',
+        analytics: 'Analytics',
+      },
+    },
+    home: {
+      welcome: 'Welcome to { placeName }!',
+      subtitle: 'Manage your menu and stay on top of orders and reservations',
+      totalDishes: 'Total dishes',
+      totalCategories: 'Total categories',
+      available: 'available',
+      unavailable: 'unavailable',
+      organized: 'Organized',
+      quickAction: 'Quick action',
+      manageMenu: 'Manage menu',
+      addEditDishes: 'Add and edit dishes',
+      link: 'Link',
+      quickLinks: 'Quick links',
+      pendingStatusHint: 'Pending status',
+      links: {
+        menu: {
+          title: 'Menu',
+          description: 'View and edit dishes',
+        },
+        categories: {
+          title: 'Categories',
+          description: 'Organize your menu',
+        },
+        settings: {
+          title: 'Settings',
+          description: 'Venue details',
+        },
+        addDish: {
+          title: 'Add dish',
+          description: 'Quickly add a new dish',
+        },
+        orders: {
+          title: 'Orders',
+          description: 'Online orders from your premium menu',
+        },
+        reservations: {
+          title: 'Table reservations',
+          description: 'Requests from your booking form',
+        },
+        analytics: {
+          title: 'Analytics',
+          description: 'Sales and dish popularity: charts for restaurant owners (Premium)',
+        },
+      },
+      tip: {
+        title: 'Tip of the day',
+        description:
+          'Keep your menu fresh and add dish photos — great visuals can meaningfully lift orders.',
       },
     },
     orders: {
@@ -34,6 +85,61 @@ export default {
       modalSaving: 'Saving…',
       statusUpdated: 'Order status updated.',
       statusUpdateFailed: 'Could not update order status. Please try again.',
+    },
+    analytics: {
+      title: 'Analytics',
+      subtitle: 'Sales and dish popularity',
+      intro: 'Sales and dish-popularity analytics with charts and diagrams for restaurant owners.',
+      chart: {
+        title: 'Dish popularity',
+        subtitle:
+          'How many orders in the selected period included the dish (cancelled orders excluded)',
+        empty: 'No menu line items in this period yet, or data is still loading.',
+        xAxis: 'Number of orders',
+        datasetLabel: 'Orders',
+        tooltipLine: '{count} orders including this dish',
+      },
+      loadError: 'Could not load data. Try refreshing the page.',
+      period: {
+        aria: 'Report period',
+        day: 'Day',
+        week: 'Week',
+        month: 'Month',
+      },
+      cards: {
+        ordersCaption: 'Menu orders',
+        revenue: 'Sales total',
+        avgCheck: 'Average check',
+        avgCheckHint: 'Revenue for the selected period divided by order count',
+        completed: 'Completed',
+        completedHint: 'Orders marked completed in the selected period',
+        reservations: 'New reservations',
+        reservationsHint: 'Requests created in the selected period (week starts Monday)',
+        pendingNow: 'Pending now',
+        pendingHint: 'All orders currently pending (not filtered by period)',
+      },
+    },
+    settings: {
+      menuBackgroundColor: 'Menu background color',
+      menuIconColor: 'Menu icon color',
+      logo: 'Venue logo',
+      dataSuccessUpdated: 'Your details were updated successfully',
+      menuDishLayout: {
+        label: 'Dish display style',
+        hint: 'How dishes appear to guests on the public menu (applies once the backend stores this field).',
+        list: {
+          title: 'List',
+          description: 'Compact rows with thumbnail, name, and price — best for long menus.',
+        },
+        grid: {
+          title: 'Card grid',
+          description: 'Multiple dishes per row with emphasis on photos.',
+        },
+        magazine: {
+          title: 'Magazine',
+          description: 'Large full-width images for an editorial, page-like layout.',
+        },
+      },
     },
     reservations: {
       title: 'Reservation requests',
@@ -140,6 +246,12 @@ export default {
     reserve: 'Reserve a table',
   },
   showcase: {
+    wishlist: {
+      title: 'Saved dishes',
+      empty: 'You have not saved any dishes yet. Tap the heart on a dish to add it here.',
+      close: 'Close wishlist',
+      open: 'Wishlist',
+    },
     premium: {
       cart: 'Cart',
       cartEmpty: 'Your cart is empty.',

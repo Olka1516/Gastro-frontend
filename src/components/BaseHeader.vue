@@ -31,15 +31,28 @@
       </ul>
     </nav>
 
-    <nav v-if="props.isMenuPage && (props.isPremiumMenu || store.isUserAuthorized)"
+    <nav v-if="props.isMenuPage && (props.showWishlist || props.isPremiumMenu || store.isUserAuthorized)"
       class="flex w-auto shrink-0 flex-nowrap items-center justify-end gap-12 justify-self-end"
       aria-label="Меню закладу">
+      <button v-if="props.showWishlist" type="button"
+        class="relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#dc5b41] text-white transition-colors hover:bg-white/5"
+        :aria-label="t('showcase.wishlist.open')" @click="wishlistModalOpen = true">
+        <span class="text-base leading-none" aria-hidden="true">♥</span>
+        <span v-if="wishlistStore.count > 0"
+          class="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#dc5b41] px-1 text-[10px] font-bold leading-none text-white">
+          {{ wishlistStore.count > 99 ? '99+' : wishlistStore.count }}
+        </span>
+      </button>
       <button v-if="props.isPremiumMenu" type="button"
-        class="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#dc5b41]"
+        class="relative flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#dc5b41] transition-colors hover:bg-white/5"
         :aria-label="t('showcase.premium.cart')" @click="cartModalOpen = true">
         <img src="@/assets/images/icons/bag.svg" alt="" class="h-5 w-5" />
+        <span v-if="cartBadgeCount > 0"
+          class="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#dc5b41] px-1 text-[10px] font-bold leading-none text-white">
+          {{ cartBadgeCount > 99 ? '99+' : cartBadgeCount }}
+        </span>
       </button>
-      <button v-if="store.isUserAuthorized" type="button"
+      <button v-if="showDashboardOnThisMenu" type="button"
         class="cursor-pointer whitespace-nowrap rounded-lg bg-[#dc5b41] px-3 py-1.5 text-sm text-white transition-transform duration-300 hover:scale-105"
         @click="changeRoute(LINK_TEMPLATES.DASHBOARD)">
         {{ t('button.dashboard') }}
@@ -81,6 +94,7 @@
     @handleProcess="changeRoute(LINK_TEMPLATES.DASHBOARD)" />
 
   <ShowcaseCartModal v-model="cartModalOpen" />
+  <ShowcaseWishlistModal v-model="wishlistModalOpen" :show-add-to-cart="props.isPremiumMenu" />
 
   <div id="scrollArea" :style="{ '--limit-length': props.limit }"></div>
 </template>
@@ -89,8 +103,12 @@
 import { LINK_TEMPLATES } from '@/constants'
 import AuthTeleportModals from '@/components/modals/auth/AuthTeleportModals.vue'
 import ShowcaseCartModal from '@/features/showcase/components/ShowcaseCartModal.vue'
+import ShowcaseWishlistModal from '@/features/showcase/components/ShowcaseWishlistModal.vue'
+import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
+import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
 import type { ModalKey } from '@/types'
 import { useUserStore } from '@/stores'
+import { spaceToUnderscore } from '@/utils/textHelpers'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -106,8 +124,9 @@ const props = withDefaults(
     isMenuPage?: boolean
     isPremiumMenu?: boolean
     showcaseNavBasePath?: string
+    showWishlist?: boolean
   }>(),
-  { isMenuPage: false, isPremiumMenu: false, showcaseNavBasePath: undefined },
+  { isMenuPage: false, isPremiumMenu: false, showcaseNavBasePath: undefined, showWishlist: false },
 )
 
 const { t } = useI18n()
@@ -115,7 +134,21 @@ const active = ref(props.activeSection)
 const isLimit = ref(true)
 const open = ref(false)
 const cartModalOpen = ref(false)
+const wishlistModalOpen = ref(false)
+const wishlistStore = useShowcaseWishlistStore()
+const cartStore = useShowcaseCartStore()
 const activeModal = ref<ModalKey>('signUp')
+
+const cartBadgeCount = computed(() =>
+  cartStore.linesInCart.reduce((sum, line) => sum + line.quantity, 0),
+)
+
+const showDashboardOnThisMenu = computed(() => {
+  if (!store.isUserAuthorized || !store.placeName) return false
+  const slug = route.params.id
+  if (typeof slug !== 'string' || !slug.trim()) return false
+  return spaceToUnderscore(store.placeName) === slug.trim()
+})
 
 const options = {
   root: document.querySelector('#scrollArea'),
@@ -192,6 +225,22 @@ watch(
   () => {
     active.value = props.activeSection
   },
+)
+
+watch(
+  () => [props.showWishlist, route.params.id] as const,
+  ([show, id]) => {
+    if (show && typeof id === 'string' && id) wishlistStore.load(id)
+  },
+  { immediate: true },
+)
+
+watch(
+  () => [props.isPremiumMenu, route.params.id] as const,
+  ([premium, id]) => {
+    if (premium && typeof id === 'string' && id) cartStore.load(id)
+  },
+  { immediate: true },
 )
 
 onMounted(() => {

@@ -43,6 +43,8 @@
           </div>
         </div>
 
+        <MenuDishLayoutPicker v-model="formData.menuDishLayout" />
+
         <div class="flex flex-col gap-2">
           <span class="text-sm text-gray-300">{{ t('dashboard.settings.logo') }}</span>
           <BaseDragFile :url="formData.logo" @update="handleLogoUpdate" />
@@ -61,6 +63,12 @@
 import BaseDragFile from '@/components/inputs/BaseDragFile.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
+import {
+  DEFAULT_MENU_DISH_LAYOUT,
+  parseMenuDishLayout,
+  type MenuDishLayout,
+} from '@/constants/menuDishLayout'
+import MenuDishLayoutPicker from '@/features/dashboard/components/shared/MenuDishLayoutPicker.vue'
 import { notificationStore, useUserStore } from '@/stores'
 import type { TRequestError } from '@/types'
 import useVuelidate from '@vuelidate/core'
@@ -80,6 +88,7 @@ const formData = reactive({
   email: '',
   menuBackgroundColor: DEFAULT_MENU_BG_COLOR,
   menuIconColor: DEFAULT_MENU_ICON_COLOR,
+  menuDishLayout: DEFAULT_MENU_DISH_LAYOUT as MenuDishLayout,
   logo: '' as string | File | null,
 })
 
@@ -111,6 +120,7 @@ const handleSubmit = async () => {
       email: formData.email,
       menuBackgroundColor: formData.menuBackgroundColor,
       menuIconColor: formData.menuIconColor,
+      menuDishLayout: formData.menuDishLayout,
       logo: formData.logo,
     })
 
@@ -130,6 +140,7 @@ onMounted(() => {
   formData.email = store.email
   formData.menuBackgroundColor = store.menuBackgroundColor || DEFAULT_MENU_BG_COLOR
   formData.menuIconColor = store.menuIconColor || DEFAULT_MENU_ICON_COLOR
+  formData.menuDishLayout = parseMenuDishLayout(store.menuDishLayout)
   formData.logo = store.logo || null
 })
 </script>

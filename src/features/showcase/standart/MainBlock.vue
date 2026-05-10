@@ -1,5 +1,10 @@
 <template>
-  <div id="menu" class="min-h-screen py-16 px-8 md:px-12 lg:px-24 pt-32" :style="pageStyle">
+  <div
+    id="menu"
+    class="min-h-screen py-16 px-8 md:px-12 lg:px-24 pt-32"
+    :style="pageStyle"
+    :data-menu-dish-layout="menuDishLayout"
+  >
     <div v-if="loading" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
       :style="loadingStyle">
       <BaseLoader />
@@ -28,9 +33,17 @@
     </div>
 
     <div v-else class="space-y-20">
-      <CategorySection v-for="category in categoriesWithDishes" :key="category.id" :category="category" :dishes="dishes"
-        :liked-dish-ids="likedDishIds" :menu-icon-color="menuIconColor" @dish-click="handleDishClick"
-        @toggle-like="handleToggleLike" />
+      <CategorySection
+        v-for="category in categoriesWithDishes"
+        :key="category.id"
+        :category="category"
+        :dishes="dishes"
+        :liked-dish-ids="likedDishIds"
+        :menu-icon-color="menuIconColor"
+        :menu-dish-layout="menuDishLayout"
+        @dish-click="handleDishClick"
+        @toggle-like="handleToggleLike"
+      />
     </div>
 
     <DishDetailsModal :dish="selectedDish" :category-name="selectedDishCategoryName" :menu-icon-color="menuIconColor"
@@ -42,8 +55,10 @@
 import BaseLoader from '@/components/BaseLoader.vue'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseStore } from '@/stores/showcaseStore'
+import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
 import type { IDish } from '@/types/menu'
-import { computed, onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import CategorySection from '../components/CategorySection.vue'
@@ -52,13 +67,15 @@ import DishDetailsModal from '../components/DishDetailsModal.vue'
 const { t } = useI18n()
 const route = useRoute()
 const showcaseStore = useShowcaseStore()
+const wishlistStore = useShowcaseWishlistStore()
+const { likedDishIds } = storeToRefs(wishlistStore)
 
 const placeRouteKey = computed(() => String(route.params.id ?? ''))
-const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName } = useShowcasePlaceTheme(placeRouteKey)
+const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName, menuDishLayout } =
+  useShowcasePlaceTheme(placeRouteKey)
 
 const loading = ref(true)
 const dishes = ref<IDish[]>([])
-const likedDishIds = ref<string[]>([])
 const selectedDish = ref<IDish | null>(null)
 
 const hexToRgba = (hex: string, alpha: number) => {
@@ -121,33 +138,8 @@ const closeDishModal = () => {
   document.body.style.overflow = ''
 }
 
-const likesStorageKey = computed(() => `showcase-likes:${String(route.params.id || '')}`)
-
-const loadLikedDishes = () => {
-  const raw = localStorage.getItem(likesStorageKey.value)
-  if (!raw) {
-    likedDishIds.value = []
-    return
-  }
-
-  try {
-    const parsed = JSON.parse(raw)
-    likedDishIds.value = Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : []
-  } catch {
-    likedDishIds.value = []
-  }
-}
-
-const saveLikedDishes = () => {
-  localStorage.setItem(likesStorageKey.value, JSON.stringify(likedDishIds.value))
-}
-
 const handleToggleLike = (dishId: string) => {
-  const isLiked = likedDishIds.value.includes(dishId)
-  likedDishIds.value = isLiked
-    ? likedDishIds.value.filter((id) => id !== dishId)
-    : [...likedDishIds.value, dishId]
-  saveLikedDishes()
+  wishlistStore.toggle(dishId)
 }
 
 const fetchData = async () => {
@@ -165,8 +157,12 @@ const fetchData = async () => {
   }
 }
 
+watch(placeRouteKey, (slug) => {
+  wishlistStore.load(slug)
+})
+
 onMounted(async () => {
-  loadLikedDishes()
+  wishlistStore.load(placeRouteKey.value)
   await fetchData()
 })
 </script>

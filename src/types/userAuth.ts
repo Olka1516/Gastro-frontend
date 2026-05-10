@@ -1,3 +1,4 @@
+import type { MenuDishLayout } from '@/constants/menuDishLayout'
 import type { EPlan, EStatus } from './errorEnum'
 
 export type ModalKey = 'signUp' | 'signIn'
@@ -16,6 +17,7 @@ export interface IUserData {
   placeName: string
   menuBackgroundColor: string
   menuIconColor: string
+  menuDishLayout?: MenuDishLayout
   logo?: string
   id: string
   planName: EPlan | null
@@ -28,6 +30,7 @@ export interface IUpdateUserData {
   email: string
   menuBackgroundColor?: string
   menuIconColor?: string
+  menuDishLayout?: MenuDishLayout
   logo?: File | string | null
 }
 

@@ -9,10 +9,11 @@
       </h1>
       <div class="flex justify-between">
         <p class="text-gray-400 text-lg">{{ t('dashboard.home.subtitle') }}</p>
-        <RouterLink class="flex gap-4 text-sky-600 cursor-pointer text-lg"
-          :to="LINK_TEMPLATES.MENU(userInfo.placeName)">{{ t('dashboard.home.link') }}
+        <a class="flex gap-4 text-sky-600 cursor-pointer text-lg" :href="menuPublicHref" target="_blank"
+          rel="noopener noreferrer">
+          {{ t('dashboard.home.link') }}
           <img src="@/assets/images/icons/link.svg" alt="" />
-        </RouterLink>
+        </a>
       </div>
     </div>
 
@@ -47,7 +48,7 @@
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
-import { LINK_TEMPLATES } from '@/constants'
+import { getMenuPublicHrefForNewTab } from '@/constants'
 import type { DashboardCardBind } from '@/features/dashboard/types'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { useStandartDashboardStore } from '@/stores/standartDashboard'
@@ -68,6 +69,8 @@ defineEmits<{
 
 const loading = ref(true)
 const userInfo = computed(() => userStore.$state)
+
+const menuPublicHref = computed(() => getMenuPublicHrefForNewTab(userInfo.value.placeName))
 
 const totalDishes = computed(() => standartDashboardStore.dishes.length)
 const availableDishes = computed(

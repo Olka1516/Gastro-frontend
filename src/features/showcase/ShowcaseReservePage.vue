@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#0f0f11]">
     <BaseHeader :limit="300" :navigations="navs" :active-section="activeSection" :is-menu-page="true"
-      :is-premium-menu="true" :showcase-nav-base-path="menuBasePath" />
+      :is-premium-menu="true" :showcase-nav-base-path="menuBasePath" :show-wishlist="true" />
 
     <div class="px-4 pb-16 pt-24 text-white sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl">

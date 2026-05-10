@@ -1,3 +1,5 @@
+import { DEFAULT_MENU_DISH_LAYOUT, parseMenuDishLayout } from '@/constants/menuDishLayout'
+import type { MenuDishLayout } from '@/constants/menuDishLayout'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useUserStore } from '@/stores/user'
 import { spaceToUnderscore, underscoreToSpace } from '@/utils/textHelpers'
@@ -40,10 +42,19 @@ export function useShowcasePlaceTheme(placeKey: MaybeRefOrGetter<string>) {
     return underscoreToSpace(key) || key
   })
 
+  const menuDishLayout = computed((): MenuDishLayout => {
+    const fromApi = showcaseStore.placeBranding?.menuDishLayout
+    if (fromApi) return parseMenuDishLayout(fromApi)
+    if (isOwnerPreview.value && userStore.menuDishLayout)
+      return parseMenuDishLayout(userStore.menuDishLayout)
+    return DEFAULT_MENU_DISH_LAYOUT
+  })
+
   return {
     menuBackgroundColor,
     menuIconColor,
     logoUrl,
     displayPlaceName,
+    menuDishLayout,
   }
 }

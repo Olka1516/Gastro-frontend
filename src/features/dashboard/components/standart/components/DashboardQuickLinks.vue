@@ -1,10 +1,11 @@
 <template>
-  <div v-for="link in links" :key="link.key" @click="$emit('navigateTo', link.key)"
+  <div v-for="(link, idx) in links" :key="`${link.key}-${link.icon}-${idx}`" @click="$emit('navigateTo', link.key)"
     class="bg-[#1a191f] p-6 rounded-lg border border-[#2a2930] hover:border-[#dc5b41] transition-all duration-300 hover:scale-102 cursor-pointer group">
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 min-w-0">
       <div
-        class="w-12 h-12 bg-[#2a2930] rounded-lg flex items-center justify-center group-hover:bg-[#dc5b41]/20 transition-all duration-300">
-        <img :src="getIconPath(link.icon)" :alt="link.key" class="w-6 h-6"
+        class="h-12 w-12 shrink-0 aspect-square bg-[#2a2930] rounded-lg flex items-center justify-center group-hover:bg-[#dc5b41]/20 transition-all duration-300">
+        <img :src="getIconPath(link.icon)" :alt="link.key"
+          class="h-6 w-6 shrink-0 object-contain pointer-events-none"
           style="filter: brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%) hue-rotate(341deg) brightness(98%) contrast(87%);" />
       </div>
       <div class="flex flex-col items-start">

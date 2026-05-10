@@ -9,21 +9,22 @@
       </h1>
       <div class="flex justify-between">
         <p class="text-gray-400 text-lg">{{ t('dashboard.home.subtitle') }}</p>
-        <RouterLink class="flex gap-4 text-sky-600 cursor-pointer text-lg"
-          :to="LINK_TEMPLATES.MENU(userInfo.placeName)">{{ t('dashboard.home.link') }}
+        <a class="flex gap-4 text-sky-600 cursor-pointer text-lg" :href="menuPublicHref" target="_blank"
+          rel="noopener noreferrer">
+          {{ t('dashboard.home.link') }}
           <img src="@/assets/images/icons/link.svg" alt="" />
-        </RouterLink>
+        </a>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
       <DashboardCard v-for="card in cards" :key="card.id" v-bind="card"
         @click="card.id && $emit('navigateTo', card.navigateKey)" />
     </div>
 
     <div class="flex flex-col gap-4 mt-4">
       <h2 class="text-white text-2xl font-bold">{{ t('dashboard.home.quickLinks') }}</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <DashboardQuickLinks :links="quickLinks" @navigateTo="$emit('navigateTo', $event)" />
       </div>
     </div>
@@ -47,8 +48,9 @@
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
-import { LINK_TEMPLATES } from '@/constants'
+import { getMenuPublicHrefForNewTab } from '@/constants'
 import type { DashboardCardBind } from '@/features/dashboard/types'
+import { getShowcaseOrdersForOwner, getTableReservationsForOwner } from '@/services/dashboard'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { usePremiumDashboardStore } from '@/stores/premiumDashboard'
 import { useUserStore } from '@/stores/user'
@@ -69,6 +71,11 @@ defineEmits<{
 const loading = ref(true)
 const userInfo = computed(() => userStore.$state)
 
+const menuPublicHref = computed(() => getMenuPublicHrefForNewTab(userInfo.value.placeName))
+
+const pendingOrdersCount = ref(0)
+const pendingReservationsCount = ref(0)
+
 const totalDishes = computed(() => premiumDashboardStore.dishes.length)
 const availableDishes = computed(
   () => premiumDashboardStore.dishes.filter((d) => d.isAvailable === 'available').length,
@@ -86,6 +93,24 @@ const quickLinks = [
     description: 'dashboard.home.links.menu.description',
   },
   {
+    key: 'orders',
+    icon: 'tools-kitchen',
+    title: 'dashboard.home.links.orders.title',
+    description: 'dashboard.home.links.orders.description',
+  },
+  {
+    key: 'reservations',
+    icon: 'clock',
+    title: 'dashboard.home.links.reservations.title',
+    description: 'dashboard.home.links.reservations.description',
+  },
+  {
+    key: 'analytics',
+    icon: 'chart',
+    title: 'dashboard.home.links.analytics.title',
+    description: 'dashboard.home.links.analytics.description',
+  },
+  {
     key: 'categories',
     icon: 'category',
     title: 'dashboard.home.links.categories.title',
@@ -99,7 +124,7 @@ const quickLinks = [
   },
   {
     key: 'menu',
-    icon: 'table',
+    icon: 'plus',
     title: 'dashboard.home.links.addDish.title',
     description: 'dashboard.home.links.addDish.description',
   },
@@ -137,18 +162,48 @@ const cards = computed<DashboardCardBind[]>(() => {
       iconAlt: 'categories',
     },
     {
-      id: 'quick',
-      navigateKey: 'menu',
-      variant: 'accent',
+      id: 'orders',
+      navigateKey: 'orders',
+      variant: 'dark',
       clickable: true,
       hoverScale: true,
-      showQuick: true,
-      quickTopText: t('dashboard.home.quickAction'),
-      quickHeading: t('dashboard.home.manageMenu'),
-      quickDescription: t('dashboard.home.addEditDishes'),
+      title: t('dashboard.standart.navs.orders'),
+      value: pendingOrdersCount.value,
+      showSubtitle: true,
+      subtitle: t('dashboard.home.pendingStatusHint'),
+      iconSrc: '../assets/images/icons/tools-kitchen.svg',
+      iconAlt: 'orders',
+    },
+    {
+      id: 'reservations',
+      navigateKey: 'reservations',
+      variant: 'dark',
+      clickable: true,
+      hoverScale: true,
+      title: t('dashboard.standart.navs.reservations'),
+      value: pendingReservationsCount.value,
+      showSubtitle: true,
+      subtitle: t('dashboard.home.pendingStatusHint'),
+      iconSrc: '../assets/images/icons/clock.svg',
+      iconAlt: 'reservations',
     },
   ]
 })
+
+async function loadPendingCounts() {
+  try {
+    const orders = await getShowcaseOrdersForOwner({ status: 'pending' })
+    pendingOrdersCount.value = orders.length
+  } catch {
+    pendingOrdersCount.value = 0
+  }
+  try {
+    const reservations = await getTableReservationsForOwner({ status: 'pending' })
+    pendingReservationsCount.value = reservations.length
+  } catch {
+    pendingReservationsCount.value = 0
+  }
+}
 
 onMounted(async () => {
   loading.value = true
@@ -156,6 +211,7 @@ onMounted(async () => {
     await Promise.all([
       premiumDashboardStore.fetchDishes(),
       categoriesDashboardStore.fetchCategories(),
+      loadPendingCounts(),
     ])
   } finally {
     loading.value = false

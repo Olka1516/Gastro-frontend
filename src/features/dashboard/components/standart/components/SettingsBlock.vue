@@ -22,7 +22,7 @@
           <div class="flex flex-col gap-2">
             <span class="text-sm text-gray-300">{{
               t('dashboard.settings.menuBackgroundColor')
-              }}</span>
+            }}</span>
             <div class="flex items-center gap-2">
               <input v-model="formData.menuBackgroundColor" type="color"
                 class="h-11 w-14 min-w-14 rounded-lg border border-[#2a2930] bg-[#1a191f] p-1 cursor-pointer" />

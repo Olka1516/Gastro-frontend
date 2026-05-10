@@ -6,12 +6,8 @@
     </div>
 
     <div class="text-center mb-16">
-      <img
-        v-if="logoUrl"
-        :src="logoUrl"
-        :alt="displayPlaceName || t('showcase.menu')"
-        class="mx-auto mb-6 h-20 w-auto max-w-[220px] object-contain"
-      />
+      <img v-if="logoUrl" :src="logoUrl" :alt="displayPlaceName || t('showcase.menu')"
+        class="mx-auto mb-6 h-20 w-auto max-w-[220px] object-contain" />
       <h1 class="text-white text-5xl font-bold mb-4">
         {{ displayPlaceName || t('showcase.menu') }}
       </h1>
@@ -50,8 +46,8 @@ import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
-import DishDetailsModal from '../components/DishDetailsModal.vue'
 import CategorySection from '../components/CategorySection.vue'
+import DishDetailsModal from '../components/DishDetailsModal.vue'
 
 const { t } = useI18n()
 const route = useRoute()

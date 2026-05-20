@@ -55,5 +55,3 @@ const handleDishClick = (dish: IDish) => {
   emit('dishClick', dish)
 }
 </script>
-
-<style scoped></style>

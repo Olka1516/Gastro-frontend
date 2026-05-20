@@ -68,5 +68,3 @@ const onStatusFilterChange = async (value: string) => {
 
 onMounted(fetchOrders)
 </script>
-
-<style scoped></style>

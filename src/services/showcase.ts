@@ -1,5 +1,8 @@
 import { ENDPOINTS } from '@/constants'
+import { normalizeCategoriesFromApi } from '@/features/dashboard/utils/categoryApi'
+import { normalizeDishesFromApi } from '@/features/dashboard/utils/dishApi'
 import type { IPlaceBranding } from '@/types'
+import type { IDish, ICategory } from '@/types/menu'
 import type { IShowcaseOrderPayload } from '@/types/showcaseOrder'
 import type { ICreateTableReservationPayload } from '@/types/tableReservation'
 import http from '@/http'
@@ -10,13 +13,19 @@ export const getPlaceBranding = async (placeName: string): Promise<IPlaceBrandin
 }
 
 export const getMenuDishes = async (placeName: string) => {
-  const data = await http.get(ENDPOINTS.GET_MENU_DISHES(placeName))
-  return data.data
+  const { data } = await http.get<{ dishes?: IDish[] }>(ENDPOINTS.GET_MENU_DISHES(placeName))
+  return {
+    dishes: normalizeDishesFromApi(data.dishes ?? []),
+  }
 }
 
 export const getMenuCategories = async (placeName: string) => {
-  const data = await http.get(ENDPOINTS.GET_MENU_CATEGORIES(placeName))
-  return data.data
+  const { data } = await http.get<{ categories?: ICategory[] }>(
+    ENDPOINTS.GET_MENU_CATEGORIES(placeName),
+  )
+  return {
+    categories: normalizeCategoriesFromApi(data.categories ?? []),
+  }
 }
 
 export const postShowcaseOrder = async (

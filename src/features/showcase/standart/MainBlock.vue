@@ -1,10 +1,6 @@
 <template>
-  <div
-    id="menu"
-    class="min-h-screen py-16 px-8 md:px-12 lg:px-24 pt-32"
-    :style="pageStyle"
-    :data-menu-dish-layout="menuDishLayout"
-  >
+  <div id="menu" class="min-h-screen py-16 px-8 md:px-12 lg:px-24 pt-32" :style="pageStyle"
+    :data-menu-dish-layout="menuDishLayout">
     <div v-if="loading" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
       :style="loadingStyle">
       <BaseLoader />
@@ -33,17 +29,9 @@
     </div>
 
     <div v-else class="space-y-20">
-      <CategorySection
-        v-for="category in categoriesWithDishes"
-        :key="category.id"
-        :category="category"
-        :dishes="dishes"
-        :liked-dish-ids="likedDishIds"
-        :menu-icon-color="menuIconColor"
-        :menu-dish-layout="menuDishLayout"
-        @dish-click="handleDishClick"
-        @toggle-like="handleToggleLike"
-      />
+      <CategorySection v-for="category in categoriesWithDishes" :key="category.id" :category="category" :dishes="dishes"
+        :liked-dish-ids="likedDishIds" :menu-icon-color="menuIconColor" :menu-dish-layout="menuDishLayout"
+        @dish-click="handleDishClick" @toggle-like="handleToggleLike" />
     </div>
 
     <DishDetailsModal :dish="selectedDish" :category-name="selectedDishCategoryName" :menu-icon-color="menuIconColor"
@@ -166,5 +154,3 @@ onMounted(async () => {
   await fetchData()
 })
 </script>
-
-<style scoped></style>

@@ -3,7 +3,7 @@
     class="dish-card-list group flex w-full overflow-hidden rounded-xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] shadow-lg transition-colors duration-200 hover:border-[#3d3c44] cursor-pointer"
     :style="dishCardStyle" @click="handleClick">
     <div class="relative h-[5.5rem] w-[5.5rem] shrink-0 sm:h-28 sm:w-28">
-      <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name"
+      <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dishLabels.name"
         class="h-full w-full object-cover transition duration-300 group-hover:brightness-105" />
       <div v-else class="flex h-full w-full items-center justify-center bg-[#2a2930] text-xl text-white/25">
         —
@@ -21,7 +21,7 @@
       class="flex min-h-[5.5rem] min-w-0 flex-1 flex-col justify-center gap-1 border-l border-[#2a2930]/70 py-2.5 pl-3 pr-2 sm:min-h-28 sm:pl-4">
       <div class="flex items-start justify-between gap-2 sm:gap-3">
         <h3 class="line-clamp-2 text-left text-base font-bold leading-snug text-white sm:text-lg">
-          {{ dish.name }}
+          {{ dishLabels.name }}
         </h3>
         <div class="shrink-0 rounded-lg px-2 py-0.5 text-sm font-bold tabular-nums text-white sm:text-base"
           :style="priceBadgeStyle">
@@ -29,7 +29,7 @@
         </div>
       </div>
       <p class="line-clamp-2 text-left text-xs leading-relaxed text-gray-400 sm:text-sm">
-        {{ dish.description || t('dashboard.menu.noDescription') }}
+        {{ dishLabels.description || t('dashboard.menu.noDescription') }}
       </p>
     </div>
 
@@ -59,7 +59,7 @@
       <div class="rounded-2xl bg-[#0a0a0c] p-2 ring-1 ring-inset ring-white/[0.06] md:sticky md:top-28">
         <div
           class="relative flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-xl bg-[#121214]">
-          <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name" decoding="async"
+          <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dishLabels.name" decoding="async"
             class="max-h-full max-w-full object-contain" />
           <div v-else class="text-3xl text-white/15">—</div>
 
@@ -80,11 +80,11 @@
           {{ categoryName }}
         </p>
         <h3 class="text-balance text-2xl font-bold leading-snug tracking-tight text-white sm:text-3xl">
-          {{ dish.name }}
+          {{ dishLabels.name }}
         </h3>
         <div class="mt-3 h-px w-16 rounded-full" :style="{ backgroundColor: menuIconColor || '#dc5b41' }" />
         <p class="mt-5 text-[15px] leading-[1.65] text-gray-400 sm:text-base">
-          {{ dish.description || t('dashboard.menu.noDescription') }}
+          {{ dishLabels.description || t('dashboard.menu.noDescription') }}
         </p>
       </div>
 
@@ -116,7 +116,7 @@
     class="dish-card bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] overflow-hidden transition-all duration-300 hover:scale-102 group shadow-lg cursor-pointer"
     :style="dishCardStyle" @click="handleClick">
     <div class="relative h-48 overflow-hidden">
-      <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name"
+      <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dishLabels.name"
         class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
       <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-transparent to-transparent"></div>
 
@@ -150,9 +150,9 @@
     </div>
 
     <div class="p-5 flex flex-col gap-3">
-      <h3 class="text-white text-xl font-bold line-clamp-1">{{ dish.name }}</h3>
+      <h3 class="text-white text-xl font-bold line-clamp-1">{{ dishLabels.name }}</h3>
       <p class="text-gray-400 text-sm line-clamp-2 leading-relaxed">
-        {{ dish.description || t('dashboard.menu.noDescription') }}
+        {{ dishLabels.description || t('dashboard.menu.noDescription') }}
       </p>
     </div>
   </div>
@@ -162,12 +162,14 @@
 import iconPlus from '@/assets/images/icons/plus.svg'
 import iconSubtract from '@/assets/images/icons/substract.svg'
 import { DEFAULT_MENU_DISH_LAYOUT, type MenuDishLayout } from '@/constants/menuDishLayout'
+import { useShowcaseMenuContentLanguage } from '@/features/showcase/composables/useShowcaseMenuContentLanguage'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import type { IDish } from '@/types/menu'
-import { computed } from 'vue'
+import { computed, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+const { useDishLabels, getDishLabels } = useShowcaseMenuContentLanguage()
 
 const props = withDefaults(
   defineProps<{
@@ -187,6 +189,7 @@ const emit = defineEmits<{
 }>()
 
 const cartStore = useShowcaseCartStore()
+const dishLabels = useDishLabels(toRef(props, 'dish'))
 
 const quantityInCart = computed(() => {
   if (!props.showAddToCart) return 0
@@ -199,7 +202,8 @@ const handleCartToggle = () => {
     return
   }
   const name = props.categoryName.trim() || props.dish.category
-  cartStore.addDish(props.dish, name)
+  const labels = getDishLabels(props.dish)
+  cartStore.addDish(props.dish, name, labels)
 }
 
 const handleClick = () => {

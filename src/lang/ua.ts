@@ -1,5 +1,8 @@
 export default {
   landing: {
+    uiLanguage: {
+      label: 'Мова сайту',
+    },
     priceAndPlans: 'Плани і ціни',
     welcomeText: 'Ласкаво просимо до Gastro',
     readyTemplates: 'Готові шаблони - для будь-якого закладу',
@@ -308,12 +311,24 @@ export default {
       noDescription: 'Опис не додано',
       freePlanItemsLimit: 'Ви досягли обмеження на кількість страв для безплатного плану',
     },
+    dish: {
+      multilingualHint:
+        'Українська назва обовʼязкова; опис та інші мови — за бажанням. Категорія в списку показується мовою активного таба.',
+      sectionGeneral: 'Загальні дані',
+      sectionTranslations: 'Назва та опис для гостей',
+      translationsHint: 'Перемикайте мову та заповнюйте текст для публічного меню.',
+      ukNameRequired: 'Заповніть назву українською',
+      optionalDescription: 'необовʼязково',
+    },
     categories: {
       subtitle: 'Організуйте меню за категоріями',
       category: 'Категорія',
       noCategoriesDescription:
         'Створіть категорії для організації вашого меню. Це допоможе клієнтам легше знайти потрібні страви.',
       freePlanItemsLimit: 'Ви досягли обмеження на кількість категорій для безплатного плану',
+      ukNameRequired: 'Заповніть назву українською',
+      languagesTablist: 'Мови меню',
+      languagesFilled: 'Заповнено {count} з {total} мов',
     },
     settings: {
       menuBackgroundColor: 'Колір фону меню',
@@ -376,6 +391,11 @@ export default {
   subscribe: {
     month: 'Місяць',
   },
+  header: {
+    menuOpen: 'Відкрити меню',
+    menuClose: 'Закрити меню',
+    sidebarNav: 'Навігація',
+  },
   button: {
     add: 'Додати',
     clickMe: 'Натисни мене',
@@ -413,6 +433,9 @@ export default {
       required: 'Поле обов’язкове для заповнення',
       placeTaken: 'Ця назва місця вже використовується',
     },
+    name: {
+      required: 'Поле обов’язкове для заповнення',
+    },
     firstName: {
       required: 'Вкажіть імʼя',
     },
@@ -444,6 +467,9 @@ export default {
     tableReservationInvalidSlot: 'Оберіть інший час або дату — цей слот недоступний.',
     tableReservationRateLimit: 'Забагато спроб. Спробуйте пізніше.',
     invalidCredentials: 'Меню не знайдено або воно недоступне.',
+  },
+  apiCategory: {
+    categoryTranslationsPremiumOnly: 'Багатомовні категорії доступні лише на преміум-плані.',
   },
   apiShowcaseOrder: {
     showcaseOrderingNotAvailable: 'Оформлення замовлень у цьому меню недоступне.',
@@ -488,6 +514,9 @@ export default {
   },
   showcase: {
     menu: 'Меню',
+    menuLanguage: {
+      label: 'Мова меню',
+    },
     welcomeDescription: 'Оберіть страви з нашого меню та насолоджуйтесь смачними стравами',
     wishlist: {
       title: 'Обрані страви',

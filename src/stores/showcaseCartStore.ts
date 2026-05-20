@@ -77,13 +77,21 @@ export const useShowcaseCartStore = defineStore('showcaseCart', () => {
     }
   }
 
-  const addDish = (dish: IDish, categoryName: string) => {
+  const addDish = (
+    dish: IDish,
+    categoryName: string,
+    display?: { name?: string; description?: string },
+  ) => {
     if (!placeSlug.value) return
+
+    const snapshot = snapshotFromDish(dish, categoryName)
+    if (display?.name?.trim()) snapshot.name = display.name.trim()
+    if (display?.description !== undefined) snapshot.description = display.description
 
     const openLine = lines.value.find((l) => l.dishId === dish.id && l.status === 'in_cart')
     if (openLine) {
       openLine.quantity += 1
-      openLine.dish = snapshotFromDish(dish, categoryName)
+      openLine.dish = snapshot
     } else {
       lines.value.push({
         lineId: newLineId(),
@@ -91,7 +99,7 @@ export const useShowcaseCartStore = defineStore('showcaseCart', () => {
         quantity: 1,
         status: 'in_cart',
         addedAt: new Date().toISOString(),
-        dish: snapshotFromDish(dish, categoryName),
+        dish: snapshot,
       })
     }
     persist()

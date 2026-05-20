@@ -1,5 +1,6 @@
 <template>
-  <div class="rounded-2xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-6 sm:p-8 shadow-xl flex flex-col gap-4">
+  <div
+    class="rounded-2xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-6 sm:p-8 shadow-xl flex flex-col gap-4">
     <div>
       <h3 class="text-white text-xl font-bold">{{ t('dashboard.analytics.chart.title') }}</h3>
       <p class="text-gray-500 text-sm mt-1">{{ t('dashboard.analytics.chart.subtitle') }}</p>
@@ -110,5 +111,3 @@ const chartOptions = computed(() => ({
   },
 }))
 </script>
-
-<style scoped></style>

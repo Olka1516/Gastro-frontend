@@ -1,3 +1,8 @@
+export interface IDishTranslation {
+  name: string
+  description?: string
+}
+
 export interface IDish {
   id: string
   name: string
@@ -7,6 +12,12 @@ export interface IDish {
   isAvailable: 'available' | 'unavailable'
   image: string | File
   ownerId?: string
+  translations?: Partial<Record<string, IDishTranslation>>
+}
+
+export interface ICategoryTranslation {
+  name: string
+  description?: string
 }
 
 export interface ICategory {
@@ -14,4 +25,6 @@ export interface ICategory {
   name: string
   description?: string
   ownerId?: string
+  /** Per-language category copy (menu content locales, not UI i18n) */
+  translations?: Partial<Record<string, ICategoryTranslation>>
 }

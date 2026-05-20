@@ -101,5 +101,3 @@ onMounted(async () => {
   await fetchData()
 })
 </script>
-
-<style scoped></style>

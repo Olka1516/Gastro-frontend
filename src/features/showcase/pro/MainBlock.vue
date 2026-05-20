@@ -1,10 +1,5 @@
 <template>
-  <div
-    id="menu"
-    class="min-h-screen pb-24 pt-28 md:pt-32"
-    :style="pageStyle"
-    :data-menu-dish-layout="menuDishLayout"
-  >
+  <div id="menu" class="min-h-screen pb-24 pt-28 md:pt-32" :style="pageStyle" :data-menu-dish-layout="menuDishLayout">
     <div v-if="loading" class="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
       :style="loadingStyle">
       <BaseLoader />
@@ -45,19 +40,10 @@
       </div>
 
       <div v-else class="mx-auto max-w-6xl space-y-24 pb-16">
-        <CategorySection
-          v-for="category in categoriesWithDishes"
-          :key="category.id"
-          :category="category"
-          :dishes="dishes"
-          :liked-dish-ids="likedDishIds"
-          :menu-icon-color="menuIconColor"
-          :menu-dish-layout="menuDishLayout"
-          :show-add-to-cart="true"
-          class="scroll-mt-28"
-          @dish-click="handleDishClick"
-          @toggle-like="handleToggleLike"
-        />
+        <CategorySection v-for="category in categoriesWithDishes" :key="category.id" :category="category"
+          :dishes="dishes" :liked-dish-ids="likedDishIds" :menu-icon-color="menuIconColor"
+          :menu-dish-layout="menuDishLayout" :show-add-to-cart="true" class="scroll-mt-28" @dish-click="handleDishClick"
+          @toggle-like="handleToggleLike" />
       </div>
     </div>
 
@@ -69,7 +55,9 @@
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
+import { getCategoryDisplayName } from '@/features/dashboard/utils/categoryApi'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
+import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
 import type { IDish } from '@/types/menu'
@@ -84,8 +72,10 @@ const { t } = useI18n()
 const route = useRoute()
 const showcaseStore = useShowcaseStore()
 const cartStore = useShowcaseCartStore()
+const menuLangStore = useShowcaseMenuLanguageStore()
 const wishlistStore = useShowcaseWishlistStore()
 const { likedDishIds } = storeToRefs(wishlistStore)
+const { languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
 
 const placeRouteKey = computed(() => String(route.params.id ?? ''))
 const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName, menuDishLayout } =
@@ -140,7 +130,8 @@ const heroGlowSecondaryStyle = computed(() => ({
 const selectedDishCategoryName = computed(() => {
   if (!selectedDish.value) return ''
   const category = showcaseStore.categories.find((item) => item.id === selectedDish.value?.category)
-  return category?.name || selectedDish.value.category
+  if (!category) return selectedDish.value.category
+  return getCategoryDisplayName(category, menuLanguageCode.value)
 })
 
 const categoriesWithDishes = computed(() => {
@@ -209,6 +200,7 @@ watch(placeRouteKey, (slug) => {
 })
 
 onMounted(async () => {
+  menuLangStore.enableForPlace(placeRouteKey.value)
   cartStore.load(placeRouteKey.value)
   wishlistStore.load(placeRouteKey.value)
   await fetchData()
@@ -224,5 +216,3 @@ onUnmounted(() => {
   document.body.style.overflow = ''
 })
 </script>
-
-<style scoped></style>

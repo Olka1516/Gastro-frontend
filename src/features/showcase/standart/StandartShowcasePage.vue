@@ -1,12 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#0f0f11]">
-    <BaseHeader
-      :limit="300"
-      :navigations="navs"
-      :activeSection="activeSection"
-      :isMenuPage="true"
-      :show-wishlist="true"
-    />
+    <BaseHeader :limit="300" :navigations="navs" :activeSection="activeSection" :isMenuPage="true"
+      :show-wishlist="true" />
 
     <MainBlock />
 
@@ -24,5 +19,3 @@ const activeSection = ref('')
 
 const navs = ['menu']
 </script>
-
-<style scoped></style>

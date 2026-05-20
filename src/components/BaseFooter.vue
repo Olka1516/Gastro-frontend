@@ -6,13 +6,7 @@
         {{ t('footer.description') }}
       </p>
       <div class="flex gap-2">
-        <a
-          target="_blank"
-          class="cursor-pointer"
-          v-for="value in media"
-          :href="`${value.link}`"
-          :key="value.name"
-        >
+        <a target="_blank" class="cursor-pointer" v-for="value in media" :href="`${value.link}`" :key="value.name">
           <img :src="getImage(`../assets/images/icons/${value.name}.svg`)" alt="" />
         </a>
       </div>
@@ -25,8 +19,8 @@
 </template>
 
 <script setup lang="ts">
-import { getImage } from '@/common/functions'
-import { useI18n } from 'vue-i18n'
+import { getImage } from '@/common/functions';
+import { useI18n } from 'vue-i18n';
 
 const media = [
   { name: 'instagram', link: 'https://www.instagram.com/_olka_1518/' },
@@ -35,5 +29,3 @@ const media = [
 ]
 const { t } = useI18n()
 </script>
-
-<style scoped></style>

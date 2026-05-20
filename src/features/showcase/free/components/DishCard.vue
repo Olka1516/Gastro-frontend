@@ -48,5 +48,3 @@ const handleClick = () => {
   emit('click', props.dish)
 }
 </script>
-
-<style scoped></style>

@@ -101,5 +101,3 @@ function onClick() {
   if (props.clickable) emit('click')
 }
 </script>
-
-<style scoped></style>

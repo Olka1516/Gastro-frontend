@@ -36,19 +36,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import type { Plan } from '../types'
-import { loadStripe } from '@stripe/stripe-js'
-import { getCheckoutId } from '@/services'
-import { plans } from '../constants'
-import { useUserStore } from '@/stores'
-import { EPlan } from '@/types'
-import { useRouter } from 'vue-router'
 import { getImage } from '@/common/functions'
+import BaseDelete from '@/components/modal/BaseDelete.vue'
 import AuthTeleportModals from '@/components/modals/auth/AuthTeleportModals.vue'
 import { LINK_TEMPLATES } from '@/constants'
-import BaseDelete from '@/components/modal/BaseDelete.vue'
+import { getCheckoutId } from '@/services'
+import { useUserStore } from '@/stores'
+import { EPlan } from '@/types'
+import { loadStripe } from '@stripe/stripe-js'
+import { ref, type Ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { plans } from '../constants'
+import type { Plan } from '../types'
 
 const store = useUserStore()
 const router = useRouter()
@@ -99,5 +99,3 @@ const nextStep = async (value: Plan) => {
   }
 }
 </script>
-
-<style scoped></style>

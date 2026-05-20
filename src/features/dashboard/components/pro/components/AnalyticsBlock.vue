@@ -39,7 +39,7 @@
           <div class="mt-6 pt-6 border-t border-[#2a2930]">
             <p class="text-gray-500 text-xs uppercase tracking-wide">{{ t('dashboard.analytics.cards.revenue') }}</p>
             <p class="text-[#dc5b41] text-2xl font-semibold tabular-nums mt-1">{{ formatMoney(activeOrderStats.revenue)
-            }}</p>
+              }}</p>
           </div>
         </article>
 
@@ -89,12 +89,12 @@ import {
   dishPopularityByOrderCount,
   getPeriodBounds,
 } from '@/features/dashboard/composables/useAnalyticsPeriodStats'
-import DishPopularityBarChart from './DishPopularityBarChart.vue'
 import { getShowcaseOrdersForOwner, getTableReservationsForOwner } from '@/services/dashboard'
 import type { IShowcasePlacedOrder } from '@/types/showcaseOrder'
 import type { ITableReservation } from '@/types/tableReservation'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import DishPopularityBarChart from './DishPopularityBarChart.vue'
 
 type Period = 'day' | 'week' | 'month'
 
@@ -179,5 +179,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped></style>

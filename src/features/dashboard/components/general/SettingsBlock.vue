@@ -7,32 +7,19 @@
     <div class="w-full max-w-md">
       <form class="space-y-6" @submit.prevent="handleSubmit" autocomplete="on">
         <div class="relative">
-          <BaseText
-            v-model="formData.placeName"
-            :v="v$.placeName"
-            type="placeName"
-            :error="error"
-            autocomplete="organization"
-          />
+          <BaseText v-model="formData.placeName" :v="v$.placeName" type="placeName" :error="error"
+            autocomplete="organization" />
           <ErrorMessage :v="v$.placeName" :error="error" />
         </div>
 
         <div class="relative">
-          <BaseText
-            v-model="formData.email"
-            :v="v$.email"
-            type="email"
-            :error="error"
-            autocomplete="username"
-            inputType="email"
-          />
+          <BaseText v-model="formData.email" :v="v$.email" type="email" :error="error" autocomplete="username"
+            inputType="email" />
           <ErrorMessage :v="v$.email" :error="error" />
         </div>
 
-        <button
-          type="submit"
-          class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold rounded-lg shadow-md hover:bg-[#dc5b34] transition"
-        >
+        <button type="submit"
+          class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold rounded-lg shadow-md hover:bg-[#dc5b34] transition">
           {{ t('button.edit') }}
         </button>
       </form>
@@ -87,5 +74,3 @@ onMounted(() => {
   formData.email = store.email
 })
 </script>
-
-<style scoped></style>

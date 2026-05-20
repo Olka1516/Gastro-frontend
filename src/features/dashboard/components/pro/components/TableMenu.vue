@@ -123,9 +123,9 @@
 
     <BaseDelete text="dashboard.tableHead.deleteMeal" v-model:openDelete="openDelete"
       @handleProcess="(value) => deleteMeal(value)" />
-    <ManageDish text="dashboard.editText" v-model:dish="editDish" v-model:openManage="openManage" :error
+    <ManageDishPremium text="dashboard.editText" v-model:dish="editDish" v-model:openManage="openManage" :error
       @handleProcess="(value) => editMeal(value)" />
-    <ManageDish text="dashboard.addText" v-model:dish="newDish" v-model:openManage="openAdd" :error
+    <ManageDishPremium text="dashboard.addText" v-model:dish="newDish" v-model:openManage="openAdd" :error
       @handleProcess="(value) => addMeal(value)" />
   </div>
 </template>
@@ -140,7 +140,7 @@ import { usePremiumDashboardStore } from '@/stores/premiumDashboard'
 import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import ManageDish from '../../general/ManageDish.vue'
+import ManageDishPremium from './ManageDishPremium.vue'
 
 const size = 6
 const loading = ref(true)
@@ -241,5 +241,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped></style>

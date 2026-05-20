@@ -1,5 +1,5 @@
 <template>
-  <BaseHeader :limit="300" :navigations="navs" :activeSection />
+  <BaseHeader :limit="300" :navigations="navs" :activeSection is-landing-page />
 
   <template v-for="(section, i) in sections" :key="i">
     <template v-if="section.repeat">

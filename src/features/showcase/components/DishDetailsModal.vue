@@ -7,7 +7,7 @@
           class="w-full max-w-2xl bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] overflow-hidden shadow-2xl"
           @click.stop>
           <div class="relative h-64 bg-[#111]">
-            <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name"
+            <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dishLabels.name"
               class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-transparent to-transparent"></div>
             <button type="button"
@@ -19,14 +19,14 @@
 
           <div class="p-6 md:p-8">
             <div class="flex items-start justify-between gap-4">
-              <h3 class="text-white text-2xl md:text-3xl font-bold">{{ dish.name }}</h3>
+              <h3 class="text-white text-2xl md:text-3xl font-bold">{{ dishLabels.name }}</h3>
               <span class="px-4 py-2 rounded-lg text-white font-bold" :style="priceBadgeStyle">
                 ${{ Number(dish.price || 0).toFixed(2) }}
               </span>
             </div>
 
             <p class="text-gray-300 mt-4 leading-relaxed">
-              {{ dish.description || t('dashboard.menu.noDescription') }}
+              {{ dishLabels.description || t('dashboard.menu.noDescription') }}
             </p>
 
             <div class="mt-6 flex flex-wrap items-center gap-3">
@@ -50,9 +50,10 @@
 </template>
 
 <script setup lang="ts">
-import type { IDish } from '@/types/menu';
-import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { useShowcaseMenuContentLanguage } from '@/features/showcase/composables/useShowcaseMenuContentLanguage'
+import type { IDish } from '@/types/menu'
+import { computed, toRef } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = withDefaults(
   defineProps<{
@@ -70,6 +71,8 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { useDishLabels } = useShowcaseMenuContentLanguage()
+const dishLabels = useDishLabels(toRef(props, 'dish'))
 
 const hexToRgba = (hex: string, alpha: number) => {
   const normalized = hex.replace('#', '')

@@ -52,12 +52,14 @@
                 <img src="@/assets/images/icons/category.svg" alt="category" class="w-6 h-6"
                   style="filter: brightness(0) invert(1)" />
               </div>
-              <div class="flex flex-col">
-                <h3 class="text-white text-lg font-bold">{{ category.name }}</h3>
+              <div class="flex flex-col min-w-0 flex-1">
+                <h3 class="text-white text-lg font-bold truncate">{{ category.name }}</h3>
                 <p class="text-gray-400 text-xs">{{ t('dashboard.categories.category') }}</p>
               </div>
             </div>
           </div>
+
+          <CategoryLanguageBadges :category="category" />
 
           <div class="flex items-center gap-2 mt-2">
             <button @click="openManageCategory(category)"
@@ -83,9 +85,9 @@
     <BaseDelete text="dashboard.tableHead.deleteCategory" v-model:openDelete="openDelete"
       @handleProcess="(value) => deleteCategoryHandler(value)" />
     <ManageCategory text="dashboard.editCategoryText" v-model:category="editCategoryData"
-      v-model:openManage="openManage" :error @handleProcess="(value) => editCategoryHandler(value)" />
-    <ManageCategory text="dashboard.addCategoryText" v-model:category="newCategory" v-model:openManage="openAdd" :error
-      @handleProcess="(value) => addCategoryHandler(value)" />
+      v-model:openManage="openManage" multilingual :error @handleProcess="(value) => editCategoryHandler(value)" />
+    <ManageCategory text="dashboard.addCategoryText" v-model:category="newCategory" v-model:openManage="openAdd"
+      multilingual :error @handleProcess="(value) => addCategoryHandler(value)" />
   </div>
 </template>
 
@@ -93,12 +95,15 @@
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modal/BaseDelete.vue'
+import { defaultCategory } from '@/features/dashboard/utils/default'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
+import { notificationStore } from '@/stores/notificationStore'
+import { ErrorMessageEnum } from '@/types'
 import type { ICategory } from '@/types/menu'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import CategoryLanguageBadges from '../../general/CategoryLanguageBadges.vue'
 import ManageCategory from '../../general/ManageCategory.vue'
-import { defaultCategory } from '@/features/dashboard/utils/default'
 
 const size = 6
 const loading = ref(true)
@@ -114,6 +119,14 @@ const categoriesList = ref<ICategory[]>([])
 
 const { t } = useI18n()
 const categoriesDashboardStore = useCategoriesDashboardStore()
+const toastStore = notificationStore()
+
+const handleCategoryApiError = (apiError?: string) => {
+  if (!apiError) return
+  if (apiError === ErrorMessageEnum.CategoryTranslationsPremiumOnly) {
+    toastStore.sendError(t('apiCategory.categoryTranslationsPremiumOnly'))
+  }
+}
 
 const changeDeleteValue = (id: string) => {
   openDelete.value = true
@@ -123,10 +136,11 @@ const changeDeleteValue = (id: string) => {
 
 const deleteCategoryHandler = async (value: boolean) => {
   if (value && categoryId.value) {
-    const success = await categoriesDashboardStore.deleteCategory(categoryId.value)
-    if (success) {
+    const response = await categoriesDashboardStore.deleteCategory(categoryId.value)
+    if (response.success) {
       await getCategories()
     } else {
+      handleCategoryApiError(response.error)
       console.error('Failed to delete category:', categoriesDashboardStore.error)
     }
   }
@@ -139,10 +153,11 @@ const openManageCategory = (value: ICategory) => {
 }
 
 const editCategoryHandler = async (value: ICategory) => {
-  const success = await categoriesDashboardStore.editCategory(value)
-  if (success) {
+  const response = await categoriesDashboardStore.editCategory(value)
+  if (response.success) {
     await getCategories()
   } else {
+    handleCategoryApiError(response.error)
     console.error('Failed to edit category:', categoriesDashboardStore.error)
   }
 }
@@ -154,10 +169,11 @@ const openAddCategory = () => {
 }
 
 const addCategoryHandler = async (value: ICategory) => {
-  const success = await categoriesDashboardStore.addCategory(value)
-  if (success) {
+  const response = await categoriesDashboardStore.addCategory(value)
+  if (response.success) {
     await getCategories()
   } else {
+    handleCategoryApiError(response.error)
     console.error('Failed to add category:', categoriesDashboardStore.error)
   }
 }
@@ -178,5 +194,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped></style>

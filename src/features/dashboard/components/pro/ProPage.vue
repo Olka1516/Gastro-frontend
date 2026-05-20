@@ -12,11 +12,11 @@ import { computed, markRaw, ref } from 'vue'
 import type { IBaseSidebarData } from '../../types'
 import BaseSidebar from '../general/BaseSidebar.vue'
 import QRCodeBlock from '../general/QRCodeBlock.vue'
+import AnalyticsBlock from './components/AnalyticsBlock.vue'
 import Categories from './components/CategoriesBlock.vue'
 import HomeBlock from './components/HomeBlock.vue'
 import OrdersBlock from './components/OrdersBlock.vue'
 import ReservationsBlock from './components/ReservationsBlock.vue'
-import AnalyticsBlock from './components/AnalyticsBlock.vue'
 import SettingsBlock from './components/SettingsBlock.vue'
 import TableMenu from './components/TableMenu.vue'
 
@@ -74,5 +74,3 @@ const sidebarStyle = computed(() => {
     : 'grid-cols-[minmax(0,0.24fr)_minmax(0,1fr)]'
 })
 </script>
-
-<style scoped></style>

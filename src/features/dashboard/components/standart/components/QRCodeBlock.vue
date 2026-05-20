@@ -188,5 +188,3 @@ onMounted(() => {
   generateQRCode()
 })
 </script>
-
-<style scoped></style>

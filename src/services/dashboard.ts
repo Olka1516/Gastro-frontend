@@ -10,6 +10,12 @@ import type {
   ITableReservation,
   TableReservationStatusFilter,
 } from '@/types/tableReservation'
+import {
+  normalizeCategoriesFromApi,
+  normalizeCategoryFromApi,
+  serializeCategoryForApi,
+} from '@/features/dashboard/utils/categoryApi'
+import { normalizeDishFromApi, normalizeDishesFromApi } from '@/features/dashboard/utils/dishApi'
 import type { IDish, ICategory } from '@/types/menu'
 
 export const getUserDetailsByUserId = async () => {
@@ -23,8 +29,10 @@ export const putUserFreePlan = async () => {
 }
 
 export const getUserDishes = async () => {
-  const data = await http.get(ENDPOINTS.GET_USER_DISHES)
-  return data.data
+  const { data } = await http.get<{ dishes?: IDish[] }>(ENDPOINTS.GET_USER_DISHES)
+  return {
+    dishes: normalizeDishesFromApi(data.dishes ?? []),
+  }
 }
 
 export const getUserStatus = async (placeName: string) => {
@@ -32,28 +40,43 @@ export const getUserStatus = async (placeName: string) => {
   return data.data
 }
 
-const generateFormDish = (dishData: IDish) => {
+const generateFormDish = (dishData: IDish, options?: { includeTranslations?: boolean }) => {
   const formData = new FormData()
   if (dishData.image) formData.append('image', dishData.image)
   formData.append('name', dishData.name)
-  formData.append('description', dishData.description)
+  formData.append('description', dishData.description ?? '')
   formData.append('price', dishData.price!.toString())
   formData.append('category', dishData.category)
   formData.append('isAvailable', dishData.isAvailable)
 
+  if (options?.includeTranslations && dishData.translations) {
+    formData.append('translations', JSON.stringify(dishData.translations))
+  }
+
   return formData
 }
 
-export const addDishForUser = async (dishData: IDish) => {
-  const formData = generateFormDish(dishData)
-  const data = await http.post(ENDPOINTS.ADD_DISH, formData)
-  return data.data
+export const addDishForUser = async (
+  dishData: IDish,
+  options?: { includeTranslations?: boolean },
+) => {
+  const formData = generateFormDish(dishData, options)
+  const { data } = await http.post<{ dish?: IDish } | IDish>(ENDPOINTS.ADD_DISH, formData)
+  const raw = (data as { dish?: IDish }).dish ?? (data as IDish)
+  return normalizeDishFromApi(raw)
 }
 
-export const editDishForUser = async (dishData: IDish) => {
-  const formData = generateFormDish(dishData)
-  const data = await http.put(ENDPOINTS.EDIT_DISH(dishData.id), formData)
-  return data.data
+export const editDishForUser = async (
+  dishData: IDish,
+  options?: { includeTranslations?: boolean },
+) => {
+  const formData = generateFormDish(dishData, options)
+  const { data } = await http.put<{ dish?: IDish } | IDish>(
+    ENDPOINTS.EDIT_DISH(dishData.id),
+    formData,
+  )
+  const raw = (data as { dish?: IDish }).dish ?? (data as IDish)
+  return normalizeDishFromApi(raw)
 }
 
 export const deleteDishById = async (dishId: string) => {
@@ -61,18 +84,37 @@ export const deleteDishById = async (dishId: string) => {
 }
 
 export const getUserCategories = async () => {
-  const data = await http.get(ENDPOINTS.GET_USER_CATEGORIES)
-  return data.data
+  const { data } = await http.get<{ categories?: ICategory[] }>(ENDPOINTS.GET_USER_CATEGORIES)
+  return {
+    categories: normalizeCategoriesFromApi(data.categories ?? []),
+  }
 }
 
-export const addCategoryForUser = async (categoryData: ICategory) => {
-  const data = await http.post(ENDPOINTS.ADD_CATEGORY, categoryData)
-  return data.data
+export const addCategoryForUser = async (
+  categoryData: ICategory,
+  options?: { includeTranslations?: boolean },
+) => {
+  const body = serializeCategoryForApi(categoryData, {
+    includeTranslations: options?.includeTranslations ?? false,
+  })
+  const { data } = await http.post<{ category?: ICategory } | ICategory>(ENDPOINTS.ADD_CATEGORY, body)
+  const raw = (data as { category?: ICategory }).category ?? (data as ICategory)
+  return normalizeCategoryFromApi(raw)
 }
 
-export const editCategoryForUser = async (categoryData: ICategory) => {
-  const data = await http.put(ENDPOINTS.EDIT_CATEGORY(categoryData.id), categoryData)
-  return data.data
+export const editCategoryForUser = async (
+  categoryData: ICategory,
+  options?: { includeTranslations?: boolean },
+) => {
+  const body = serializeCategoryForApi(categoryData, {
+    includeTranslations: options?.includeTranslations ?? false,
+  })
+  const { data } = await http.put<{ category?: ICategory } | ICategory>(
+    ENDPOINTS.EDIT_CATEGORY(categoryData.id),
+    body,
+  )
+  const raw = (data as { category?: ICategory }).category ?? (data as ICategory)
+  return normalizeCategoryFromApi(raw)
 }
 
 export const deleteCategoryById = async (categoryId: string) => {

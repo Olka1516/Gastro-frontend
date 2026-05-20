@@ -132,15 +132,15 @@
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modal/BaseDelete.vue'
+import { defaultDish } from '@/features/dashboard/utils/default'
+import { notificationStore } from '@/stores'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
+import { useFreeDashboardStore } from '@/stores/freeDashboard'
+import { ErrorMessageEnum } from '@/types'
 import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ManageDish from '../../general/ManageDish.vue'
-import { defaultDish } from '@/features/dashboard/utils/default'
-import { useFreeDashboardStore } from '@/stores/freeDashboard'
-import { ErrorMessageEnum } from '@/types'
-import { notificationStore } from '@/stores'
 
 const size = 6
 const loading = ref(true)
@@ -245,5 +245,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped></style>

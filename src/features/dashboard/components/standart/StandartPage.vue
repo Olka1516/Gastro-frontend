@@ -11,11 +11,11 @@ import type { IUserData } from '@/types'
 import { computed, markRaw, ref } from 'vue'
 import type { IBaseSidebarData } from '../../types'
 import BaseSidebar from '../general/BaseSidebar.vue'
+import QRCodeBlock from '../general/QRCodeBlock.vue'
 import Categories from './components/CategoriesBlock.vue'
 import HomeBlock from './components/HomeBlock.vue'
 import SettingsBlock from './components/SettingsBlock.vue'
 import TableMenu from './components/TableMenu.vue'
-import QRCodeBlock from '../general/QRCodeBlock.vue'
 
 defineProps<{ userInfo: IUserData }>()
 
@@ -56,5 +56,3 @@ const sidebarStyle = computed(() => {
     : 'grid-cols-[minmax(0,0.24fr)_minmax(0,1fr)]'
 })
 </script>
-
-<style scoped></style>

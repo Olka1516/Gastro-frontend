@@ -9,6 +9,12 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 .Vue-Toastification__toast.success-toats {

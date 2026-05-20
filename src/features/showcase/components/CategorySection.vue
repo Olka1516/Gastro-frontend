@@ -7,7 +7,7 @@
             style="filter: brightness(0) invert(1)" />
         </div>
         <div>
-          <h2 class="text-white text-3xl font-bold">{{ category.name }}</h2>
+          <h2 class="text-white text-3xl font-bold">{{ categoryDisplayName }}</h2>
           <p v-if="category.description" class="text-gray-400 text-sm mt-1">
             {{ category.description }}
           </p>
@@ -34,7 +34,7 @@
         :is-liked="likedDishIds.includes(dish.id)"
         :menu-icon-color="menuIconColor"
         :show-add-to-cart="showAddToCart"
-        :category-name="category.name"
+        :category-name="categoryDisplayName"
         @click="handleDishClick"
         @toggle-like="handleToggleLike"
       />
@@ -49,12 +49,27 @@
 
 <script setup lang="ts">
 import { DEFAULT_MENU_DISH_LAYOUT, type MenuDishLayout } from '@/constants/menuDishLayout'
+import {
+  getCategoryDisplayName,
+  mapUiLocaleToMenuLanguage,
+} from '@/features/dashboard/utils/categoryApi'
+import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
 import type { ICategory, IDish } from '@/types/menu'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
 import DishCard from './DishCard.vue'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const menuLangStore = useShowcaseMenuLanguageStore()
+const { enabled: menuLangEnabled, languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
+
+const categoryDisplayName = computed(() => {
+  const lang = menuLangEnabled.value
+    ? menuLanguageCode.value
+    : mapUiLocaleToMenuLanguage(locale.value)
+  return getCategoryDisplayName(props.category, lang)
+})
 
 const props = withDefaults(
   defineProps<{
@@ -118,4 +133,4 @@ const handleToggleLike = (dishId: string) => {
 }
 </script>
 
-<style scoped></style>
+

@@ -3,11 +3,7 @@
     <div class="relative flex items-center justify-center">
       <svg viewBox="0 0 200 200" class="absolute w-32 h-32 animate-[spin_10s_linear_infinite]">
         <defs>
-          <path
-            id="circlePath"
-            d="M 100,100 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0"
-            fill="none"
-          />
+          <path id="circlePath" d="M 100,100 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0" fill="none" />
         </defs>
 
         <text class="text-gray-600 text-[12px] uppercase tracking-[0.15em]">
@@ -24,9 +20,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n()
 </script>
-
-<style scoped></style>

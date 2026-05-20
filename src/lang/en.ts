@@ -1,4 +1,14 @@
 export default {
+  header: {
+    menuOpen: 'Open menu',
+    menuClose: 'Close menu',
+    sidebarNav: 'Navigation',
+  },
+  landing: {
+    uiLanguage: {
+      label: 'Site language',
+    },
+  },
   dashboard: {
     standart: {
       navs: {
@@ -119,6 +129,24 @@ export default {
         pendingHint: 'All orders currently pending (not filtered by period)',
       },
     },
+    dish: {
+      multilingualHint:
+        'Ukrainian name is required; description and other languages are optional. Category labels follow the active tab language.',
+      sectionGeneral: 'General details',
+      sectionTranslations: 'Name & description for guests',
+      translationsHint: 'Switch the language tab and fill in text shown on the public menu.',
+      ukNameRequired: 'Enter the name in Ukrainian',
+      optionalDescription: 'optional',
+    },
+    categories: {
+      subtitle: 'Organize your menu with categories',
+      category: 'Category',
+      noCategoriesDescription:
+        'Create categories to organize your menu and help guests find dishes faster.',
+      ukNameRequired: 'Enter the name in Ukrainian',
+      languagesTablist: 'Menu languages',
+      languagesFilled: '{count} of {total} languages filled',
+    },
     settings: {
       menuBackgroundColor: 'Menu background color',
       menuIconColor: 'Menu icon color',
@@ -187,6 +215,10 @@ export default {
     tableReservationRateLimit: 'Too many attempts. Please try again later.',
     invalidCredentials: 'Menu not found or unavailable.',
   },
+  apiCategory: {
+    categoryTranslationsPremiumOnly:
+      'Multilingual categories are available on the premium plan only.',
+  },
   apiShowcaseOrder: {
     showcaseOrderingNotAvailable: 'Ordering is not available for this menu.',
     showcaseOrderTotalMismatch:
@@ -223,6 +255,9 @@ export default {
       email: 'Enter a valid email address',
       required: 'This field is required',
     },
+    name: {
+      required: 'This field is required',
+    },
     firstName: {
       required: 'Enter your first name',
     },
@@ -246,6 +281,9 @@ export default {
     reserve: 'Reserve a table',
   },
   showcase: {
+    menuLanguage: {
+      label: 'Menu language',
+    },
     wishlist: {
       title: 'Saved dishes',
       empty: 'You have not saved any dishes yet. Tap the heart on a dish to add it here.',

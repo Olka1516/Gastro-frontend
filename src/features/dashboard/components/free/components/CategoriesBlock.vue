@@ -51,8 +51,8 @@
                 <img src="@/assets/images/icons/category.svg" alt="category" class="w-6 h-6"
                   style="filter: brightness(0) invert(1)" />
               </div>
-              <div class="flex flex-col">
-                <h3 class="text-white text-lg font-bold">{{ category.name }}</h3>
+              <div class="flex flex-col min-w-0 flex-1">
+                <h3 class="text-white text-lg font-bold truncate">{{ category.name }}</h3>
                 <p class="text-gray-400 text-xs">{{ t('dashboard.categories.category') }}</p>
               </div>
             </div>
@@ -92,14 +92,14 @@
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modal/BaseDelete.vue'
+import { defaultCategory } from '@/features/dashboard/utils/default'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
+import { notificationStore } from '@/stores/notificationStore'
+import { ErrorMessageEnum } from '@/types'
 import type { ICategory } from '@/types/menu'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ManageCategory from '../../general/ManageCategory.vue'
-import { defaultCategory } from '@/features/dashboard/utils/default'
-import { ErrorMessageEnum } from '@/types'
-import { notificationStore } from '@/stores/notificationStore'
 
 const size = 6
 const loading = ref(true)
@@ -183,5 +183,3 @@ onMounted(async () => {
   }
 })
 </script>
-
-<style scoped></style>

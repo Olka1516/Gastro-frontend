@@ -36,7 +36,7 @@ export const usePremiumDashboardStore = defineStore('premiumDashboard', () => {
 
   const addDish = async (dishData: IDish) => {
     try {
-      await addDishForUser(dishData)
+      await addDishForUser(dishData, { includeTranslations: true })
 
       return { success: true }
     } catch (err) {
@@ -47,7 +47,7 @@ export const usePremiumDashboardStore = defineStore('premiumDashboard', () => {
 
   const editDish = async (dishData: IDish) => {
     try {
-      await editDishForUser(dishData)
+      await editDishForUser(dishData, { includeTranslations: true })
 
       return { success: true }
     } catch (err) {

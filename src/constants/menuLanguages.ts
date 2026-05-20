@@ -5,7 +5,6 @@ export interface MenuLanguage {
   flag: string
 }
 
-/** Menu content languages shown in dashboard category/dish editors */
 export const MENU_LANGUAGES: MenuLanguage[] = [
   { code: 'uk', label: 'Ukrainian', nativeLabel: 'Українська', flag: '🇺🇦' },
   { code: 'en', label: 'English', nativeLabel: 'English', flag: '🇬🇧' },
@@ -25,5 +24,4 @@ export const DEFAULT_MENU_LANGUAGE = MENU_LANGUAGES[0].code
 
 export const MENU_LANGUAGE_CODES = MENU_LANGUAGES.map((l) => l.code)
 
-export const getMenuLanguage = (code: string) =>
-  MENU_LANGUAGES.find((l) => l.code === code)
+export const getMenuLanguage = (code: string) => MENU_LANGUAGES.find((l) => l.code === code)

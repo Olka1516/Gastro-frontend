@@ -78,7 +78,6 @@ const props = withDefaults(
   defineProps<{
     text: string
     error: string
-    /** Premium plan: per-language names sent as `translations` to API */
     multilingual?: boolean
   }>(),
   { multilingual: false },

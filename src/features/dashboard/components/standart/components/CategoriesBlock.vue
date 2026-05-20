@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
-import BaseDelete from '@/components/modal/BaseDelete.vue'
+import BaseDelete from '@/components/modals/BaseDelete.vue'
 import { defaultCategory } from '@/features/dashboard/utils/default'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import type { ICategory } from '@/types/menu'

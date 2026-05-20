@@ -1,21 +1,34 @@
 <template>
-  <main class="w-full bg-[#0f0f11]">
-    <div class="w-[calc(100%-256px)] text-center m-auto min-h-screen flex flex-col justify-center items-center gap-4">
-      <h3 class="text-[#dc5b41] font-bold opacity-0 animate-fade-in" style="animation-delay: 0.4s">
+  <main class="w-full overflow-x-clip bg-[#0f0f11]">
+    <div
+      class="mx-auto flex min-h-[calc(100dvh-5rem)] w-full max-w-4xl flex-col items-center justify-center gap-5 px-4 py-16 text-center sm:gap-6 sm:px-6 sm:py-20 lg:max-w-5xl lg:gap-8"
+    >
+      <h3
+        class="animate-fade-in text-sm font-bold text-[#dc5b41] opacity-0 sm:text-base"
+        style="animation-delay: 0.4s"
+      >
         {{ t('landing.welcomeText') }}
       </h3>
 
-      <h1 class="text-[#fff] text-5xl font-bold opacity-0 animate-fade-in" style="animation-delay: 0.4s">
+      <h1
+        class="animate-fade-in text-3xl font-bold leading-tight text-white opacity-0 sm:text-4xl md:text-5xl"
+        style="animation-delay: 0.4s"
+      >
         {{ t('landing.readyTemplates') }}
       </h1>
 
-      <p class="max-w-3xl text-[#ccc] opacity-0 animate-fade-in" style="animation-delay: 1.3s">
+      <p
+        class="animate-fade-in max-w-3xl text-sm leading-relaxed text-[#ccc] opacity-0 sm:text-base md:text-lg"
+        style="animation-delay: 1.3s"
+      >
         {{ t('landing.readyTemplatesDescription') }}
       </p>
 
-      <a href="#plans"
-        class="cursor-pointer text-[#fff] bg-[#dc5b41] px-8 py-2 opacity-0 rounded-lg hover:scale-105 transition-transform duration-300 animate-fade-in"
-        style="animation-delay: 1.9s">
+      <a
+        href="#plans"
+        class="animate-fade-in mt-1 cursor-pointer rounded-lg bg-[#dc5b41] px-8 py-2.5 text-sm text-white opacity-0 transition-transform duration-300 hover:scale-105 sm:mt-2 sm:text-base"
+        style="animation-delay: 1.9s"
+      >
         {{ t('button.buyNow') }}
       </a>
     </div>

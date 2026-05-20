@@ -6,7 +6,7 @@
       <component
         v-for="n in section.repeat"
         :is="section.component"
-        :id="section.id"
+        :id="`${section.id}-${n}`"
         :key="`${section.id}-${n}`"
         v-bind="section.props(n)"
       />
@@ -27,6 +27,7 @@ import PhonesBlock from './components/PhonesBlock.vue'
 import NumbersBlock from './components/NumbersBlock.vue'
 import InfoBlock from './components/InfoBlock.vue'
 import MapBlock from './components/MapBlock.vue'
+import { INFO_BLOCK_IMAGES } from './constants'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -43,7 +44,7 @@ const sections = [
     repeat: 3,
     props: (n: number) => ({
       index: n,
-      img: '',
+      img: INFO_BLOCK_IMAGES[n] ?? INFO_BLOCK_IMAGES[1],
       title: `landing.infoBlock.${n}.title`,
       description: `landing.infoBlock.${n}.description`,
       buttonText: 'button.buyNow',

@@ -7,6 +7,10 @@
 <style>
 @import 'tailwindcss';
 
+@theme {
+  --breakpoint-header: 87.5rem;
+}
+
 html {
   scroll-behavior: smooth;
   overflow-x: clip;

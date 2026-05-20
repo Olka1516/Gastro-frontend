@@ -6,16 +6,13 @@ import { storeToRefs } from 'pinia'
 import { computed, type MaybeRef, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-/** Active menu content locale for showcase (premium selector or UI locale). */
 export const useShowcaseMenuContentLanguage = () => {
   const { locale } = useI18n()
   const menuLangStore = useShowcaseMenuLanguageStore()
   const { enabled: menuLangEnabled, languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
 
   const menuContentLangCode = computed(() =>
-    menuLangEnabled.value
-      ? menuLanguageCode.value
-      : mapUiLocaleToMenuLanguage(locale.value),
+    menuLangEnabled.value ? menuLanguageCode.value : mapUiLocaleToMenuLanguage(locale.value),
   )
 
   const getDishLabels = (dish: IDish) => ({

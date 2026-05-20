@@ -131,7 +131,7 @@
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
-import BaseDelete from '@/components/modal/BaseDelete.vue'
+import BaseDelete from '@/components/modals/BaseDelete.vue'
 import { defaultDish } from '@/features/dashboard/utils/default'
 import { notificationStore } from '@/stores'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'

@@ -25,6 +25,5 @@ export interface ICategory {
   name: string
   description?: string
   ownerId?: string
-  /** Per-language category copy (menu content locales, not UI i18n) */
   translations?: Partial<Record<string, ICategoryTranslation>>
 }

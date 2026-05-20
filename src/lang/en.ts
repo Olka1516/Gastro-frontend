@@ -8,6 +8,7 @@ export default {
     uiLanguage: {
       label: 'Site language',
     },
+    recommendedPlan: 'Popular',
   },
   dashboard: {
     standart: {

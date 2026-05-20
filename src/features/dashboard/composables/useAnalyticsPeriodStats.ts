@@ -3,12 +3,10 @@ import type { ITableReservation } from '@/types/tableReservation'
 
 export type PeriodBounds = { dayStart: number; weekStart: number; monthStart: number }
 
-/** Local calendar day 00:00 */
 export function startOfLocalDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
 }
 
-/** Monday 00:00 of the week containing `d` (ISO-style week, European) */
 export function startOfLocalWeekMonday(d: Date): Date {
   const day = d.getDay()
   const offset = day === 0 ? -6 : 1 - day
@@ -74,7 +72,6 @@ export function countOrdersWithStatusSince(
   return n
 }
 
-/** Популярність: скільки замовлень (не скасованих) містили страву хоча б у одній позиції */
 export interface DishOrderPopularity {
   dishId: string
   name: string

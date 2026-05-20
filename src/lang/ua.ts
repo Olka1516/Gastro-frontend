@@ -4,6 +4,7 @@ export default {
       label: 'Мова сайту',
     },
     priceAndPlans: 'Плани і ціни',
+    recommendedPlan: 'Популярний',
     welcomeText: 'Ласкаво просимо до Gastro',
     readyTemplates: 'Готові шаблони - для будь-якого закладу',
     readyTemplatesDescription:

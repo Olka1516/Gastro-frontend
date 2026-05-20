@@ -1,7 +1,6 @@
 import { DEFAULT_MENU_LANGUAGE, MENU_LANGUAGE_CODES } from '@/constants/menuLanguages'
 import type { ICategory, ICategoryTranslation } from '@/types/menu'
 
-/** Maps vue-i18n UI locale to menu content language code */
 const UI_LOCALE_TO_MENU_LANGUAGE: Record<string, string> = {
   ua: 'uk',
   uk: 'uk',
@@ -34,7 +33,9 @@ export const getCategoryDisplayName = (
     langCode,
     DEFAULT_MENU_LANGUAGE,
     'en',
-    ...MENU_LANGUAGE_CODES.filter((c) => c !== langCode && c !== DEFAULT_MENU_LANGUAGE && c !== 'en'),
+    ...MENU_LANGUAGE_CODES.filter(
+      (c) => c !== langCode && c !== DEFAULT_MENU_LANGUAGE && c !== 'en',
+    ),
   ]
 
   for (const code of fallbackOrder) {

@@ -1,13 +1,7 @@
 <template>
   <div ref="rootRef" class="relative shrink-0">
-    <button
-      type="button"
-      class="menu-lang-trigger"
-      :aria-expanded="open"
-      aria-haspopup="listbox"
-      :aria-label="ariaLabel"
-      @click="open = !open"
-    >
+    <button type="button" class="menu-lang-trigger" :aria-expanded="open" aria-haspopup="listbox"
+      :aria-label="ariaLabel" @click="open = !open">
       <span class="menu-lang-trigger__flag" aria-hidden="true">{{ activeLanguage?.flag }}</span>
       <span class="menu-lang-trigger__code">{{ activeLanguage?.code.toUpperCase() }}</span>
       <span class="menu-lang-trigger__chevron" :class="{ 'menu-lang-trigger__chevron--open': open }" aria-hidden="true">
@@ -15,32 +9,15 @@
       </span>
     </button>
 
-    <Transition
-      enter-active-class="transition duration-150 ease-out"
-      enter-from-class="opacity-0 scale-95 -translate-y-1"
-      enter-to-class="opacity-100 scale-100 translate-y-0"
-      leave-active-class="transition duration-100 ease-in"
-      leave-from-class="opacity-100 scale-100"
-      leave-to-class="opacity-0 scale-95"
-    >
-      <ul
-        v-if="open"
-        class="menu-lang-list"
-        role="listbox"
-        :aria-label="ariaLabel"
-      >
-        <li
-          v-for="lang in availableLanguages"
-          :key="lang.code"
-          role="option"
-          :aria-selected="lang.code === selectedCode"
-        >
-          <button
-            type="button"
-            class="menu-lang-option"
-            :class="{ 'menu-lang-option--active': lang.code === selectedCode }"
-            @click="selectLanguage(lang.code)"
-          >
+    <Transition enter-active-class="transition duration-150 ease-out"
+      enter-from-class="opacity-0 scale-95 -translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0"
+      leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100 scale-100"
+      leave-to-class="opacity-0 scale-95">
+      <ul v-if="open" class="menu-lang-list" role="listbox" :aria-label="ariaLabel">
+        <li v-for="lang in availableLanguages" :key="lang.code" role="option"
+          :aria-selected="lang.code === selectedCode">
+          <button type="button" class="menu-lang-option"
+            :class="{ 'menu-lang-option--active': lang.code === selectedCode }" @click="selectLanguage(lang.code)">
             <span aria-hidden="true">{{ lang.flag }}</span>
             <span class="menu-lang-option__label">{{ lang.nativeLabel }}</span>
             <span class="menu-lang-option__code">{{ lang.code.toUpperCase() }}</span>
@@ -62,7 +39,6 @@ const UI_LOCALE_STORAGE_KEY = 'gastro-ui-locale'
 
 const props = withDefaults(
   defineProps<{
-    /** `menu` — мови контенту меню (premium); `ui` — мова інтерфейсу на лендінгу */
     mode?: 'menu' | 'ui'
   }>(),
   { mode: 'menu' },

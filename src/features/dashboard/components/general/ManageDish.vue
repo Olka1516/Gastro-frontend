@@ -5,11 +5,11 @@
       leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
       <div v-if="open" class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px]">
         <div
-          class="relative border border-[#dc5b41] w-full max-w-md max-h-[90vh] rounded-2xl shadow-2xl bg-black/80 overflow-hidden flex flex-col">
+          class="relative pb-[18px] border border-[#dc5b41] w-full max-w-md max-h-[90vh] rounded-2xl shadow-2xl bg-black/80 overflow-hidden flex flex-col">
           <div class="flex-shrink-0 relative p-6 pb-0">
             <button @click="closeModal"
               class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition">
-              ✕
+              <img src="@/assets/images/icons/exit_white.svg" alt="Close" />
             </button>
 
             <h2 class="text-2xl font-semibold text-white text-center mb-6">
@@ -48,7 +48,7 @@
               </div>
 
               <button type="submit"
-                class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold shadow-md hover:bg-[#dc5b34] transition">
+                class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] rounded-lg text-white font-semibold shadow-md hover:bg-[#dc5b34] transition">
                 {{ isEditMode ? t('button.edit') : t('button.add') }}
               </button>
             </form>

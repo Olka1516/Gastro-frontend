@@ -1,8 +1,14 @@
 <template>
-  <div>
-    <div :class="['grid transition-all duration-300', sidebarStyle]">
-      <BaseSidebar :navs="navs" :userInfo :activeNav="activeNav" @handleProcess="(value) => getSidebarStyle(value)"
-        @handleNav="handleNav" />
+  <div
+    class="grid min-h-screen w-full grid-cols-1 transition-all duration-300"
+    :class="sidebarStyle">
+    <BaseSidebar
+      :navs="navs"
+      :userInfo
+      :activeNav="activeNav"
+      @handleProcess="(value) => getSidebarStyle(value)"
+      @handleNav="handleNav" />
+    <div class="min-w-0 overflow-x-hidden">
       <component :is="activeNav.component" @navigateTo="navigateTo" />
     </div>
   </div>
@@ -54,7 +60,7 @@ const navigateTo = (key: string) => {
 
 const sidebarStyle = computed(() => {
   return isSidebarClosed.value
-    ? 'grid-cols-[minmax(0,0.1fr)_minmax(0,1fr)]'
-    : 'grid-cols-[minmax(0,0.24fr)_minmax(0,1fr)]'
+    ? 'lg:grid-cols-[minmax(4.5rem,0.09fr)_minmax(0,1fr)]'
+    : 'lg:grid-cols-[minmax(13rem,0.24fr)_minmax(0,1fr)]'
 })
 </script>

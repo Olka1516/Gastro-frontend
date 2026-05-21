@@ -282,9 +282,12 @@ export default {
     reserve: 'Reserve a table',
   },
   showcase: {
+    menu: 'Menu',
+    welcomeDescription: 'Browse our menu and enjoy every dish we have prepared for you.',
     menuLanguage: {
       label: 'Menu language',
     },
+    categoryTabsLabel: 'Menu categories',
     wishlist: {
       title: 'Saved dishes',
       empty: 'You have not saved any dishes yet. Tap the heart on a dish to add it here.',
@@ -292,6 +295,9 @@ export default {
       open: 'Wishlist',
     },
     premium: {
+      badge: 'Premium menu',
+      description:
+        'A curated menu with polished presentation and easy navigation — pick a category or scroll.',
       cart: 'Cart',
       cartEmpty: 'Your cart is empty.',
       cartTotal: 'Total',

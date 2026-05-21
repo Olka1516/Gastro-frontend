@@ -1,10 +1,10 @@
 <template>
   <div
-    class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-2xl border border-[#2a2930] overflow-hidden hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-[1.02] group shadow-lg hover:shadow-[0_20px_60px_rgba(220,91,65,0.2)] cursor-pointer"
+    class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-2xl border border-[#2a2930] overflow-hidden transition-all duration-300 hover:scale-[1.02] group shadow-lg cursor-pointer"
     @click="handleClick">
     <div class="relative h-48 overflow-hidden">
       <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name"
-        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        class="w-full h-full object-cover group-hover:scale-101 transition-transform duration-500" />
       <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-transparent to-transparent"></div>
 
       <div v-if="dish.isAvailable === 'unavailable'" class="absolute top-4 right-4">

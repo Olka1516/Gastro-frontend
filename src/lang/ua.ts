@@ -582,6 +582,7 @@ export default {
     },
     noMenuAvailable: 'Меню поки недоступне',
     menuComingSoon: 'Наші страви незабаром будуть доступні',
+    categoryTabsLabel: 'Категорії меню',
     noDishesInCategory: 'Поки немає страв у цій категорії',
     error: {
       title: 'Помилка завантаження',

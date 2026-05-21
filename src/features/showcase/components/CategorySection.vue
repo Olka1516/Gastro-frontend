@@ -16,28 +16,15 @@
       <div class="h-px mt-4" :style="separatorStyle"></div>
     </div>
 
-    <div
-      v-if="categoryDishes.length > 0"
-      :class="
-        menuDishLayout === 'list'
-          ? 'mx-auto flex w-full max-w-3xl flex-col gap-3 lg:max-w-4xl'
-          : menuDishLayout === 'magazine'
-            ? 'mx-auto flex w-full max-w-4xl flex-col gap-12 lg:max-w-5xl lg:gap-16'
-            : 'grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'
-      "
-    >
-      <DishCard
-        v-for="dish in categoryDishes"
-        :key="dish.id"
-        :dish="dish"
-        :layout="menuDishLayout"
-        :is-liked="likedDishIds.includes(dish.id)"
-        :menu-icon-color="menuIconColor"
-        :show-add-to-cart="showAddToCart"
-        :category-name="categoryDisplayName"
-        @click="handleDishClick"
-        @toggle-like="handleToggleLike"
-      />
+    <div v-if="categoryDishes.length > 0" :class="menuDishLayout === 'list'
+        ? 'mx-auto flex w-full max-w-3xl flex-col gap-3 lg:max-w-4xl'
+        : menuDishLayout === 'magazine'
+          ? 'mx-auto flex w-full max-w-4xl flex-col gap-12 lg:max-w-5xl lg:gap-16'
+          : 'grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'
+      ">
+      <DishCard v-for="dish in categoryDishes" :key="dish.id" :dish="dish" :layout="menuDishLayout"
+        :is-liked="likedDishIds.includes(dish.id)" :menu-icon-color="menuIconColor" :show-add-to-cart="showAddToCart"
+        :category-name="categoryDisplayName" @click="handleDishClick" @toggle-like="handleToggleLike" />
     </div>
 
     <div v-else
@@ -55,9 +42,9 @@ import {
 } from '@/features/dashboard/utils/categoryApi'
 import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
 import type { ICategory, IDish } from '@/types/menu'
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { storeToRefs } from 'pinia'
 import DishCard from './DishCard.vue'
 
 const { t, locale } = useI18n()
@@ -132,5 +119,3 @@ const handleToggleLike = (dishId: string) => {
   emit('toggleLike', dishId)
 }
 </script>
-
-

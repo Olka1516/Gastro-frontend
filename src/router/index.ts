@@ -13,7 +13,7 @@ const router = createRouter({
         {
           path: '',
           name: 'showcase-place',
-          component: () => import('../features/showcase/ShowcasePlanHost.vue'),
+          component: () => import('../features/showcase/pro/ShowcasePlanHost.vue'),
         },
         {
           path: 'orders',
@@ -23,12 +23,12 @@ const router = createRouter({
         {
           path: 'checkout',
           name: 'showcase-checkout',
-          component: () => import('../features/showcase/ShowcaseCheckoutPage.vue'),
+          component: () => import('../features/showcase/pro/ShowcaseCheckoutPage.vue'),
         },
         {
           path: 'reserve',
           name: 'showcase-place-reserve',
-          component: () => import('../features/showcase/ShowcaseReservePage.vue'),
+          component: () => import('../features/showcase/pro/ShowcaseReservePage.vue'),
         },
       ],
     },

@@ -11,6 +11,13 @@ export default {
     recommendedPlan: 'Popular',
   },
   dashboard: {
+    sidebar: {
+      currentPlan: 'Current plan',
+      changePlan: 'Change plan',
+      collapsePlans: 'Collapse',
+      current: 'Current',
+      freePrice: 'Free',
+    },
     standart: {
       navs: {
         orders: 'Orders',

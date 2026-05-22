@@ -121,7 +121,7 @@ const changeVisibility = (key: boolean, id: number) => {
 }
 
 const loadCheckout = async (value: Plan) => {
-  const id = await getCheckoutId(value)
+  const id = await getCheckoutId({ ...value, returnTo: 'landing' })
   const stripe = await stripePromise
   if (!stripe) {
     console.log('not loaded')

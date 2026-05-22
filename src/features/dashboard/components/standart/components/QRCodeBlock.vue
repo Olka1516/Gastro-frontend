@@ -1,65 +1,65 @@
 <template>
-  <div class="p-12 flex flex-col gap-8 min-h-screen bg-[#0f0f11]">
-    <div v-if="loading" class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50">
+  <div
+    class="flex min-h-screen min-w-0 flex-col gap-6 bg-[#0f0f11] p-4 sm:gap-8 sm:p-6 md:p-8 lg:p-12 md:pt-16 sm:pt-16">
+    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f0f11]/80 backdrop-blur-sm">
       <BaseLoader />
     </div>
 
-    <div v-else class="flex flex-col gap-8">
-      <div class="flex flex-col gap-4">
-        <div class="flex items-center justify-between">
-          <div class="flex flex-col gap-2">
-            <h1 class="text-white text-4xl font-bold">
-              {{ t('dashboard.standart.qrCode.description') }}
-            </h1>
-            <p class="text-gray-400 text-sm max-w-2xl">
-              {{ t('dashboard.standart.qrCode.instruction') }}
-            </p>
-          </div>
-        </div>
+    <div v-else class="flex min-w-0 flex-col gap-6 sm:gap-8">
+      <div class="flex min-w-0 flex-col gap-2 sm:gap-4">
+        <h1 class="text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+          {{ t('dashboard.standart.qrCode.description') }}
+        </h1>
+        <p class="max-w-2xl text-sm text-gray-400">
+          {{ t('dashboard.standart.qrCode.instruction') }}
+        </p>
       </div>
 
       <div
-        class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-3xl border border-[#2a2930] p-8 md:p-12 shadow-xl">
-        <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
-          <div class="flex-shrink-0">
+        class="rounded-2xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 shadow-xl sm:rounded-3xl sm:p-6 md:p-8 lg:p-12">
+        <div class="flex flex-col items-center gap-6 sm:gap-8 lg:flex-row lg:items-start">
+          <div class="w-full shrink-0 sm:w-auto">
             <div
-              class="bg-white p-6 rounded-2xl shadow-2xl relative group hover:scale-105 transition-transform duration-300">
-              <img v-if="qrCode" :src="qrCode" alt="QR Code" class="w-64 h-64 block" />
-              <div v-if="!qrCode" class="w-64 h-64 bg-gray-100 rounded-xl flex items-center justify-center">
+              class="relative mx-auto w-fit rounded-xl bg-white p-4 shadow-2xl transition-transform duration-300 group-hover:scale-105 sm:rounded-2xl sm:p-5 md:p-6">
+              <img v-if="qrCode" :src="qrCode" alt="QR Code" class="block h-48 w-48 sm:h-56 sm:w-56 md:h-64 md:w-64" />
+              <div v-if="!qrCode"
+                class="flex h-48 w-48 items-center justify-center rounded-xl bg-gray-100 sm:h-56 sm:w-56 md:h-64 md:w-64">
                 <BaseLoader />
               </div>
               <div
-                class="absolute -top-2 -left-2 w-8 h-8 border-t-4 border-l-4 border-[#dc5b41] rounded-tl-xl opacity-50">
-              </div>
+                class="absolute -left-2 -top-2 h-6 w-6 rounded-tl-xl border-l-4 border-t-4 border-[#dc5b41] opacity-50 sm:h-8 sm:w-8" />
               <div
-                class="absolute -bottom-2 -right-2 w-8 h-8 border-b-4 border-r-4 border-[#e66a4f] rounded-br-xl opacity-50">
-              </div>
+                class="absolute -bottom-2 -right-2 h-6 w-6 rounded-br-xl border-b-4 border-r-4 border-[#e66a4f] opacity-50 sm:h-8 sm:w-8" />
             </div>
           </div>
 
-          <div class="flex-1 flex flex-col gap-6 w-full">
-            <div class="bg-gradient-to-br from-[#2a2930] to-[#1a191f] rounded-2xl border border-[#2a2930] p-6">
-              <div class="flex flex-col gap-4">
+          <div class="flex w-full min-w-0 flex-1 flex-col gap-4 sm:gap-6">
+            <div
+              class="rounded-xl border border-[#2a2930] bg-gradient-to-br from-[#2a2930] to-[#1a191f] p-4 sm:rounded-2xl sm:p-5 md:p-6">
+              <div class="flex flex-col gap-3 sm:gap-4">
                 <div class="flex items-center gap-3">
                   <div
-                    class="w-10 h-10 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg flex items-center justify-center flex-shrink-0">
-                    <img src="@/assets/images/icons/link.svg" alt="link" class="w-5 h-5"
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-10 sm:w-10">
+                    <img src="@/assets/images/icons/link.svg" alt="link" class="h-4 w-4 sm:h-5 sm:w-5"
                       style="filter: brightness(0) invert(1)" />
                   </div>
-                  <h3 class="text-white text-lg font-semibold">
+                  <h3 class="text-base font-semibold text-white sm:text-lg">
                     {{ t('dashboard.standart.qrCode.menuLink') }}
                   </h3>
                 </div>
-                <div class="bg-[#0f0f11] rounded-lg p-4 border border-[#2a2930] flex items-center gap-3 group">
-                  <p class="text-gray-300 text-sm flex-1 break-all font-mono" :class="{ 'select-all': copied }">
+                <div
+                  class="flex flex-col gap-3 rounded-lg border border-[#2a2930] bg-[#0f0f11] p-3 sm:flex-row sm:items-center sm:gap-3 sm:p-4">
+                  <p class="min-w-0 flex-1 break-all font-mono text-xs text-gray-300 sm:text-sm"
+                    :class="{ 'select-all': copied }">
                     {{ menuUrl }}
                   </p>
-                  <button @click="copyToClipboard" :class="[
-                    'px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 flex-shrink-0',
-                    copied
-                      ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                      : 'bg-[#dc5b41]/20 text-[#dc5b41] hover:bg-[#dc5b41]/30 border border-[#dc5b41]/30',
-                  ]">
+                  <button type="button"
+                    class="flex w-full shrink-0 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 sm:w-auto"
+                    :class="[
+                      copied
+                        ? 'border border-green-500/30 bg-green-500/20 text-green-400'
+                        : 'border border-[#dc5b41]/30 bg-[#dc5b41]/20 text-[#dc5b41] hover:bg-[#dc5b41]/30',
+                    ]" @click="copyToClipboard">
                     <span v-if="copied">✓</span>
                     <span v-else>{{ t('button.copy') }}</span>
                   </button>
@@ -67,17 +67,18 @@
               </div>
             </div>
 
-            <div class="bg-gradient-to-br from-[#2a2930] to-[#1a191f] rounded-2xl border border-[#2a2930] p-6">
-              <div class="flex items-start gap-4">
+            <div
+              class="rounded-xl border border-[#2a2930] bg-gradient-to-br from-[#2a2930] to-[#1a191f] p-4 sm:rounded-2xl sm:p-5 md:p-6">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                 <div
-                  class="w-10 h-10 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg flex items-center justify-center flex-shrink-0">
-                  <span class="text-xl">📱</span>
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-10 sm:w-10">
+                  <span class="text-lg sm:text-xl">📱</span>
                 </div>
-                <div class="flex flex-col gap-2">
-                  <h3 class="text-white text-lg font-semibold">
+                <div class="flex min-w-0 flex-col gap-2">
+                  <h3 class="text-base font-semibold text-white sm:text-lg">
                     {{ t('dashboard.standart.qrCode.howToUse') }}
                   </h3>
-                  <ul class="text-gray-400 text-sm space-y-2 list-disc list-inside">
+                  <ul class="list-inside list-disc space-y-1.5 text-sm text-gray-400 sm:space-y-2">
                     <li>{{ t('dashboard.standart.qrCode.step1') }}</li>
                     <li>{{ t('dashboard.standart.qrCode.step2') }}</li>
                     <li>{{ t('dashboard.standart.qrCode.step3') }}</li>
@@ -86,15 +87,16 @@
               </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-4">
-              <button @click="downloadQRCode"
-                class="flex-1 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-6 py-4 cursor-pointer rounded-2xl hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-3 group shadow-[0_8px_30px_rgb(220,91,65,0.4)] hover:shadow-[0_8px_40px_rgb(220,91,65,0.6)]">
-                <img src="@/assets/images/icons/download.svg" alt="download" class="w-5 h-5" />
+            <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
+              <button type="button"
+                class="group flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 sm:gap-3 sm:rounded-2xl sm:px-6 sm:py-4"
+                @click="downloadQRCode">
+                <img src="@/assets/images/icons/download.svg" alt="" class="h-5 w-5 shrink-0" aria-hidden="true" />
                 {{ t('button.download') }}
               </button>
               <a :href="menuUrl" target="_blank" rel="noopener noreferrer"
-                class="flex-1 text-white border-2 border-[#dc5b41] px-6 py-4 cursor-pointer rounded-2xl hover:bg-[#dc5b41]/10 transition-all duration-300 font-semibold flex items-center justify-center gap-3 group">
-                <img src="@/assets/images/icons/link.svg" alt="arrow-right" class="w-5 h-5" />
+                class="group flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-[#dc5b41] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#dc5b41]/10 sm:gap-3 sm:rounded-2xl sm:px-6 sm:py-4">
+                <img src="@/assets/images/icons/link.svg" alt="" class="h-5 w-5 shrink-0" aria-hidden="true" />
                 {{ t('dashboard.standart.qrCode.openMenu') }}
               </a>
             </div>

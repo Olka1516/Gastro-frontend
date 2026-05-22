@@ -105,6 +105,13 @@ export default {
     },
   },
   dashboard: {
+    sidebar: {
+      currentPlan: 'Поточний план',
+      changePlan: 'Змінити план',
+      collapsePlans: 'Згорнути',
+      current: 'Поточний',
+      freePrice: 'Безкоштовно',
+    },
     pro: {
       navs: {},
     },

@@ -1,90 +1,130 @@
 <template>
-  <div class="p-12 flex flex-col gap-8 min-h-screen bg-[#0f0f11]">
-    <div v-if="loading" class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50">
+  <div
+    class="flex min-h-screen min-w-0 flex-col gap-6 bg-[#0f0f11] p-4 sm:gap-8 sm:p-6 md:p-8 lg:p-12 md:pt-16 sm:pt-16">
+    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f0f11]/80 backdrop-blur-sm">
       <BaseLoader />
     </div>
 
-    <div class="flex items-center justify-between w-full">
-      <div class="flex flex-col gap-2">
-        <h2 class="text-white text-3xl font-bold">{{ t('dashboard.tableHead.categories') }}</h2>
-        <p class="text-gray-400 text-sm">{{ t('dashboard.categories.subtitle') }}</p>
+    <div class="flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex min-w-0 flex-col gap-2">
+        <h2 class="text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+          {{ t('dashboard.tableHead.categories') }}
+        </h2>
+        <p class="text-sm text-gray-400">{{ t('dashboard.categories.subtitle') }}</p>
       </div>
-      <button @click="openAddCategory"
-        class="text-white flex items-center gap-2 bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-8 py-2 rounded-lg hover:scale-102 transition-transform duration-300 cursor-pointer font-semibold">
-        <img src="@/assets/images/icons/plus.svg" alt="add category" class="w-6 h-6">
+      <button
+        type="button"
+        class="group flex w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-6"
+        @click="openAddCategory">
+        <img
+          src="@/assets/images/icons/plus.svg"
+          alt=""
+          class="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
+          aria-hidden="true" />
         {{ t('dashboard.tableHead.addCategory') }}
       </button>
     </div>
 
-    <div v-if="categoriesList.length === 0"
-      class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] p-20 text-center">
-      <div class="flex flex-col items-center gap-4">
+    <div
+      v-if="categoriesList.length === 0"
+      class="rounded-xl border border-[#2a2930] bg-[#1a191f] p-8 text-center sm:rounded-2xl sm:p-12 md:p-16">
+      <div class="flex flex-col items-center gap-4 sm:gap-5">
         <div
-          class="w-24 h-24 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg flex items-center justify-center">
-          <span class="text-5xl">📂</span>
+          class="flex h-20 w-20 items-center justify-center rounded-xl bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-24 sm:w-24 sm:rounded-2xl">
+          <img
+            src="@/assets/images/icons/category.svg"
+            alt=""
+            class="h-10 w-10 sm:h-12 sm:w-12"
+            style="filter: brightness(0) invert(1)" />
         </div>
-        <h3 class="text-white text-2xl font-semibold">
+        <h3 class="text-xl font-semibold text-white sm:text-2xl">
           {{ t('dashboard.tableHead.noCategories') }}
         </h3>
-        <p class="text-gray-400 text-sm max-w-md">
+        <p class="max-w-md px-2 text-sm text-gray-400">
           {{ t('dashboard.categories.noCategoriesDescription') }}
         </p>
-        <button @click="openAddCategory"
-          class="mt-4 text-white bg-[#dc5b41] px-8 py-2 rounded-lg transition-all duration-300 hover:scale-102">
+        <button
+          type="button"
+          class="mt-2 w-full rounded-xl bg-[#dc5b41] px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-[#e66a4f] sm:mt-4 sm:w-auto"
+          @click="openAddCategory">
           {{ t('dashboard.tableHead.addCategory') }}
         </button>
       </div>
     </div>
 
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div v-for="category in categoriesList.slice((paginationPage - 1) * size, paginationPage * size)"
+    <div v-else class="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div
+        v-for="category in categoriesList.slice((paginationPage - 1) * size, paginationPage * size)"
         :key="category.id"
-        class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-6 rounded-lg border border-[#2a2930] hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-102 group relative overflow-hidden">
+        class="group relative overflow-hidden rounded-xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 transition-all duration-300 hover:scale-[1.02] hover:border-[#dc5b41]/50 sm:rounded-2xl sm:p-6">
         <div
-          class="absolute -right-8 -top-8 w-32 h-32 bg-[#dc5b41]/5 rounded-full group-hover:scale-150 transition-transform duration-300">
-        </div>
+          class="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#dc5b41]/5 transition-transform duration-500 group-hover:scale-150 sm:h-32 sm:w-32" />
 
-        <div class="relative z-10 flex flex-col gap-4">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-3">
+        <div class="relative z-10 flex flex-col gap-3 sm:gap-4">
+          <div class="flex min-w-0 items-start justify-between">
+            <div class="flex min-w-0 flex-1 items-center gap-3">
               <div
-                class="w-12 h-12 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg flex items-center justify-center">
-                <img src="@/assets/images/icons/category.svg" alt="category" class="w-6 h-6"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-12 sm:w-12 sm:rounded-xl">
+                <img
+                  src="@/assets/images/icons/category.svg"
+                  alt="category"
+                  class="h-5 w-5 sm:h-6 sm:w-6"
                   style="filter: brightness(0) invert(1)" />
               </div>
-              <div class="flex flex-col min-w-0 flex-1">
-                <h3 class="text-white text-lg font-bold truncate">{{ category.name }}</h3>
-                <p class="text-gray-400 text-xs">{{ t('dashboard.categories.category') }}</p>
+              <div class="flex min-w-0 flex-1 flex-col">
+                <h3 class="truncate text-base font-bold text-white sm:text-lg">{{ category.name }}</h3>
+                <p class="text-xs text-gray-400">{{ t('dashboard.categories.category') }}</p>
               </div>
             </div>
           </div>
 
-          <div class="flex items-center gap-2 mt-2">
-            <button @click="openManageCategory(category)"
-              class="flex-1 flex items-center justify-center gap-2 p-2.5 rounded-lg bg-[#2a2930] hover:bg-[#dc5b41]/20 transition-all duration-200 group/btn">
-              <img src="@/assets/images/icons/edit.svg" alt="edit"
-                class="w-4 h-4 opacity-60 group-hover/btn:opacity-100 transition-opacity" />
-              <span class="text-white text-sm font-medium">{{ t('button.edit') }}</span>
+          <div class="mt-1 flex items-center gap-2 sm:mt-2">
+            <button
+              type="button"
+              class="group/btn flex min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-[#2a2930] p-2.5 transition-all duration-200 hover:bg-[#dc5b41]/20"
+              @click="openManageCategory(category)">
+              <img
+                src="@/assets/images/icons/edit.svg"
+                alt="edit"
+                class="h-4 w-4 shrink-0 opacity-60 transition-opacity group-hover/btn:opacity-100" />
+              <span class="truncate text-sm font-medium text-white">{{ t('button.edit') }}</span>
             </button>
-            <button @click="changeDeleteValue(category.id)"
-              class="p-3 rounded-lg bg-[#2a2930] hover:bg-red-500/20 transition-all duration-200 group/btn"
-              title="Delete">
-              <img src="@/assets/images/icons/trash.svg" alt="delete"
-                class="w-5 h-5 opacity-60 group-hover/btn:opacity-100 transition-opacity" />
+            <button
+              type="button"
+              class="group/btn shrink-0 rounded-lg bg-[#2a2930] p-2.5 transition-all duration-200 hover:bg-red-500/20"
+              :aria-label="t('dashboard.tableHead.deleteCategory')"
+              @click="changeDeleteValue(category.id)">
+              <img
+                src="@/assets/images/icons/trash.svg"
+                alt="delete"
+                class="h-4 w-4 opacity-60 transition-opacity group-hover/btn:opacity-100" />
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <BasePagination v-if="categoriesList.length > 0" v-model:datas="categoriesList as any"
-      v-model:paginationPage="paginationPage" :size />
+    <BasePagination
+      v-if="categoriesList.length > 0"
+      v-model:datas="categoriesList as any"
+      v-model:paginationPage="paginationPage"
+      :size />
 
-    <BaseDelete text="dashboard.tableHead.deleteCategory" v-model:openDelete="openDelete"
+    <BaseDelete
+      v-model:openDelete="openDelete"
+      text="dashboard.tableHead.deleteCategory"
       @handleProcess="(value) => deleteCategoryHandler(value)" />
-    <ManageCategory text="dashboard.editCategoryText" v-model:category="editCategoryData"
-      v-model:openManage="openManage" :error @handleProcess="(value) => editCategoryHandler(value)" />
-    <ManageCategory text="dashboard.addCategoryText" v-model:category="newCategory" v-model:openManage="openAdd" :error
+    <ManageCategory
+      v-model:category="editCategoryData"
+      v-model:openManage="openManage"
+      text="dashboard.editCategoryText"
+      :error
+      @handleProcess="(value) => editCategoryHandler(value)" />
+    <ManageCategory
+      v-model:category="newCategory"
+      v-model:openManage="openAdd"
+      text="dashboard.addCategoryText"
+      :error
       @handleProcess="(value) => addCategoryHandler(value)" />
   </div>
 </template>

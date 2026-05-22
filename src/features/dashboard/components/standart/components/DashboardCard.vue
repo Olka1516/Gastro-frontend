@@ -1,37 +1,44 @@
 <template>
-  <div :class="[
-    'p-6 rounded-lg transition-all duration-300 group',
-    baseClasses,
-    hoverScale ? 'hover:scale-102' : '',
-    clickable ? 'cursor-pointer' : 'cursor-default',
-  ]" @click="onClick">
+  <div
+    :class="[
+      'group rounded-xl p-4 transition-all duration-300 sm:rounded-2xl sm:p-5 md:p-6',
+      baseClasses,
+      hoverScale ? 'hover:scale-[1.02] sm:hover:scale-102' : '',
+      clickable ? 'cursor-pointer' : 'cursor-default',
+    ]"
+    @click="onClick">
     <template v-if="showQuick">
       <div class="relative z-10 flex flex-col gap-2">
-        <p v-if="quickTopText && showTopText" class="text-white/90 text-sm font-medium">
+        <p v-if="quickTopText && showTopText" class="text-sm font-medium text-white/90">
           {{ quickTopText }}
         </p>
-        <h3 class="text-white text-2xl font-bold" v-if="quickHeading">
+        <h3 v-if="quickHeading" class="text-xl font-bold text-white sm:text-2xl">
           {{ quickHeading }}
         </h3>
-        <p v-if="quickDescription && showDescription" class="text-white/80 text-xs mt-2">
+        <p v-if="quickDescription && showDescription" class="mt-2 text-xs text-white/80 sm:text-sm">
           {{ quickDescription }}
         </p>
       </div>
-      <div v-if="variant === 'accent'"
-        class="absolute -right-4 -bottom-4 w-32 h-32 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500" />
+      <div
+        v-if="variant === 'accent'"
+        class="absolute -bottom-4 -right-4 h-24 w-24 rounded-full bg-white/10 transition-transform duration-500 group-hover:scale-150 sm:h-32 sm:w-32" />
       <slot name="quick-extra" />
     </template>
 
     <template v-else>
-      <div class="flex items-start justify-between">
-        <div class="flex flex-col gap-2">
-          <p v-if="title && showTitle" class="text-gray-400 text-sm">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0 flex flex-col gap-2">
+          <p v-if="title && showTitle" class="text-sm text-gray-400">
             {{ title }}
           </p>
-          <h3 v-if="value !== null && value !== undefined" class="text-white text-4xl font-bold">
+          <h3
+            v-if="value !== null && value !== undefined"
+            class="text-3xl font-bold tabular-nums text-white sm:text-4xl">
             {{ value }}
           </h3>
-          <div v-if="showAvailability" class="flex gap-2 text-xs mt-2">
+          <div
+            v-if="showAvailability"
+            class="mt-2 flex flex-col gap-1 text-xs sm:flex-row sm:flex-wrap sm:gap-2">
             <span v-if="availableCount !== null && showAvailable" class="text-green-500">
               ✓ {{ availableCount }} {{ availableText }}
             </span>
@@ -39,12 +46,15 @@
               ✗ {{ unavailableCount }} {{ unavailableText }}
             </span>
           </div>
-          <p v-if="subtitle && showSubtitle" class="text-gray-500 text-xs mt-2">
+          <p v-if="subtitle && showSubtitle" class="mt-2 text-xs text-gray-500">
             {{ subtitle }}
           </p>
         </div>
-        <div v-if="iconSrc" class="w-12 h-12 rounded-lg flex items-center justify-center" :class="iconWrapperClasses">
-          <img :src="getImage(iconSrc)" :alt="iconAlt" class="w-6 h-6" :style="iconStyle" />
+        <div
+          v-if="iconSrc"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg sm:h-12 sm:w-12"
+          :class="iconWrapperClasses">
+          <img :src="getImage(iconSrc)" :alt="iconAlt" class="h-5 w-5 sm:h-6 sm:w-6" :style="iconStyle" />
         </div>
       </div>
       <slot />

@@ -22,7 +22,7 @@
       class="bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-5 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-[#dc5b41]/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
       <div class="flex flex-col gap-2 min-w-0">
         <p class="text-[#dc5b41] text-xs sm:text-sm font-semibold uppercase tracking-wide">
-          Free plan
+          {{ t('plans.free.name') }}
         </p>
         <h2 class="text-white text-xl sm:text-2xl font-bold">
           {{ t('dashboard.home.quickAction') }}

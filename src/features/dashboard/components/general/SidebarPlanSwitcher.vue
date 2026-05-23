@@ -109,7 +109,7 @@
             @click="closePicker" />
           <div
             ref="collapsedPickerRef"
-            class="plan-picker-modal-panel relative w-full max-w-sm rounded-xl border border-[#2a2930] bg-gradient-to-b from-[#1a191f] to-[#0f0f11] p-4 shadow-2xl"
+            class="plan-picker-modal-panel relative w-full max-w-sm rounded-lg border border-[#2a2930] bg-gradient-to-b from-[#1a191f] to-[#0f0f11] p-4 shadow-2xl"
             role="dialog"
             :aria-label="t('dashboard.sidebar.changePlan')">
             <p class="mb-3 text-sm font-semibold text-white">{{ t('dashboard.sidebar.changePlan') }}</p>

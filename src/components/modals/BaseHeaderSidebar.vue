@@ -47,7 +47,7 @@
 
               <div v-if="isMenuPage && (showWishlist || isPremiumMenu || store.isUserAuthorized)"
                 class="flex flex-col gap-4 border-t border-[#2a2930] pt-6" aria-label="Меню закладу">
-                <BaseLanguageSelector v-if="showMenuLanguageSelector" mode="menu" />
+                <BaseLanguageSelector v-if="showMenuLanguageSelector" mode="menu" placement="above" />
                 <button v-if="showWishlist" type="button"
                   class="relative flex w-full cursor-pointer items-center gap-3 rounded-lg border border-[#dc5b41] px-4 py-3 text-left text-white transition-colors hover:bg-white/5"
                   :aria-label="t('showcase.wishlist.open')" @click="emitOpenWishlist">
@@ -77,7 +77,7 @@
 
               <div v-else-if="!isMenuPage" class="flex flex-col gap-4 border-t border-[#2a2930] pt-6"
                 aria-label="Головна навігація">
-                <BaseLanguageSelector v-if="showMenuLanguageSelector" mode="ui" />
+                <BaseLanguageSelector v-if="showMenuLanguageSelector" mode="ui" placement="above" />
                 <template v-if="!store.isUserAuthorized">
                   <button type="button"
                     class="w-full cursor-pointer rounded-lg bg-[#dc5b41] px-4 py-3 text-sm font-medium text-white transition-transform duration-300 hover:scale-[1.02]"

@@ -13,17 +13,17 @@
         <p class="text-gray-400 text-sm">{{ t('dashboard.categories.subtitle') }}</p>
       </div>
       <button @click="openAddCategory"
-        class="w-full sm:w-auto shrink-0 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 sm:px-6 py-3 cursor-pointer rounded-xl sm:rounded-2xl hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2 sm:gap-3 group">
+        class="w-full sm:w-auto shrink-0 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 sm:px-6 py-3 cursor-pointer rounded-lg hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2 sm:gap-3 group">
         <span class="text-2xl group-hover:rotate-90 transition-transform duration-300 leading-none">+</span>
         {{ t('dashboard.tableHead.addCategory') }}
       </button>
     </div>
 
     <div v-if="categoriesList.length === 0"
-      class="bg-[#1a191f] rounded-xl sm:rounded-2xl border border-[#2a2930] p-8 sm:p-12 md:p-16 text-center">
+      class="bg-[#1a191f] rounded-lg border border-[#2a2930] p-8 sm:p-12 md:p-16 text-center">
       <div class="flex flex-col items-center gap-4 sm:gap-5">
         <div
-          class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-xl sm:rounded-2xl flex items-center justify-center">
+          class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg flex items-center justify-center">
           <img src="@/assets/images/icons/category.svg" alt="" class="w-10 h-10 sm:w-12 sm:h-12"
             style="filter: brightness(0) invert(1)" />
         </div>
@@ -34,7 +34,7 @@
           {{ t('dashboard.categories.noCategoriesDescription') }}
         </p>
         <button @click="openAddCategory"
-          class="mt-2 sm:mt-4 w-full sm:w-auto text-white bg-[#dc5b41] px-6 py-3 rounded-xl hover:bg-[#e66a4f] transition-all duration-300 hover:scale-105 font-semibold">
+          class="mt-2 sm:mt-4 w-full sm:w-auto text-white bg-[#dc5b41] px-6 py-3 rounded-lg hover:bg-[#e66a4f] transition-all duration-300 hover:scale-105 font-semibold">
           {{ t('dashboard.tableHead.addCategory') }}
         </button>
       </div>
@@ -43,7 +43,7 @@
     <div v-else class="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="category in categoriesList.slice((paginationPage - 1) * size, paginationPage * size)"
         :key="category.id"
-        class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-[#2a2930] hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-105 group relative overflow-hidden">
+        class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 sm:p-6 rounded-lg border border-[#2a2930] hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-105 group relative overflow-hidden">
         <div
           class="absolute -right-8 -top-8 w-24 h-24 sm:w-32 sm:h-32 bg-[#dc5b41]/5 rounded-full group-hover:scale-150 transition-transform duration-500">
         </div>
@@ -52,7 +52,7 @@
           <div class="flex items-start justify-between min-w-0">
             <div class="flex items-center gap-3 min-w-0 flex-1">
               <div
-                class="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg sm:rounded-xl flex items-center justify-center">
+                class="w-10 h-10 sm:w-12 sm:h-12 shrink-0 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg flex items-center justify-center">
                 <img src="@/assets/images/icons/category.svg" alt="category" class="w-5 h-5 sm:w-6 sm:h-6"
                   style="filter: brightness(0) invert(1)" />
               </div>

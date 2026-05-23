@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'group rounded-xl p-4 transition-all duration-300 sm:rounded-2xl sm:p-5 md:p-6',
+      'group rounded-lg p-4 transition-all duration-300 sm:p-5 md:p-6',
       baseClasses,
       hoverScale ? 'hover:scale-[1.02] sm:hover:scale-102' : '',
       clickable ? 'cursor-pointer' : 'cursor-default',

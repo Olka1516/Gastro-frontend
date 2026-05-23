@@ -14,7 +14,7 @@
       </div>
       <button
         type="button"
-        class="group flex w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-6"
+        class="group flex w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 sm:w-auto sm:gap-3 sm:px-6"
         @click="openAddCategory">
         <img
           src="@/assets/images/icons/plus.svg"
@@ -27,10 +27,10 @@
 
     <div
       v-if="categoriesList.length === 0"
-      class="rounded-xl border border-[#2a2930] bg-[#1a191f] p-8 text-center sm:rounded-2xl sm:p-12 md:p-16">
+      class="rounded-lg border border-[#2a2930] bg-[#1a191f] p-8 text-center sm:p-12 md:p-16">
       <div class="flex flex-col items-center gap-4 sm:gap-5">
         <div
-          class="flex h-20 w-20 items-center justify-center rounded-xl bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-24 sm:w-24 sm:rounded-2xl">
+          class="flex h-20 w-20 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-24 sm:w-24">
           <img
             src="@/assets/images/icons/category.svg"
             alt=""
@@ -45,7 +45,7 @@
         </p>
         <button
           type="button"
-          class="mt-2 w-full rounded-xl bg-[#dc5b41] px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-[#e66a4f] sm:mt-4 sm:w-auto"
+          class="mt-2 w-full rounded-lg bg-[#dc5b41] px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-[#e66a4f] sm:mt-4 sm:w-auto"
           @click="openAddCategory">
           {{ t('dashboard.tableHead.addCategory') }}
         </button>
@@ -56,7 +56,7 @@
       <div
         v-for="category in categoriesList.slice((paginationPage - 1) * size, paginationPage * size)"
         :key="category.id"
-        class="group relative overflow-hidden rounded-xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 transition-all duration-300 hover:scale-[1.02] hover:border-[#dc5b41]/50 sm:rounded-2xl sm:p-6">
+        class="group relative overflow-hidden rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 transition-all duration-300 hover:scale-[1.02] hover:border-[#dc5b41]/50 sm:p-6">
         <div
           class="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[#dc5b41]/5 transition-transform duration-500 group-hover:scale-150 sm:h-32 sm:w-32" />
 
@@ -64,7 +64,7 @@
           <div class="flex min-w-0 items-start justify-between">
             <div class="flex min-w-0 flex-1 items-center gap-3">
               <div
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-12 sm:w-12 sm:rounded-xl">
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-12 sm:w-12">
                 <img
                   src="@/assets/images/icons/category.svg"
                   alt="category"

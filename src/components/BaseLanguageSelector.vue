@@ -1,6 +1,6 @@
 <template>
-  <div ref="rootRef" class="relative shrink-0">
-    <button type="button" class="menu-lang-trigger" :aria-expanded="open" aria-haspopup="listbox"
+  <div ref="rootRef" class="relative w-fit shrink-0 self-start">
+    <button ref="triggerRef" type="button" class="menu-lang-trigger" :aria-expanded="open" aria-haspopup="listbox"
       :aria-label="ariaLabel" @click="open = !open">
       <span class="menu-lang-trigger__flag" aria-hidden="true">{{ activeLanguage?.flag }}</span>
       <span class="menu-lang-trigger__code">{{ activeLanguage?.code.toUpperCase() }}</span>
@@ -9,7 +9,27 @@
       </span>
     </button>
 
-    <Transition enter-active-class="transition duration-150 ease-out"
+    <Teleport v-if="usesFixedDropdown" to="body">
+      <Transition enter-active-class="transition duration-150 ease-out"
+        enter-from-class="opacity-0 scale-95 translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0"
+        leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-95 translate-y-1">
+        <ul v-if="open" ref="dropdownRef" class="menu-lang-list menu-lang-list--fixed" role="listbox"
+          :aria-label="ariaLabel" :style="fixedDropdownStyle">
+          <li v-for="lang in availableLanguages" :key="lang.code" role="option"
+            :aria-selected="lang.code === selectedCode">
+            <button type="button" class="menu-lang-option"
+              :class="{ 'menu-lang-option--active': lang.code === selectedCode }" @click="selectLanguage(lang.code)">
+              <span aria-hidden="true">{{ lang.flag }}</span>
+              <span class="menu-lang-option__label">{{ lang.nativeLabel }}</span>
+              <span class="menu-lang-option__code">{{ lang.code.toUpperCase() }}</span>
+            </button>
+          </li>
+        </ul>
+      </Transition>
+    </Teleport>
+
+    <Transition v-else enter-active-class="transition duration-150 ease-out"
       enter-from-class="opacity-0 scale-95 -translate-y-1" enter-to-class="opacity-100 scale-100 translate-y-0"
       leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100 scale-100"
       leave-to-class="opacity-0 scale-95">
@@ -31,23 +51,65 @@
 <script setup lang="ts">
 import { MENU_LANGUAGES, getMenuLanguage, type MenuLanguage } from '@/constants/menuLanguages'
 import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const UI_LANGUAGE_CODES = ['uk', 'en'] as const
 const UI_LOCALE_STORAGE_KEY = 'gastro-ui-locale'
+const DROPDOWN_WIDTH_PX = 11.5 * 16
+const DROPDOWN_GAP_PX = 6
 
 const props = withDefaults(
   defineProps<{
     mode?: 'menu' | 'ui'
+    /** Opens above the trigger; uses fixed positioning (needed inside clip-path sidebars). */
+    placement?: 'above' | 'below'
   }>(),
-  { mode: 'menu' },
+  { mode: 'menu', placement: 'below' },
 )
 
 const { t, locale } = useI18n()
 const menuLangStore = useShowcaseMenuLanguageStore()
 const open = ref(false)
 const rootRef = ref<HTMLElement | null>(null)
+const triggerRef = ref<HTMLButtonElement | null>(null)
+const dropdownRef = ref<HTMLElement | null>(null)
+const fixedDropdownStyle = ref<Record<string, string>>({})
+
+const usesFixedDropdown = computed(() => props.placement === 'above')
+
+const updateFixedDropdownPosition = () => {
+  const trigger = triggerRef.value
+  if (!trigger) return
+
+  const rect = trigger.getBoundingClientRect()
+  const left = Math.max(8, rect.left)
+
+  fixedDropdownStyle.value = {
+    position: 'fixed',
+    left: `${left}px`,
+    bottom: `${window.innerHeight - rect.top + DROPDOWN_GAP_PX}px`,
+    top: 'auto',
+    width: `${DROPDOWN_WIDTH_PX}px`,
+    zIndex: '1102',
+  }
+}
+
+let positionListenersAttached = false
+
+const attachPositionListeners = () => {
+  if (positionListenersAttached) return
+  window.addEventListener('scroll', updateFixedDropdownPosition, true)
+  window.addEventListener('resize', updateFixedDropdownPosition)
+  positionListenersAttached = true
+}
+
+const detachPositionListeners = () => {
+  if (!positionListenersAttached) return
+  window.removeEventListener('scroll', updateFixedDropdownPosition, true)
+  window.removeEventListener('resize', updateFixedDropdownPosition)
+  positionListenersAttached = false
+}
 
 const uiLocaleToMenuCode = (value: string) => (value === 'ua' ? 'uk' : value === 'en' ? 'en' : 'uk')
 
@@ -81,9 +143,9 @@ const selectLanguage = (code: string) => {
 }
 
 const onDocumentClick = (event: MouseEvent) => {
-  if (!rootRef.value?.contains(event.target as Node)) {
-    open.value = false
-  }
+  const target = event.target as Node
+  if (rootRef.value?.contains(target) || dropdownRef.value?.contains(target)) return
+  open.value = false
 }
 
 watch(
@@ -98,8 +160,24 @@ watch(
   { immediate: true },
 )
 
+watch(open, async (isOpen) => {
+  if (!usesFixedDropdown.value) return
+
+  if (!isOpen) {
+    detachPositionListeners()
+    return
+  }
+
+  await nextTick()
+  updateFixedDropdownPosition()
+  attachPositionListeners()
+})
+
 onMounted(() => document.addEventListener('click', onDocumentClick))
-onUnmounted(() => document.removeEventListener('click', onDocumentClick))
+onUnmounted(() => {
+  document.removeEventListener('click', onDocumentClick)
+  detachPositionListeners()
+})
 </script>
 
 <style scoped>
@@ -144,9 +222,14 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
   transform: rotate(180deg);
 }
 
+.menu-lang-list--fixed {
+  position: fixed;
+  margin: 0;
+}
+
 .menu-lang-list {
   position: absolute;
-  right: 0;
+  left: 0;
   top: calc(100% + 0.375rem);
   z-index: 50;
   width: 11.5rem;

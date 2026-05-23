@@ -2,7 +2,7 @@
   <div
     v-for="(link, idx) in links"
     :key="`${link.key}-${link.icon}-${idx}`"
-    class="group min-w-0 cursor-pointer rounded-xl border border-[#2a2930] bg-[#1a191f] p-4 transition-all duration-300 hover:border-[#dc5b41] hover:translate-y-[-2px] sm:p-5 sm:hover:scale-[1.02]"
+    class="group min-w-0 cursor-pointer rounded-lg border border-[#2a2930] bg-[#1a191f] p-4 transition-all duration-300 hover:border-[#dc5b41] hover:translate-y-[-2px] sm:p-5 sm:hover:scale-[1.02]"
     @click="$emit('navigateTo', link.key)">
     <div class="flex min-w-0 items-center gap-3 sm:gap-4">
       <div

@@ -16,26 +16,26 @@
       </div>
 
       <div
-        class="rounded-2xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 shadow-xl sm:rounded-3xl sm:p-6 md:p-8 lg:p-12">
+        class="rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 shadow-xl sm:p-6 md:p-8 lg:p-12">
         <div class="flex flex-col items-center gap-6 sm:gap-8 lg:flex-row lg:items-start">
           <div class="w-full shrink-0 sm:w-auto">
             <div
-              class="relative mx-auto w-fit rounded-xl bg-white p-4 shadow-2xl transition-transform duration-300 group-hover:scale-105 sm:rounded-2xl sm:p-5 md:p-6">
+              class="relative mx-auto w-fit rounded-lg bg-white p-4 shadow-2xl transition-transform duration-300 group-hover:scale-105 sm:p-5 md:p-6">
               <img v-if="qrCode" :src="qrCode" alt="QR Code" class="block h-48 w-48 sm:h-56 sm:w-56 md:h-64 md:w-64" />
               <div v-if="!qrCode"
-                class="flex h-48 w-48 items-center justify-center rounded-xl bg-gray-100 sm:h-56 sm:w-56 md:h-64 md:w-64">
+                class="flex h-48 w-48 items-center justify-center rounded-lg bg-gray-100 sm:h-56 sm:w-56 md:h-64 md:w-64">
                 <BaseLoader />
               </div>
               <div
-                class="absolute -left-2 -top-2 h-6 w-6 rounded-tl-xl border-l-4 border-t-4 border-[#dc5b41] opacity-50 sm:h-8 sm:w-8" />
+                class="absolute -left-2 -top-2 h-6 w-6 rounded-tl-lg border-l-4 border-t-4 border-[#dc5b41] opacity-50 sm:h-8 sm:w-8" />
               <div
-                class="absolute -bottom-2 -right-2 h-6 w-6 rounded-br-xl border-b-4 border-r-4 border-[#e66a4f] opacity-50 sm:h-8 sm:w-8" />
+                class="absolute -bottom-2 -right-2 h-6 w-6 rounded-br-lg border-b-4 border-r-4 border-[#e66a4f] opacity-50 sm:h-8 sm:w-8" />
             </div>
           </div>
 
           <div class="flex w-full min-w-0 flex-1 flex-col gap-4 sm:gap-6">
             <div
-              class="rounded-xl border border-[#2a2930] bg-gradient-to-br from-[#2a2930] to-[#1a191f] p-4 sm:rounded-2xl sm:p-5 md:p-6">
+              class="rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#2a2930] to-[#1a191f] p-4 sm:p-5 md:p-6">
               <div class="flex flex-col gap-3 sm:gap-4">
                 <div class="flex items-center gap-3">
                   <div
@@ -68,7 +68,7 @@
             </div>
 
             <div
-              class="rounded-xl border border-[#2a2930] bg-gradient-to-br from-[#2a2930] to-[#1a191f] p-4 sm:rounded-2xl sm:p-5 md:p-6">
+              class="rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#2a2930] to-[#1a191f] p-4 sm:p-5 md:p-6">
               <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
                 <div
                   class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-10 sm:w-10">
@@ -89,13 +89,13 @@
 
             <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
               <button type="button"
-                class="group flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 sm:gap-3 sm:rounded-2xl sm:px-6 sm:py-4"
+                class="group flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 sm:gap-3 sm:px-6 sm:py-4"
                 @click="downloadQRCode">
                 <img src="@/assets/images/icons/download.svg" alt="" class="h-5 w-5 shrink-0" aria-hidden="true" />
                 {{ t('button.download') }}
               </button>
               <a :href="menuUrl" target="_blank" rel="noopener noreferrer"
-                class="group flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-[#dc5b41] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#dc5b41]/10 sm:gap-3 sm:rounded-2xl sm:px-6 sm:py-4">
+                class="group flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-[#dc5b41] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#dc5b41]/10 sm:gap-3 sm:px-6 sm:py-4">
                 <img src="@/assets/images/icons/link.svg" alt="" class="h-5 w-5 shrink-0" aria-hidden="true" />
                 {{ t('dashboard.standart.qrCode.openMenu') }}
               </a>

@@ -40,10 +40,10 @@
     </div>
 
     <div
-      class="rounded-xl border border-[#dc5b41]/30 bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-5 sm:rounded-2xl sm:p-6 md:p-8">
+      class="rounded-lg border border-[#dc5b41]/30 bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-5 sm:p-6 md:p-8">
       <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-start">
         <div
-          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-14 sm:w-14 sm:rounded-2xl md:h-16 md:w-16">
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-14 sm:w-14 md:h-16 md:w-16">
           <span class="text-2xl sm:text-3xl">💡</span>
         </div>
         <div class="flex min-w-0 flex-col gap-2">

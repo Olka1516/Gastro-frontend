@@ -13,26 +13,26 @@
         <p class="text-gray-400 text-sm">{{ t('dashboard.menu.subtitle') }}</p>
       </div>
       <button @click="openAddDish"
-        class="w-full sm:w-auto shrink-0 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 sm:px-6 py-3 cursor-pointer rounded-xl sm:rounded-2xl hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2 sm:gap-3 group">
+        class="w-full sm:w-auto shrink-0 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 sm:px-6 py-3 cursor-pointer rounded-lg hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2 sm:gap-3 group">
         <span class="text-2xl group-hover:rotate-90 transition-transform duration-300 leading-none">+</span>
         {{ t('dashboard.tableHead.addMeal') }}
       </button>
     </div>
 
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
-      <div class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 rounded-xl border border-[#2a2930]">
+      <div class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-4 rounded-lg border border-[#2a2930]">
         <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">
           {{ t('dashboard.menu.total') }}
         </p>
         <p class="text-white text-xl sm:text-2xl font-bold tabular-nums">{{ dishes.length }}</p>
       </div>
-      <div class="bg-gradient-to-br from-green-500/10 to-[#0f0f11] p-4 rounded-xl border border-green-500/20">
+      <div class="bg-gradient-to-br from-green-500/10 to-[#0f0f11] p-4 rounded-lg border border-green-500/20">
         <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">
           {{ t('dashboard.home.available') }}
         </p>
         <p class="text-green-400 text-xl sm:text-2xl font-bold tabular-nums">{{ availableDishes }}</p>
       </div>
-      <div class="bg-gradient-to-br from-red-500/10 to-[#0f0f11] p-4 rounded-xl border border-red-500/20">
+      <div class="bg-gradient-to-br from-red-500/10 to-[#0f0f11] p-4 rounded-lg border border-red-500/20">
         <p class="text-gray-400 text-xs uppercase tracking-wider mb-1">
           {{ t('dashboard.home.unavailable') }}
         </p>
@@ -41,16 +41,16 @@
     </div>
 
     <div v-if="dishes.length === 0"
-      class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-2xl sm:rounded-3xl border border-[#2a2930] p-8 sm:p-12 md:p-20 text-center">
+      class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] p-8 sm:p-12 md:p-20 text-center">
       <div class="flex flex-col items-center gap-4 sm:gap-6">
         <div
-          class="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-[0_20px_60px_rgb(220,91,65,0.3)]">
+          class="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg flex items-center justify-center shadow-[0_20px_60px_rgb(220,91,65,0.3)]">
           <span class="text-5xl sm:text-6xl">🍽️</span>
         </div>
         <h3 class="text-white text-2xl sm:text-3xl font-bold">{{ t('dashboard.menu.noDishes') }}</h3>
         <p class="text-gray-400 text-sm sm:text-base max-w-md px-2">{{ t('dashboard.menu.addFirstDish') }}</p>
         <button @click="openAddDish"
-          class="mt-2 sm:mt-4 w-full sm:w-auto text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:scale-105 transition-all duration-300 shadow-lg font-semibold">
+          class="mt-2 sm:mt-4 w-full sm:w-auto text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-6 sm:px-8 py-3 sm:py-4 rounded-lg hover:scale-105 transition-all duration-300 shadow-lg font-semibold">
           {{ t('dashboard.tableHead.addMeal') }}
         </button>
       </div>
@@ -58,7 +58,7 @@
 
     <div v-else class="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="data in dishes.slice((paginationPage - 1) * size, paginationPage * size)" :key="data.id"
-        class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-2xl sm:rounded-3xl border border-[#2a2930] overflow-hidden hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-[1.02] group shadow-xl hover:shadow-[0_20px_60px_rgba(220,91,65,0.2)]">
+        class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] overflow-hidden hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-[1.02] group shadow-xl hover:shadow-[0_20px_60px_rgba(220,91,65,0.2)]">
         <div class="relative h-44 sm:h-52 md:h-56 overflow-hidden">
           <img v-if="typeof data.image === 'string'" :src="data.image" alt="dish"
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -81,7 +81,7 @@
 
           <div class="absolute bottom-3 left-3 sm:bottom-4 sm:left-4">
             <div
-              class="bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl shadow-lg backdrop-blur-md">
+              class="bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg shadow-lg backdrop-blur-md">
               <span class="text-white text-lg sm:text-xl font-bold tabular-nums">
                 ${{ Number(data.price).toFixed(2) }}
               </span>
@@ -107,13 +107,13 @@
 
           <div class="flex items-center gap-2 mt-1 sm:mt-2 pt-3 sm:pt-4 border-t border-[#2a2930]">
             <button @click="openManageDish(data)"
-              class="flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-lg sm:rounded-xl bg-[#2a2930] hover:bg-[#dc5b41]/20 transition-all duration-200 group/btn min-w-0">
+              class="flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-lg bg-[#2a2930] hover:bg-[#dc5b41]/20 transition-all duration-200 group/btn min-w-0">
               <img src="@/assets/images/icons/edit.svg" alt="edit"
                 class="w-4 h-4 sm:w-5 sm:h-5 shrink-0 opacity-60 group-hover/btn:opacity-100 transition-opacity" />
               <span class="text-white text-sm font-semibold truncate">{{ t('button.edit') }}</span>
             </button>
             <button @click="changeDeleteValue(data.id)"
-              class="p-2.5 sm:p-3 shrink-0 rounded-lg sm:rounded-xl bg-[#2a2930] hover:bg-red-500/20 transition-all duration-200 group/btn"
+              class="p-2.5 sm:p-3 shrink-0 rounded-lg bg-[#2a2930] hover:bg-red-500/20 transition-all duration-200 group/btn"
               title="Delete">
               <img src="@/assets/images/icons/trash.svg" alt="delete"
                 class="w-5 h-5 opacity-60 group-hover/btn:opacity-100 transition-opacity" />

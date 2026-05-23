@@ -1,43 +1,54 @@
 <template>
-  <div class="p-12 flex flex-col gap-8 min-h-screen bg-[#0f0f11]">
-    <div v-if="loading" class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="flex min-h-screen min-w-0 flex-col gap-6 bg-[#0f0f11] p-4 sm:gap-8 sm:p-6 md:p-8 lg:p-12">
+    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f0f11]/80 backdrop-blur-sm">
       <BaseLoader />
     </div>
-    <div class="flex flex-col gap-4">
-      <h1 class="text-white text-4xl font-bold">
+
+    <div class="flex flex-col gap-3 sm:gap-4">
+      <h1 class="break-words text-2xl font-bold text-white sm:text-3xl md:text-4xl">
         {{ t('dashboard.home.welcome', { placeName: userInfo.placeName }) }}
       </h1>
-      <div class="flex justify-between">
-        <p class="text-gray-400 text-lg">{{ t('dashboard.home.subtitle') }}</p>
-        <a class="flex gap-4 text-sky-600 cursor-pointer text-lg" :href="menuPublicHref" target="_blank"
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <p class="text-base text-gray-400 sm:text-lg">{{ t('dashboard.home.subtitle') }}</p>
+        <a
+          class="flex shrink-0 cursor-pointer items-center gap-2 self-start text-base text-sky-600 sm:gap-3 sm:self-auto sm:text-lg"
+          :href="menuPublicHref"
+          target="_blank"
           rel="noopener noreferrer">
           {{ t('dashboard.home.link') }}
-          <img src="@/assets/images/icons/link.svg" alt="" />
+          <img
+            src="@/assets/images/icons/link.svg"
+            alt=""
+            class="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
         </a>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-      <DashboardCard v-for="card in cards" :key="card.id" v-bind="card"
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4">
+      <DashboardCard
+        v-for="card in cards"
+        :key="card.id"
+        v-bind="card"
         @click="card.id && $emit('navigateTo', card.navigateKey)" />
     </div>
 
-    <div class="flex flex-col gap-4 mt-4">
-      <h2 class="text-white text-2xl font-bold">{{ t('dashboard.home.quickLinks') }}</h2>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="flex flex-col gap-3 sm:gap-4">
+      <h2 class="text-xl font-bold text-white sm:text-2xl">{{ t('dashboard.home.quickLinks') }}</h2>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <DashboardQuickLinks :links="quickLinks" @navigateTo="$emit('navigateTo', $event)" />
       </div>
     </div>
 
-    <div class="bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-8 rounded-2xl border border-[#dc5b41]/30">
-      <div class="flex items-start gap-4">
+    <div
+      class="rounded-lg border border-[#dc5b41]/30 bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-5 sm:p-6 md:p-8">
+      <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-start">
         <div
-          class="w-16 h-16 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-2xl flex items-center justify-center flex-shrink-0">
-          <span class="text-3xl">💡</span>
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-14 sm:w-14 md:h-16 md:w-16">
+          <span class="text-2xl sm:text-3xl">💡</span>
         </div>
-        <div class="flex flex-col gap-2">
-          <h3 class="text-white text-xl font-bold">{{ t('dashboard.home.tip.title') }}</h3>
-          <p class="text-gray-300 text-sm leading-relaxed">
+        <div class="flex min-w-0 flex-col gap-2">
+          <h3 class="text-lg font-bold text-white sm:text-xl">{{ t('dashboard.home.tip.title') }}</h3>
+          <p class="text-sm leading-relaxed text-gray-300">
             {{ t('dashboard.home.tip.description') }}
           </p>
         </div>

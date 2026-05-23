@@ -19,7 +19,7 @@
     </div>
 
     <div
-      class="bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-5 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl border border-[#dc5b41]/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
+      class="bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-5 sm:p-6 md:p-8 rounded-lg border border-[#dc5b41]/30 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6">
       <div class="flex flex-col gap-2 min-w-0">
         <p class="text-[#dc5b41] text-xs sm:text-sm font-semibold uppercase tracking-wide">
           {{ t('plans.free.name') }}
@@ -30,34 +30,34 @@
         <p class="text-gray-300 text-sm max-w-xl">{{ t('dashboard.home.addEditDishes') }}</p>
       </div>
       <button @click="$emit('navigateTo', 'menu')"
-        class="w-full sm:w-fit shrink-0 px-6 py-3 rounded-xl bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] text-white font-semibold hover:scale-105 transition-all duration-300 text-center">
+        class="w-full sm:w-fit shrink-0 px-6 py-3 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] text-white font-semibold hover:scale-105 transition-all duration-300 text-center">
         {{ t('dashboard.home.manageMenu') }}
       </button>
     </div>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <div class="bg-[#1a191f] p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-[#2a2930]">
+      <div class="bg-[#1a191f] p-4 sm:p-5 md:p-6 rounded-lg border border-[#2a2930]">
         <p class="text-gray-400 text-sm">{{ t('dashboard.home.totalDishes') }}</p>
         <h3 class="text-white text-3xl sm:text-4xl font-bold mt-2 tabular-nums">
           {{ totalDishes }}
         </h3>
       </div>
 
-      <div class="bg-[#1a191f] p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-[#2a2930]">
+      <div class="bg-[#1a191f] p-4 sm:p-5 md:p-6 rounded-lg border border-[#2a2930]">
         <p class="text-gray-400 text-sm">{{ t('dashboard.home.totalCategories') }}</p>
         <h3 class="text-white text-3xl sm:text-4xl font-bold mt-2 tabular-nums">
           {{ totalCategories }}
         </h3>
       </div>
 
-      <div class="bg-[#1a191f] p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-green-500/30">
+      <div class="bg-[#1a191f] p-4 sm:p-5 md:p-6 rounded-lg border border-green-500/30">
         <p class="text-gray-400 text-sm">{{ t('dashboard.home.available') }}</p>
         <h3 class="text-green-400 text-3xl sm:text-4xl font-bold mt-2 tabular-nums">
           {{ availableDishes }}
         </h3>
       </div>
 
-      <div class="bg-[#1a191f] p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-red-500/30">
+      <div class="bg-[#1a191f] p-4 sm:p-5 md:p-6 rounded-lg border border-red-500/30">
         <p class="text-gray-400 text-sm">{{ t('dashboard.home.unavailable') }}</p>
         <h3 class="text-red-400 text-3xl sm:text-4xl font-bold mt-2 tabular-nums">
           {{ unavailableDishes }}
@@ -69,7 +69,7 @@
       <h2 class="text-white text-xl sm:text-2xl font-bold">{{ t('dashboard.home.quickLinks') }}</h2>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <button v-for="action in quickActions" :key="action.key" @click="$emit('navigateTo', action.key)"
-          class="bg-[#1a191f] p-4 sm:p-5 rounded-xl border border-[#2a2930] hover:border-[#dc5b41] transition-all duration-300 text-left group hover:translate-y-[-3px]">
+          class="bg-[#1a191f] p-4 sm:p-5 rounded-lg border border-[#2a2930] hover:border-[#dc5b41] transition-all duration-300 text-left group hover:translate-y-[-3px]">
           <div
             class="w-10 h-10 rounded-lg bg-[#2a2930] group-hover:bg-[#dc5b41]/20 transition-all duration-300 flex items-center justify-center mb-3">
             <img

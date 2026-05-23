@@ -7,16 +7,9 @@
         isInfoInvalid() ? 'border-red-500' : 'border-white',
       ]"
     >
-      <i v-if="!selectedValue" class="text-[#787676] not-italic">{{ t(type) }}</i>
-
-      <div v-if="selectedValue" class="flex items-center justify-between w-full">
-        <span class="text-white text-sm">
-          {{ t(`dashboard.${selectedValue}`) }}
-        </span>
-        <button @click="deleteChoose" class="hover:scale-110 transition-transform w-4 h-4 ml-2">
-          <img src="@/assets/images/icons/exit_white.svg" alt="exit" class="w-4 h-4" />
-        </button>
-      </div>
+      <span class="text-white text-sm">
+        {{ t(`dashboard.${displayValue}`) }}
+      </span>
 
       <div
         v-if="selectStatus"
@@ -36,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
@@ -48,10 +41,28 @@ const props = defineProps<{
   }
 }>()
 
-const selectedValue = defineModel<string>('availability')
+const selectedValue = defineModel<string>('availability', { default: 'available' })
 const { t } = useI18n()
 
 const selectStatus = ref(false)
+
+const displayValue = computed(
+  () => selectedValue.value || props.allSelections[0] || 'available',
+)
+
+const ensureSelection = () => {
+  if (!selectedValue.value && props.allSelections.length > 0) {
+    selectedValue.value = props.allSelections[0]
+  }
+}
+
+onMounted(ensureSelection)
+
+watch(
+  () => props.allSelections,
+  () => ensureSelection(),
+  { immediate: true },
+)
 
 const changeStatus = () => {
   selectStatus.value = !selectStatus.value
@@ -63,13 +74,8 @@ const selectProduct = (key: string, event: Event) => {
   selectStatus.value = false
 }
 
-const deleteChoose = (event: Event) => {
-  event.stopPropagation()
-  selectedValue.value = ''
-}
-
 const isInfoInvalid = () => {
   if (!props.v) return false
-  return props.v.$invalid && props.v.$dirty && !selectedValue.value
+  return props.v.$invalid && props.v.$dirty
 }
 </script>

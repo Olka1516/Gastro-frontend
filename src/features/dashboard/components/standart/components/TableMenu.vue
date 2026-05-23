@@ -12,17 +12,13 @@
         </h2>
         <p class="text-sm text-gray-400">{{ t('dashboard.menu.subtitle') }}</p>
       </div>
-      <button
-        type="button"
-        class="group flex w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 sm:w-auto sm:gap-3 sm:px-6"
-        @click="openAddDish">
-        <img
-          src="@/assets/images/icons/plus.svg"
-          alt=""
-          class="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
-          aria-hidden="true" />
-        {{ t('dashboard.tableHead.addMeal') }}
-      </button>
+      <BaseButton
+        variant="gradient"
+        class="w-full shrink-0 sm:w-auto"
+        :icon="plusIcon"
+        :text="t('dashboard.tableHead.addMeal')"
+        @click="openAddDish"
+      />
     </div>
 
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
@@ -56,12 +52,14 @@
         </div>
         <h3 class="text-2xl font-bold text-white sm:text-3xl">{{ t('dashboard.menu.noDishes') }}</h3>
         <p class="max-w-md px-2 text-sm text-gray-400 sm:text-base">{{ t('dashboard.menu.addFirstDish') }}</p>
-        <button
-          type="button"
-          class="mt-2 w-full rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 sm:mt-4 sm:w-auto sm:px-8 sm:py-4"
-          @click="openAddDish">
-          {{ t('dashboard.tableHead.addMeal') }}
-        </button>
+        <BaseButton
+          variant="gradient"
+          size="large"
+          class="mt-2 shadow-lg sm:mt-4 sm:w-auto"
+          block
+          :text="t('dashboard.tableHead.addMeal')"
+          @click="openAddDish"
+        />
       </div>
     </div>
 
@@ -98,7 +96,7 @@
             <div
               class="rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-3 py-1.5 shadow-lg backdrop-blur-md sm:px-4 sm:py-2">
               <span class="text-lg font-bold tabular-nums text-white sm:text-xl">
-                ${{ Number(data.price).toFixed(2) }}
+                {{ formatPrice(Number(data.price)) }}
               </span>
             </div>
           </div>
@@ -172,9 +170,12 @@
 </template>
 
 <script setup lang="ts">
+import plusIcon from '@/assets/images/icons/plus.svg'
+import BaseButton from '@/components/BaseButton.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modals/BaseDelete.vue'
+import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { defaultDish } from '@/features/dashboard/utils/default'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { useStandartDashboardStore } from '@/stores/standartDashboard'
@@ -182,6 +183,8 @@ import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ManageDish from '../../general/ManageDish.vue'
+
+const { formatPrice } = useDashboardCurrency()
 
 const size = 6
 const loading = ref(true)

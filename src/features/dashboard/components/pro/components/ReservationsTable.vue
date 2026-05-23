@@ -76,11 +76,13 @@
               </label>
             </div>
             <div class="flex flex-wrap gap-2">
-              <button type="button"
-                class="rounded-lg bg-[#dc5b41] px-4 py-2 text-xs font-semibold text-white transition-opacity hover:opacity-90"
-                @click="confirmReschedule">
-                {{ t('dashboard.reservations.rescheduleSave') }}
-              </button>
+              <BaseButton
+                size="compact"
+                :scale-on-hover="false"
+                class="px-4 hover:opacity-90"
+                :text="t('dashboard.reservations.rescheduleSave')"
+                @click="confirmReschedule"
+              />
               <button type="button"
                 class="rounded-lg border border-[#2a2930] px-4 py-2 text-xs font-medium text-gray-300 transition-colors hover:bg-white/5"
                 @click="cancelReschedule">
@@ -95,6 +97,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseOrdersStatusFilter from '@/components/inputs/BaseOrdersStatusFilter.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import { notificationStore } from '@/stores/notificationStore'

@@ -26,18 +26,19 @@
           </div>
         </div>
 
-        <a
-          href="#plans"
-          class="relative z-2 w-full cursor-pointer rounded-lg bg-[#dc5b41] px-8 py-2 text-center text-white transition-transform duration-300 hover:scale-105 md:mx-6 md:w-auto"
-        >
-          {{ t(buttonText) }}
-        </a>
+        <BaseButton
+          href="#info"
+          :text="t(buttonText)"
+          size="compact"
+          class="relative z-2 w-full text-center md:mx-6 md:w-auto"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getInfoBlockImageUrl, INFO_BLOCK_IMAGE_URLS } from '../constants/infoBlocks'

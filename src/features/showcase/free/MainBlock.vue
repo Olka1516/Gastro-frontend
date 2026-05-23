@@ -9,7 +9,7 @@
         {{ userInfo?.placeName || t('showcase.menu') }}
       </h1>
       <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-        {{ t('showcase.welcomeDescription') }}
+        {{ menuWelcomeText || t('showcase.welcomeDescription') }}
       </p>
     </div>
 
@@ -43,6 +43,7 @@
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
 import { useShowcaseCategoryScroll } from '@/features/showcase/composables/useShowcaseCategoryScroll'
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useUserStore } from '@/stores/user'
 import type { IDish } from '@/types/menu'
@@ -61,6 +62,9 @@ const showcaseStore = useShowcaseStore()
 const loading = ref(true)
 const dishes = ref<IDish[]>([])
 const selectedDish = ref<IDish | null>(null)
+
+const placeRouteKey = computed(() => String(route.params.id ?? ''))
+const { menuWelcomeText } = useShowcasePlaceTheme(placeRouteKey)
 
 const userInfo = computed(() => userStore.$state)
 const selectedDishCategoryName = computed(() => {
@@ -101,6 +105,7 @@ const fetchData = async () => {
     await Promise.all([
       showcaseStore.fetchDishes(placeName),
       showcaseStore.fetchCategories(placeName),
+      showcaseStore.fetchPlaceBranding(placeName),
     ])
     dishes.value = showcaseStore.dishes
   } finally {

@@ -40,16 +40,18 @@
       </p>
     </td>
     <td class="whitespace-nowrap px-5 py-4 text-right font-semibold text-white">
-      ${{ Number(order.total).toFixed(2) }}
+      {{ formatMenuPrice(Number(order.total), currency, numberLocale) }}
     </td>
   </tr>
 </template>
 
 <script setup lang="ts">
-import { showcaseOrdersTableKey } from '@/features/dashboard/constants';
-import type { IShowcasePlacedOrder } from '@/types/showcaseOrder';
-import { inject } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { showcaseOrdersTableKey } from '@/features/dashboard/constants'
+import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
+import type { IShowcasePlacedOrder } from '@/types/showcaseOrder'
+import { formatMenuPrice } from '@/utils/formatPrice'
+import { inject } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 defineProps<{ order: IShowcasePlacedOrder }>()
 
@@ -58,6 +60,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { currency, numberLocale } = useDashboardCurrency()
 const { formatOrderDate, formatCustomerName, formatLinesSummary, statusBadgeClass } =
   inject(showcaseOrdersTableKey)!
 </script>

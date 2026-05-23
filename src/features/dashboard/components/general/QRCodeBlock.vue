@@ -86,16 +86,22 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-4">
-              <button @click="downloadQRCode"
-                class="flex-1 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-8 py-2 cursor-pointer rounded-lg hover:scale-102 transition-all duration-300 font-semibold flex items-center justify-center gap-3 group">
-                <img src="@/assets/images/icons/download.svg" alt="download" class="w-5 h-5" />
-                {{ t('button.download') }}
-              </button>
-              <a :href="menuUrl" target="_blank" rel="noopener noreferrer"
-                class="flex-1 text-white border-2 border-[#dc5b41] px-8 py-2 cursor-pointer rounded-lg hover:scale-102 hover:bg-[#dc5b41]/10 transition-all duration-300 font-semibold flex items-center justify-center gap-3 group">
-                <img src="@/assets/images/icons/link.svg" alt="arrow-right" class="w-5 h-5" />
-                {{ t('dashboard.standart.qrCode.openMenu') }}
-              </a>
+              <BaseButton
+                variant="gradient"
+                class="flex-1"
+                :icon="downloadIcon"
+                :text="t('button.download')"
+                @click="downloadQRCode"
+              />
+              <BaseButton
+                variant="outline"
+                class="flex-1"
+                :href="menuUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                :icon="linkIcon"
+                :text="t('dashboard.standart.qrCode.openMenu')"
+              />
             </div>
           </div>
         </div>
@@ -105,6 +111,9 @@
 </template>
 
 <script setup lang="ts">
+import downloadIcon from '@/assets/images/icons/download.svg'
+import linkIcon from '@/assets/images/icons/link.svg'
+import BaseButton from '@/components/BaseButton.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
 import { LINK_TEMPLATES } from '@/constants'
 import { notificationStore, useUserStore } from '@/stores'

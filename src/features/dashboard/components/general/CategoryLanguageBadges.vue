@@ -1,15 +1,14 @@
 <template>
   <div class="flex flex-wrap items-center gap-1.5" :title="titleText">
-    <span
-      v-for="lang in MENU_LANGUAGES"
-      :key="lang.code"
-      class="lang-badge"
-      :class="filledSet.has(lang.code) ? 'lang-badge--filled' : 'lang-badge--empty'"
-      :title="lang.nativeLabel"
-    >
-      <span class="lang-badge__flag" aria-hidden="true">{{ lang.flag }}</span>
+    <span v-for="lang in MENU_LANGUAGES" :key="lang.code"
+      class="inline-flex text-white h-[1.375rem] w-[1.375rem] items-center justify-center rounded-md transition-[opacity,transform,box-shadow] duration-200 ease-in-out"
+      :class="filledSet.has(lang.code)
+        ? 'border border-[#dc5b41]/35 bg-[#dc5b41]/15 opacity-100'
+        : 'border border-[#2a2930] bg-[#1a191f] opacity-35 grayscale'
+        " :title="lang.nativeLabel">
+      <span class="text-xs leading-none" aria-hidden="true">{{ lang.flag }}</span>
     </span>
-    <span class="text-[10px] font-semibold text-gray-500 tabular-nums ml-0.5">
+    <span class="ml-0.5 text-[10px] font-semibold tabular-nums text-white">
       {{ filledCount }}/{{ MENU_LANGUAGES.length }}
     </span>
   </div>
@@ -39,40 +38,3 @@ const titleText = computed(() =>
   }),
 )
 </script>
-
-<style scoped>
-.lang-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.375rem;
-  height: 1.375rem;
-  border-radius: 0.375rem;
-  transition:
-    opacity 0.2s ease,
-    transform 0.15s ease,
-    box-shadow 0.2s ease;
-}
-
-.lang-badge__flag {
-  font-size: 0.75rem;
-  line-height: 1;
-}
-
-.lang-badge--filled {
-  background: rgba(220, 91, 65, 0.15);
-  border: 1px solid rgba(220, 91, 65, 0.35);
-  opacity: 1;
-}
-
-.lang-badge--empty {
-  background: #1a191f;
-  border: 1px solid #2a2930;
-  opacity: 0.35;
-  filter: grayscale(0.6);
-}
-
-.group:hover .lang-badge--filled {
-  box-shadow: 0 0 8px rgba(220, 91, 65, 0.25);
-}
-</style>

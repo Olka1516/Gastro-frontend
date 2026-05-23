@@ -27,6 +27,7 @@
                 <ErrorMessage :v="v$.name" :error="error" />
               </div>
               <div class="relative">
+                <label class="mb-2 block text-sm text-gray-400">{{ priceFieldLabel }}</label>
                 <BaseText v-model="formData.price" :v="v$.price" type="price" :error="error" autocomplete="price" />
                 <ErrorMessage :v="v$.price" :error="error" />
               </div>
@@ -47,10 +48,13 @@
                 <ErrorMessage :v="v$.isAvailable" :error="error" />
               </div>
 
-              <button type="submit"
-                class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] rounded-lg text-white font-semibold shadow-md hover:bg-[#dc5b34] transition">
-                {{ isEditMode ? t('button.edit') : t('button.add') }}
-              </button>
+              <BaseButton
+                type="submit"
+                block
+                :scale-on-hover="false"
+                class="mt-4 shadow-md hover:bg-[#dc5b34]"
+                :text="isEditMode ? t('button.edit') : t('button.add')"
+              />
             </form>
           </div>
         </div>
@@ -60,11 +64,13 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseAvailabilitySelect from '@/components/inputs/BaseAvailabilitySelect.vue'
 import BaseDragFile from '@/components/inputs/BaseDragFile.vue'
 import BaseSelect from '@/components/inputs/BaseSelect.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
+import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import type { IDish } from '@/types/menu'
 import useVuelidate from '@vuelidate/core'
@@ -75,6 +81,7 @@ import { useI18n } from 'vue-i18n'
 const props = defineProps<{ text: string; error: string }>()
 
 const { t } = useI18n()
+const { priceFieldLabel } = useDashboardCurrency()
 const open = defineModel('openManage')
 const dish = defineModel<IDish>('dish')
 const emit = defineEmits<{

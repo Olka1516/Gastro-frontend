@@ -88,17 +88,24 @@
             </div>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
-              <button type="button"
-                class="group flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:scale-105 sm:gap-3 sm:px-6 sm:py-4"
-                @click="downloadQRCode">
-                <img src="@/assets/images/icons/download.svg" alt="" class="h-5 w-5 shrink-0" aria-hidden="true" />
-                {{ t('button.download') }}
-              </button>
-              <a :href="menuUrl" target="_blank" rel="noopener noreferrer"
-                class="group flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-[#dc5b41] px-5 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#dc5b41]/10 sm:gap-3 sm:px-6 sm:py-4">
-                <img src="@/assets/images/icons/link.svg" alt="" class="h-5 w-5 shrink-0" aria-hidden="true" />
-                {{ t('dashboard.standart.qrCode.openMenu') }}
-              </a>
+              <BaseButton
+                variant="gradient"
+                size="large"
+                class="flex-1"
+                :icon="downloadIcon"
+                :text="t('button.download')"
+                @click="downloadQRCode"
+              />
+              <BaseButton
+                variant="outline"
+                size="large"
+                class="flex-1"
+                :href="menuUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                :icon="linkIcon"
+                :text="t('dashboard.standart.qrCode.openMenu')"
+              />
             </div>
           </div>
         </div>
@@ -108,6 +115,9 @@
 </template>
 
 <script setup lang="ts">
+import downloadIcon from '@/assets/images/icons/download.svg'
+import linkIcon from '@/assets/images/icons/link.svg'
+import BaseButton from '@/components/BaseButton.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
 import { LINK_TEMPLATES } from '@/constants'
 import { notificationStore, useUserStore } from '@/stores'

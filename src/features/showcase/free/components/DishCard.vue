@@ -16,7 +16,7 @@
 
       <div class="absolute bottom-4 left-4">
         <div class="bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-4 py-2 rounded-xl shadow-lg backdrop-blur-md">
-          <span class="text-white text-lg font-bold">${{ Number(dish.price || 0).toFixed(2) }}</span>
+          <span class="text-white text-lg font-bold">{{ formatPrice(Number(dish.price || 0)) }}</span>
         </div>
       </div>
     </div>
@@ -31,10 +31,14 @@
 </template>
 
 <script setup lang="ts">
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import type { IDish } from '@/types/menu'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 const { t } = useI18n()
+const route = useRoute()
+const { formatPrice } = useShowcasePlaceTheme(() => String(route.params.id ?? ''))
 
 const props = defineProps<{
   dish: IDish

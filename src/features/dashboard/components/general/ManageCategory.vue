@@ -44,10 +44,14 @@
                 </div>
               </template>
 
-              <button type="submit"
-                class="cursor-pointer rounded-lg w-full py-2.5 mt-2 bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] text-white font-semibold shadow-lg shadow-[#dc5b41]/20 hover:opacity-95 transition">
-                {{ isEditMode ? t('button.edit') : t('button.add') }}
-              </button>
+              <BaseButton
+                type="submit"
+                variant="gradient"
+                block
+                :scale-on-hover="false"
+                class="mt-2 shadow-lg shadow-[#dc5b41]/20 hover:opacity-95"
+                :text="isEditMode ? t('button.edit') : t('button.add')"
+              />
             </form>
           </div>
         </div>
@@ -57,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import { DEFAULT_MENU_LANGUAGE } from '@/constants/menuLanguages'
 import type { ICategory } from '@/types/menu'

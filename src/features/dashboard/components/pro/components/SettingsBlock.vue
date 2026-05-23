@@ -43,6 +43,8 @@
           </div>
         </div>
 
+        <SettingsPlaceExtras v-model:currency="formData.currency" v-model:menu-welcome-text="formData.menuWelcomeText" />
+
         <MenuDishLayoutPicker v-model="formData.menuDishLayout" />
 
         <div class="flex flex-col gap-2">
@@ -50,16 +52,20 @@
           <BaseDragFile :url="formData.logo" @update="handleLogoUpdate" />
         </div>
 
-        <button type="submit"
-          class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold rounded-lg shadow-md hover:bg-[#dc5b34] transition">
-          {{ t('button.edit') }}
-        </button>
+        <BaseButton
+          type="submit"
+          block
+          :scale-on-hover="false"
+          class="mt-4 shadow-md hover:bg-[#dc5b34]"
+          :text="t('button.edit')"
+        />
       </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseDragFile from '@/components/inputs/BaseDragFile.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
@@ -68,7 +74,9 @@ import {
   parseMenuDishLayout,
   type MenuDishLayout,
 } from '@/constants/menuDishLayout'
+import SettingsPlaceExtras from '@/features/dashboard/components/shared/SettingsPlaceExtras.vue'
 import MenuDishLayoutPicker from '@/features/dashboard/components/shared/MenuDishLayoutPicker.vue'
+import { DEFAULT_CURRENCY, parseCurrency } from '@/constants/currency'
 import { notificationStore, useUserStore } from '@/stores'
 import type { TRequestError } from '@/types'
 import useVuelidate from '@vuelidate/core'
@@ -90,6 +98,8 @@ const formData = reactive({
   menuIconColor: DEFAULT_MENU_ICON_COLOR,
   menuDishLayout: DEFAULT_MENU_DISH_LAYOUT as MenuDishLayout,
   logo: '' as string | File | null,
+  currency: DEFAULT_CURRENCY,
+  menuWelcomeText: '',
 })
 
 const rules = {
@@ -113,8 +123,6 @@ const handleSubmit = async () => {
     error.value = ''
     normalizeColor('menuBackgroundColor', DEFAULT_MENU_BG_COLOR)
     normalizeColor('menuIconColor', DEFAULT_MENU_ICON_COLOR)
-    console.log(formData.logo)
-
     await store.updateUser({
       placeName: formData.placeName,
       email: formData.email,
@@ -122,6 +130,8 @@ const handleSubmit = async () => {
       menuIconColor: formData.menuIconColor,
       menuDishLayout: formData.menuDishLayout,
       logo: formData.logo,
+      currency: formData.currency,
+      menuWelcomeText: formData.menuWelcomeText.trim(),
     })
 
     toastStore.sendSuccess(t('dashboard.settings.dataSuccessUpdated'))
@@ -142,5 +152,7 @@ onMounted(() => {
   formData.menuIconColor = store.menuIconColor || DEFAULT_MENU_ICON_COLOR
   formData.menuDishLayout = parseMenuDishLayout(store.menuDishLayout)
   formData.logo = store.logo || null
+  formData.currency = parseCurrency(store.currency)
+  formData.menuWelcomeText = store.menuWelcomeText || ''
 })
 </script>

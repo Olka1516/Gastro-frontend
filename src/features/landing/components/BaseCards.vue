@@ -51,18 +51,12 @@
             </li>
           </ul>
 
-          <button
-            type="button"
-            class="mt-2 w-full cursor-pointer rounded-lg bg-[#dc5b41] px-8 py-2.5 text-sm text-white transition duration-300 ease-in sm:mt-auto sm:w-auto lg:opacity-0 lg:translate-y-5"
-            :class="
-              visible && visibilityId === i
-                ? 'lg:translate-y-2 lg:opacity-100'
-                : 'max-lg:translate-y-0 max-lg:opacity-100'
-            "
+          <BaseButton
+            :text="t('button.choose')"
+            layout="plan-card"
+            :active="visible && visibilityId === i"
             @click="nextStep(value)"
-          >
-            {{ t('button.choose') }}
-          </button>
+          />
         </article>
       </div>
     </section>
@@ -78,6 +72,7 @@
 
 <script setup lang="ts">
 import { getImage } from '@/common/functions'
+import BaseButton from '@/components/BaseButton.vue'
 import BaseDelete from '@/components/modals/BaseDelete.vue'
 import AuthTeleportModals from '@/components/modals/auth/AuthTeleportModals.vue'
 import { LINK_TEMPLATES } from '@/constants'

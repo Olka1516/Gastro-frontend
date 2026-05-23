@@ -43,9 +43,7 @@
                   <img class="animatable absolute -right-14 z-4 h-25" src="../assets/images/landing/soup_1.png"
                     alt="" />
                 </div>
-                <button class="cursor-pointer rounded-3xl bg-[#dc5b41] px-12 py-2 text-xs text-white">
-                  {{ t('landing.addToCard') }}
-                </button>
+                <BaseButton variant="pill" :text="t('landing.addToCard')" />
               </div>
 
               <div
@@ -58,9 +56,7 @@
                   <CheckoutCard meals="landing.soups" :start="0" :end="3" />
                 </div>
                 <h4 class="text-xs font-bold text-white">{{ t('landing.sum', { sum: 24.7 }) }}</h4>
-                <button class="cursor-pointer rounded-3xl bg-[#dc5b41] px-12 py-2 text-xs text-white">
-                  {{ t('landing.buy') }}
-                </button>
+                <BaseButton variant="pill" :text="t('landing.buy')" />
               </div>
             </div>
           </div>
@@ -71,6 +67,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import { useI18n } from 'vue-i18n'
 import MenuCard from './MenuCard.vue'
 import CheckoutCard from './CheckoutCard.vue'

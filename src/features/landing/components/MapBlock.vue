@@ -1,6 +1,6 @@
 <template>
   <div ref="block" class="w-full overflow-x-clip bg-[#0f0f11]">
-    <div class="flex flex-col lg:hidden">
+    <div class="flex flex-col xl:hidden">
       <div class="relative z-10 mx-auto flex w-full flex-col gap-5 px-4 pt-14 sm:gap-6">
         <div class="fade-item mx-auto flex w-full max-w-xl flex-col items-center gap-2 text-center">
           <h5 class="text-base text-[#dc5b41] sm:text-lg">
@@ -35,10 +35,7 @@
           <p class="text-base text-white sm:text-lg">
             {{ t('landing.bookTable') }}
           </p>
-          <a href="#plans"
-            class="fade-item cursor-pointer rounded-lg bg-[#dc5b41] px-8 py-2 text-white transition-transform duration-300 hover:scale-105">
-            {{ t('button.reserveNow') }}
-          </a>
+          <BaseButton href="#map" :text="t('button.reserveNow')" size="compact" class="fade-item" />
         </div>
       </div>
 
@@ -53,16 +50,19 @@
       </div>
     </div>
 
-    <div class="relative hidden h-[calc(100vh-50px)] overflow-hidden lg:flex">
-      <div class="fade-item absolute top-20 z-500 flex md:left-20 xl:left-60">
-        <div class="flex flex-col items-start gap-6 rounded-lg bg-[#1a191f] p-12">
+    <div class="relative hidden h-[calc(100vh-50px)] overflow-hidden xl:flex">
+      <div class="fade-item pointer-events-none absolute top-20 z-500 flex md:left-20 xl:left-60">
+        <div class="pointer-events-auto flex flex-col items-start gap-6 rounded-lg bg-[#1a191f] p-12">
           <h3 class="fade-item text-2xl font-bold text-white">
             {{ t('landing.openTime') }}
           </h3>
           <hr class="fade-item w-full border-[#403f43]" />
           <div class="flex w-full flex-col gap-4">
-            <div v-for="value in tm('landing.times')" :key="value.day"
-              class="fade-item grid grid-cols-[80px_110px_115px] items-center gap-8">
+            <div
+              v-for="value in tm('landing.times')"
+              :key="value.day"
+              class="fade-item grid grid-cols-[80px_110px_115px] items-center gap-8"
+            >
               <h4 class="text-xl text-white">{{ rt(value.day) }}</h4>
               <hr class="w-full border border-[#403f43]" />
               <h4 class="text-xl text-white">{{ rt(value.time) }}</h4>
@@ -70,12 +70,16 @@
           </div>
           <hr class="fade-item w-full border-[#403f43]" />
           <p class="fade-item text-xl text-white">{{ t('landing.bookTable') }}</p>
-          <a href="#plans" class="fade-item cursor-pointer rounded-lg bg-[#dc5b41] px-8 py-2 text-[#fff]">
-            {{ t('button.reserveNow') }}
-          </a>
+          <BaseButton
+            href="#plans"
+            :text="t('button.reserveNow')"
+            size="compact"
+            :scale-on-hover="false"
+            class="fade-item"
+          />
         </div>
 
-        <div class="flex w-140 flex-col items-start gap-2 p-12">
+        <div class="flex w-140 select-none flex-col items-start gap-2 p-12">
           <h5 class="fade-item text-lg text-[#dc5b41]">
             {{ t('landing.visitUs') }}
           </h5>
@@ -86,10 +90,13 @@
         </div>
       </div>
 
-      <div class="fade-item m-auto mb-25">
-        <VMap class="rounded-lg" style="height: 300px; width: calc(100vw - 284px)" :center="mapCenter" :zoom="14"
-          :zoom-control="false" :keyboard="false" :box-zoom="false" :scroll-wheel-zoom="false"
-          :double-click-zoom="false" :touch-zoom="false" :dragging="false">
+      <div class="fade-item relative z-0 m-auto mb-25">
+        <VMap
+          class="rounded-lg"
+          style="height: 300px; width: calc(100vw - 284px)"
+          :center="mapCenter"
+          :zoom="14"
+        >
           <VMapOsmTileLayer />
         </VMap>
       </div>
@@ -98,6 +105,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { VMap, VMapOsmTileLayer } from 'vue-map-ui'

@@ -12,11 +12,10 @@
         </h2>
         <p class="text-gray-400 text-sm">{{ t('dashboard.menu.subtitle') }}</p>
       </div>
-      <button @click="openAddDish"
-        class="w-full sm:w-auto shrink-0 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 sm:px-6 py-3 cursor-pointer rounded-lg hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2 sm:gap-3 group">
-        <span class="text-2xl group-hover:rotate-90 transition-transform duration-300 leading-none">+</span>
+      <BaseButton variant="gradient" class="w-full shrink-0 sm:w-auto" @click="openAddDish">
+        <span class="text-2xl leading-none transition-transform duration-300 group-hover:rotate-90">+</span>
         {{ t('dashboard.tableHead.addMeal') }}
-      </button>
+      </BaseButton>
     </div>
 
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
@@ -49,10 +48,14 @@
         </div>
         <h3 class="text-white text-2xl sm:text-3xl font-bold">{{ t('dashboard.menu.noDishes') }}</h3>
         <p class="text-gray-400 text-sm sm:text-base max-w-md px-2">{{ t('dashboard.menu.addFirstDish') }}</p>
-        <button @click="openAddDish"
-          class="mt-2 sm:mt-4 w-full sm:w-auto text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-6 sm:px-8 py-3 sm:py-4 rounded-lg hover:scale-105 transition-all duration-300 shadow-lg font-semibold">
-          {{ t('dashboard.tableHead.addMeal') }}
-        </button>
+        <BaseButton
+          variant="gradient"
+          size="large"
+          class="mt-2 shadow-lg sm:mt-4 sm:w-auto"
+          block
+          :text="t('dashboard.tableHead.addMeal')"
+          @click="openAddDish"
+        />
       </div>
     </div>
 
@@ -83,7 +86,7 @@
             <div
               class="bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg shadow-lg backdrop-blur-md">
               <span class="text-white text-lg sm:text-xl font-bold tabular-nums">
-                ${{ Number(data.price).toFixed(2) }}
+                {{ formatPrice(Number(data.price)) }}
               </span>
             </div>
           </div>
@@ -135,6 +138,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modals/BaseDelete.vue'
@@ -144,9 +148,12 @@ import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { useFreeDashboardStore } from '@/stores/freeDashboard'
 import { ErrorMessageEnum } from '@/types'
 import type { IDish } from '@/types/menu'
+import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import ManageDish from '../../general/ManageDish.vue'
+
+const { formatPrice } = useDashboardCurrency()
 
 const size = 6
 const loading = ref(true)

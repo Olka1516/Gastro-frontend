@@ -41,7 +41,13 @@ export const updateUserData = async (userData: IUpdateUserData) => {
         if (userData.menuDishLayout) {
           formData.append('menuDishLayout', userData.menuDishLayout)
         }
-        if(userData.logo) formData.append('logo', userData.logo)
+        if (userData.currency) {
+          formData.append('currency', userData.currency)
+        }
+        if (userData.menuWelcomeText !== undefined) {
+          formData.append('menuWelcomeText', userData.menuWelcomeText)
+        }
+        if (userData.logo) formData.append('logo', userData.logo)
         return formData
       })()
     : userData

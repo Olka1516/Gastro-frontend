@@ -24,18 +24,18 @@
         {{ t('landing.readyTemplatesDescription') }}
       </p>
 
-      <a
+      <BaseButton
         href="#plans"
-        class="animate-fade-in mt-1 cursor-pointer rounded-lg bg-[#dc5b41] px-8 py-2.5 text-sm text-white opacity-0 transition-transform duration-300 hover:scale-105 sm:mt-2 sm:text-base"
+        :text="t('button.buyNow')"
+        class="animate-fade-in mt-1 opacity-0 sm:mt-2 sm:text-base"
         style="animation-delay: 1.9s"
-      >
-        {{ t('button.buyNow') }}
-      </a>
+      />
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

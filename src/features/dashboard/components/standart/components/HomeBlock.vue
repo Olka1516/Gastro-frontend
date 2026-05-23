@@ -49,7 +49,7 @@
         <div class="flex min-w-0 flex-col gap-2">
           <h3 class="text-lg font-bold text-white sm:text-xl">{{ t('dashboard.home.tip.title') }}</h3>
           <p class="text-sm leading-relaxed text-gray-300">
-            {{ t('dashboard.home.tip.description') }}
+            {{ dailyTipDescription }}
           </p>
         </div>
       </div>
@@ -60,6 +60,7 @@
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
 import { getMenuPublicHrefForNewTab } from '@/constants'
+import { useDailyTip } from '@/features/dashboard/composables/useDailyTip'
 import type { DashboardCardBind } from '@/features/dashboard/types'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import { useStandartDashboardStore } from '@/stores/standartDashboard'
@@ -70,6 +71,7 @@ import DashboardCard from './DashboardCard.vue'
 import DashboardQuickLinks from './DashboardQuickLinks.vue'
 
 const { t } = useI18n()
+const { dailyTipDescription } = useDailyTip()
 const userStore = useUserStore()
 const standartDashboardStore = useStandartDashboardStore()
 const categoriesDashboardStore = useCategoriesDashboardStore()

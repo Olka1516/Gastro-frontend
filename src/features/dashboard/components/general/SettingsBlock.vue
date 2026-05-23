@@ -18,19 +18,27 @@
           <ErrorMessage :v="v$.email" :error="error" />
         </div>
 
-        <button type="submit"
-          class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold rounded-lg shadow-md hover:bg-[#dc5b34] transition">
-          {{ t('button.edit') }}
-        </button>
+        <SettingsPlaceExtras v-model:currency="formData.currency" v-model:menu-welcome-text="formData.menuWelcomeText" />
+
+        <BaseButton
+          type="submit"
+          block
+          :scale-on-hover="false"
+          class="mt-4 shadow-md hover:bg-[#dc5b34]"
+          :text="t('button.edit')"
+        />
       </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
-import { useUserStore } from '@/stores'
+import SettingsPlaceExtras from '@/features/dashboard/components/shared/SettingsPlaceExtras.vue'
+import { DEFAULT_CURRENCY, parseCurrency } from '@/constants/currency'
+import { notificationStore, useUserStore } from '@/stores'
 import type { TRequestError } from '@/types'
 import useVuelidate from '@vuelidate/core'
 import { email, required } from '@vuelidate/validators'
@@ -39,11 +47,14 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const store = useUserStore()
+const toastStore = notificationStore()
 const error = ref('')
 
 const formData = reactive({
   placeName: '',
   email: '',
+  currency: DEFAULT_CURRENCY,
+  menuWelcomeText: '',
 })
 
 const rules = {
@@ -62,7 +73,11 @@ const handleSubmit = async () => {
     await store.updateUser({
       placeName: formData.placeName,
       email: formData.email,
+      currency: formData.currency,
+      menuWelcomeText: formData.menuWelcomeText.trim(),
     })
+
+    toastStore.sendSuccess(t('dashboard.settings.dataSuccessUpdated'))
   } catch (err) {
     const message = err as TRequestError
     error.value = message.response?.data.message || ''
@@ -72,5 +87,7 @@ const handleSubmit = async () => {
 onMounted(() => {
   formData.placeName = store.placeName
   formData.email = store.email
+  formData.currency = parseCurrency(store.currency)
+  formData.menuWelcomeText = store.menuWelcomeText || ''
 })
 </script>

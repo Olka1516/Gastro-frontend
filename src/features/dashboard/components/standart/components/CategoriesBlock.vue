@@ -12,17 +12,13 @@
         </h2>
         <p class="text-sm text-gray-400">{{ t('dashboard.categories.subtitle') }}</p>
       </div>
-      <button
-        type="button"
-        class="group flex w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 sm:w-auto sm:gap-3 sm:px-6"
-        @click="openAddCategory">
-        <img
-          src="@/assets/images/icons/plus.svg"
-          alt=""
-          class="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
-          aria-hidden="true" />
-        {{ t('dashboard.tableHead.addCategory') }}
-      </button>
+      <BaseButton
+        variant="gradient"
+        class="w-full shrink-0 sm:w-auto"
+        :icon="plusIcon"
+        :text="t('dashboard.tableHead.addCategory')"
+        @click="openAddCategory"
+      />
     </div>
 
     <div
@@ -43,12 +39,13 @@
         <p class="max-w-md px-2 text-sm text-gray-400">
           {{ t('dashboard.categories.noCategoriesDescription') }}
         </p>
-        <button
-          type="button"
-          class="mt-2 w-full rounded-lg bg-[#dc5b41] px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-[#e66a4f] sm:mt-4 sm:w-auto"
-          @click="openAddCategory">
-          {{ t('dashboard.tableHead.addCategory') }}
-        </button>
+        <BaseButton
+          variant="default"
+          class="mt-2 sm:mt-4 sm:w-auto"
+          block
+          :text="t('dashboard.tableHead.addCategory')"
+          @click="openAddCategory"
+        />
       </div>
     </div>
 
@@ -130,6 +127,8 @@
 </template>
 
 <script setup lang="ts">
+import plusIcon from '@/assets/images/icons/plus.svg'
+import BaseButton from '@/components/BaseButton.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modals/BaseDelete.vue'

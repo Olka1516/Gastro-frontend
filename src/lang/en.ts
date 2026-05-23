@@ -71,8 +71,13 @@ export default {
       },
       tip: {
         title: 'Tip of the day',
-        description:
-          'Keep your menu fresh and add dish photos — great visuals can meaningfully lift orders.',
+        items: [
+          'Keep your menu fresh and add dish photos — quality images can meaningfully lift orders.',
+          'Place your menu QR code on tables and near the entrance so guests can browse and order faster.',
+          'Add short dish descriptions with ingredients — it helps guests choose and reduces staff questions.',
+          'Update dish availability promptly — mark unavailable items so customers do not order what you cannot serve.',
+          'Group your menu into clear categories — logical structure makes choices easier.',
+        ],
       },
     },
     orders: {
@@ -159,6 +164,15 @@ export default {
       menuBackgroundColor: 'Menu background color',
       menuIconColor: 'Menu icon color',
       logo: 'Venue logo',
+      currency: 'Menu currency',
+      currencies: {
+        UAH: 'Ukrainian hryvnia (₴)',
+        EUR: 'Euro (€)',
+        USD: 'US dollar ($)',
+      },
+      menuWelcomeText: 'Public menu text',
+      menuWelcomeTextHint:
+        'Shown under your venue name on the public menu. Leave empty to use the default welcome text.',
       dataSuccessUpdated: 'Your details were updated successfully',
       menuDishLayout: {
         label: 'Dish display style',

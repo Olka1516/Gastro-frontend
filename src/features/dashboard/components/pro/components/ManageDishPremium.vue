@@ -43,7 +43,7 @@
                   </div>
 
                   <div class="form-field">
-                    <label class="form-field__label">{{ t('inputs.price') }}</label>
+                    <label class="form-field__label">{{ priceFieldLabel }}</label>
                     <div class="form-field__control">
                       <BaseText
                         v-model="formData.price"
@@ -141,12 +141,14 @@
                 </div>
               </section>
 
-              <button
+              <BaseButton
                 type="submit"
-                class="cursor-pointer rounded-lg w-full py-2.5 bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] text-white font-semibold shadow-lg shadow-[#dc5b41]/20 hover:opacity-95 transition"
-              >
-                {{ isEditMode ? t('button.edit') : t('button.add') }}
-              </button>
+                variant="gradient"
+                block
+                :scale-on-hover="false"
+                class="shadow-lg shadow-[#dc5b41]/20 hover:opacity-95"
+                :text="isEditMode ? t('button.edit') : t('button.add')"
+              />
             </form>
           </div>
         </div>
@@ -156,6 +158,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseAvailabilitySelect from '@/components/inputs/BaseAvailabilitySelect.vue'
 import BaseDragFile from '@/components/inputs/BaseDragFile.vue'
 import BaseSelect from '@/components/inputs/BaseSelect.vue'
@@ -172,6 +175,7 @@ import {
   hasUkrainianDishTranslation,
   type DishTranslationsForm,
 } from '@/features/dashboard/utils/dishTranslations'
+import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import type { IDish } from '@/types/menu'
 import useVuelidate from '@vuelidate/core'
@@ -182,6 +186,7 @@ import { useI18n } from 'vue-i18n'
 defineProps<{ text: string; error: string }>()
 
 const { t, te } = useI18n()
+const { priceFieldLabel } = useDashboardCurrency()
 const open = defineModel('openManage')
 const dish = defineModel<IDish>('dish')
 const emit = defineEmits<{

@@ -36,13 +36,13 @@
                   <div class="flex items-center justify-between">
                     <p class="font-semibold text-white">{{ line.dish.name }}</p>
                     <p class="shrink-0 self-start font-bold text-white sm:pt-1">
-                      ${{ lineTotal(line).toFixed(2) }}
+                      {{ formatPrice(lineTotal(line)) }}
                     </p>
                   </div>
                   <p class="mt-0.5 text-xs text-gray-500">{{ line.dish.categoryName }}</p>
                   <div class="mt-2 flex flex-wrap items-center justify-between gap-4">
                     <p class="shrink-0 text-sm leading-none text-gray-400">
-                      ${{ line.dish.price.toFixed(2) }} / {{ t('showcase.premium.cartUnit') }}
+                      {{ formatPrice(line.dish.price) }} / {{ t('showcase.premium.cartUnit') }}
                     </p>
                     <div class="inline-flex items-center rounded-lg border border-white/15 bg-black/40" role="group"
                       :aria-label="t('showcase.premium.cartQuantity')">
@@ -72,13 +72,16 @@
           <div v-if="lines.length > 0" class="flex shrink-0 flex-col gap-4 border-t border-white/10 px-5 py-4">
             <div class="flex items-center justify-between text-white">
               <span class="text-gray-400">{{ t('showcase.premium.cartTotal') }}</span>
-              <span class="text-xl font-bold">${{ grandTotal.toFixed(2) }}</span>
+              <span class="text-xl font-bold">{{ formatPrice(grandTotal) }}</span>
             </div>
-            <button v-if="placeSlug" type="button"
-              class="inline-flex w-full items-center justify-center rounded-xl bg-[#dc5b41] px-4 py-3 text-sm font-semibold leading-normal text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
-              @click="goToCheckout">
-              {{ t('showcase.premium.goToCheckout') }}
-            </button>
+            <BaseButton
+              v-if="placeSlug"
+              variant="showcase"
+              block
+              pressable
+              :text="t('showcase.premium.goToCheckout')"
+              @click="goToCheckout"
+            />
           </div>
         </div>
       </div>
@@ -87,7 +90,9 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import { LINK_TEMPLATES } from '@/constants'
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import type { IShowcaseCartLine } from '@/types/showcaseCart'
 import { computed, onUnmounted, watch } from 'vue'
@@ -111,6 +116,8 @@ const placeSlug = computed(() => {
   const id = route.params.id
   return typeof id === 'string' ? id : ''
 })
+
+const { formatPrice } = useShowcasePlaceTheme(placeSlug)
 
 const lines = computed(() => cartStore.linesInCart)
 

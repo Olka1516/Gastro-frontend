@@ -92,6 +92,7 @@ import {
 import { getShowcaseOrdersForOwner, getTableReservationsForOwner } from '@/services/dashboard'
 import type { IShowcasePlacedOrder } from '@/types/showcaseOrder'
 import type { ITableReservation } from '@/types/tableReservation'
+import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DishPopularityBarChart from './DishPopularityBarChart.vue'
@@ -99,6 +100,7 @@ import DishPopularityBarChart from './DishPopularityBarChart.vue'
 type Period = 'day' | 'week' | 'month'
 
 const { t } = useI18n()
+const { formatPrice: formatMoney } = useDashboardCurrency()
 
 const loading = ref(true)
 const loadError = ref(false)
@@ -147,18 +149,6 @@ const reservationsInActivePeriod = computed(() =>
 const dishPopularity = computed(() =>
   dishPopularityByOrderCount(allOrders.value, activeSince.value),
 )
-
-const moneyFmt = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  currencyDisplay: 'narrowSymbol',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-})
-
-function formatMoney(n: number) {
-  return moneyFmt.format(n)
-}
 
 onMounted(async () => {
   loading.value = true

@@ -7,7 +7,7 @@
         class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 p-4 backdrop-blur-[6px]"
         role="presentation" @click.self="handleNextStep(false)">
         <div
-          class="delete-modal relative w-full max-w-sm overflow-hidden rounded-2xl border border-[#dc5b41]/80 bg-gradient-to-b from-[#1a191f] to-[#0f0f11] shadow-2xl shadow-black/50"
+          class="delete-modal relative w-full max-w-md overflow-hidden rounded-lg border border-[#dc5b41]/80 bg-gradient-to-b from-[#1a191f] to-[#0f0f11] shadow-2xl shadow-black/50"
           role="alertdialog" aria-modal="true" :aria-labelledby="titleId" @click.stop>
           <div class="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#dc5b41]/10 blur-2xl"
             aria-hidden="true" />
@@ -33,16 +33,22 @@
             </div>
 
             <div class="flex flex-col-reverse gap-3 sm:flex-row">
-              <button type="button"
-                class="delete-modal__btn flex-1 cursor-pointer rounded-lg border border-[#dc5b41] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/5"
-                @click="handleNextStep(false)">
-                {{ t('button.no') }}
-              </button>
-              <button type="button"
-                class="delete-modal__btn flex-1 cursor-pointer rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-95"
-                @click="handleNextStep(true)">
-                {{ t('button.yes') }}
-              </button>
+              <BaseButton
+                variant="outline"
+                :scale-on-hover="false"
+                pressable
+                class="delete-modal__btn flex-1 hover:bg-white/5"
+                :text="t('button.no')"
+                @click="handleNextStep(false)"
+              />
+              <BaseButton
+                variant="gradient"
+                :scale-on-hover="false"
+                pressable
+                class="delete-modal__btn flex-1 hover:opacity-95"
+                :text="t('button.yes')"
+                @click="handleNextStep(true)"
+              />
             </div>
           </div>
         </div>
@@ -52,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import { onUnmounted, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 

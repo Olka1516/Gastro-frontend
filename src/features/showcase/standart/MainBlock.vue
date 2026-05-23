@@ -37,7 +37,7 @@
             </h1>
             <p class="mt-1.5 line-clamp-2 text-xs leading-snug sm:text-sm sm:leading-relaxed"
               :style="heroSubtitleStyle">
-              {{ t('showcase.welcomeDescription') }}
+              {{ menuWelcomeText || t('showcase.welcomeDescription') }}
             </p>
           </div>
 
@@ -118,7 +118,7 @@ const wishlistStore = useShowcaseWishlistStore()
 const { likedDishIds } = storeToRefs(wishlistStore)
 
 const placeRouteKey = computed(() => String(route.params.id ?? ''))
-const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName, menuDishLayout } =
+const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName, menuDishLayout, menuWelcomeText } =
   useShowcasePlaceTheme(placeRouteKey)
 
 const loading = ref(true)

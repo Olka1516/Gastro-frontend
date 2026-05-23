@@ -1,3 +1,4 @@
+import type { CurrencyCode } from '@/constants/currency'
 import type { MenuDishLayout } from '@/constants/menuDishLayout'
 import type { EPlan, EStatus } from './errorEnum'
 
@@ -19,6 +20,8 @@ export interface IUserData {
   menuIconColor: string
   menuDishLayout?: MenuDishLayout
   logo?: string
+  currency?: CurrencyCode
+  menuWelcomeText?: string
   id: string
   planName: EPlan | null
   planDate: Date | null
@@ -32,6 +35,8 @@ export interface IUpdateUserData {
   menuIconColor?: string
   menuDishLayout?: MenuDishLayout
   logo?: File | string | null
+  currency?: CurrencyCode
+  menuWelcomeText?: string
 }
 
 export interface IUserStatus {

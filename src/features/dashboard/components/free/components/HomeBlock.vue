@@ -29,10 +29,12 @@
         </h2>
         <p class="text-gray-300 text-sm max-w-xl">{{ t('dashboard.home.addEditDishes') }}</p>
       </div>
-      <button @click="$emit('navigateTo', 'menu')"
-        class="w-full sm:w-fit shrink-0 px-6 py-3 rounded-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] text-white font-semibold hover:scale-105 transition-all duration-300 text-center">
-        {{ t('dashboard.home.manageMenu') }}
-      </button>
+      <BaseButton
+        variant="gradient"
+        class="w-full shrink-0 text-center sm:w-fit"
+        :text="t('dashboard.home.manageMenu')"
+        @click="$emit('navigateTo', 'menu')"
+      />
     </div>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -88,6 +90,7 @@
 
 <script setup lang="ts">
 import { getImage } from '@/common/functions'
+import BaseButton from '@/components/BaseButton.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
 import { getMenuPublicHrefForNewTab } from '@/constants'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'

@@ -25,7 +25,7 @@
         </h3>
         <div class="shrink-0 rounded-lg px-2 py-0.5 text-sm font-bold tabular-nums text-white sm:text-base"
           :style="priceBadgeStyle">
-          ${{ Number(dish.price || 0).toFixed(2) }}
+          {{ formatPrice(Number(dish.price || 0)) }}
         </div>
       </div>
       <p class="line-clamp-2 text-left text-xs leading-relaxed text-gray-400 sm:text-sm">
@@ -52,13 +52,13 @@
   </div>
 
   <article v-else-if="layout === 'magazine'"
-    class="dish-card-magazine group cursor-pointer rounded-2xl border border-[#2a2930] bg-[#141318] p-5 shadow-lg transition-colors duration-200 hover:border-[#3f3e47] sm:p-6 md:flex md:gap-10 md:p-8"
+    class="dish-card-magazine group cursor-pointer rounded-2xl border border-[#2a2930] bg-[#141318] p-5 shadow-lg transition-colors duration-200 hover:border-[#3f3e47] sm:p-6 md:flex md:gap-8 md:p-8"
     :style="dishCardStyle" @click="handleClick">
     <div
-      class="relative mx-auto mb-6 w-full max-w-[280px] shrink-0 sm:max-w-[320px] md:order-2 md:mb-0 md:mx-0 md:w-[42%] md:max-w-[340px]">
-      <div class="rounded-2xl bg-[#0a0a0c] p-2 ring-1 ring-inset ring-white/[0.06] md:sticky md:top-28">
+      class="relative mx-auto mb-5 w-full max-w-[250px] shrink-0 sm:max-w-[290px] md:order-2 md:mb-0 md:mx-0 md:w-[42%] md:max-w-[320px]">
+      <div class="rounded-xl bg-[#0a0a0c] p-2 ring-1 ring-inset ring-white/[0.06] md:sticky md:top-28">
         <div
-          class="relative flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-xl bg-[#121214]">
+          class="relative flex aspect-[6/5] w-full items-center justify-center overflow-hidden rounded-lg bg-[#121214]">
           <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dishLabels.name" decoding="async"
             class="max-h-full max-w-full object-contain" />
           <div v-else class="text-3xl text-white/15">—</div>
@@ -74,23 +74,23 @@
     </div>
 
     <div
-      class="flex min-w-0 flex-1 flex-col justify-start gap-8 md:order-1 md:justify-between md:gap-0 md:self-stretch">
+      class="flex min-w-0 flex-1 flex-col justify-start gap-6 md:order-1 md:justify-between md:gap-0 md:self-stretch">
       <div class="shrink-0">
-        <p v-if="categoryName" class="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+        <p v-if="categoryName" class="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
           {{ categoryName }}
         </p>
-        <h3 class="text-balance text-2xl font-bold leading-snug tracking-tight text-white sm:text-3xl">
+        <h3 class="line-clamp-2 text-balance text-xl font-bold leading-snug tracking-tight text-white sm:text-2xl">
           {{ dishLabels.name }}
         </h3>
-        <div class="mt-3 h-px w-16 rounded-full" :style="{ backgroundColor: menuIconColor || '#dc5b41' }" />
-        <p class="mt-5 text-[15px] leading-[1.65] text-gray-400 sm:text-base">
+        <div class="mt-2.5 h-px w-14 rounded-full" :style="{ backgroundColor: menuIconColor || '#dc5b41' }" />
+        <p class="mt-5 line-clamp-4 text-sm leading-relaxed text-gray-400 sm:text-[15px]">
           {{ dishLabels.description || t('dashboard.menu.noDescription') }}
         </p>
       </div>
 
-      <div class="flex shrink-0 flex-wrap items-center gap-4 border-t border-white/[0.06] pt-6 md:mt-0">
-        <span class="text-2xl font-semibold tabular-nums text-white sm:text-[1.65rem]">
-          ${{ Number(dish.price || 0).toFixed(2) }}
+      <div class="flex shrink-0 flex-wrap items-center gap-3 border-t border-white/[0.06] pt-6 md:mt-0">
+        <span class="text-xl font-semibold tabular-nums text-white sm:text-2xl">
+          {{ formatPrice(Number(dish.price || 0)) }}
         </span>
         <div class="ml-auto flex items-center gap-2">
           <button type="button" :class="[
@@ -136,7 +136,7 @@
 
       <div class="absolute bottom-4 left-4">
         <div class="px-4 py-2 rounded-xl shadow-lg backdrop-blur-md" :style="priceBadgeStyle">
-          <span class="text-white text-lg font-bold">${{ Number(dish.price || 0).toFixed(2) }}</span>
+          <span class="text-white text-lg font-bold">{{ formatPrice(Number(dish.price || 0)) }}</span>
         </div>
       </div>
 
@@ -163,12 +163,16 @@ import iconPlus from '@/assets/images/icons/plus.svg'
 import iconSubtract from '@/assets/images/icons/substract.svg'
 import { DEFAULT_MENU_DISH_LAYOUT, type MenuDishLayout } from '@/constants/menuDishLayout'
 import { useShowcaseMenuContentLanguage } from '@/features/showcase/composables/useShowcaseMenuContentLanguage'
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import type { IDish } from '@/types/menu'
 import { computed, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 const { t } = useI18n()
+const route = useRoute()
+const { formatPrice } = useShowcasePlaceTheme(() => String(route.params.id ?? ''))
 const { useDishLabels, getDishLabels } = useShowcaseMenuContentLanguage()
 
 const props = withDefaults(

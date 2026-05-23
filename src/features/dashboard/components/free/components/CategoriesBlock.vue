@@ -12,11 +12,10 @@
         </h2>
         <p class="text-gray-400 text-sm">{{ t('dashboard.categories.subtitle') }}</p>
       </div>
-      <button @click="openAddCategory"
-        class="w-full sm:w-auto shrink-0 text-white bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-5 sm:px-6 py-3 cursor-pointer rounded-lg hover:scale-105 transition-all duration-300 font-semibold flex items-center justify-center gap-2 sm:gap-3 group">
-        <span class="text-2xl group-hover:rotate-90 transition-transform duration-300 leading-none">+</span>
+      <BaseButton variant="gradient" class="w-full shrink-0 sm:w-auto" @click="openAddCategory">
+        <span class="text-2xl leading-none transition-transform duration-300 group-hover:rotate-90">+</span>
         {{ t('dashboard.tableHead.addCategory') }}
-      </button>
+      </BaseButton>
     </div>
 
     <div v-if="categoriesList.length === 0"
@@ -33,10 +32,13 @@
         <p class="text-gray-400 text-sm max-w-md px-2">
           {{ t('dashboard.categories.noCategoriesDescription') }}
         </p>
-        <button @click="openAddCategory"
-          class="mt-2 sm:mt-4 w-full sm:w-auto text-white bg-[#dc5b41] px-6 py-3 rounded-lg hover:bg-[#e66a4f] transition-all duration-300 hover:scale-105 font-semibold">
-          {{ t('dashboard.tableHead.addCategory') }}
-        </button>
+        <BaseButton
+          variant="default"
+          class="mt-2 sm:mt-4 sm:w-auto"
+          block
+          :text="t('dashboard.tableHead.addCategory')"
+          @click="openAddCategory"
+        />
       </div>
     </div>
 
@@ -96,6 +98,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'
 import BaseDelete from '@/components/modals/BaseDelete.vue'

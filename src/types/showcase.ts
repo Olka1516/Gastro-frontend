@@ -1,3 +1,4 @@
+import type { CurrencyCode } from '@/constants/currency'
 import type { MenuDishLayout } from '@/constants/menuDishLayout'
 
 export interface IPlaceBranding {
@@ -5,4 +6,6 @@ export interface IPlaceBranding {
   menuIconColor: string
   logo: string
   menuDishLayout?: MenuDishLayout
+  currency?: CurrencyCode
+  menuWelcomeText?: string
 }

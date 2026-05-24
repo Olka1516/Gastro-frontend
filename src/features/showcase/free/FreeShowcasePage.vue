@@ -18,5 +18,3 @@ const activeSection = ref('')
 
 const navs = ['menu']
 </script>
-
-<style scoped></style>

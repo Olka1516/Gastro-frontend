@@ -7,7 +7,7 @@
         <p class="text-sm text-gray-500">{{ t('showcase.premium.orderHistoryPlacedAt') }}</p>
         <p class="mt-1 font-medium text-white">{{ placedAtLabel }}</p>
       </div>
-      <p class="text-lg font-bold text-white">${{ Number(entry.total).toFixed(2) }}</p>
+      <p class="text-lg font-bold text-white">{{ formatPrice(Number(entry.total)) }}</p>
     </div>
     <ul class="mt-4 flex flex-col gap-2 text-sm text-gray-300">
       <li v-for="(line, idx) in entry.lines" :key="idx" class="flex justify-between gap-4">
@@ -18,7 +18,7 @@
           </span>
         </span>
         <span class="shrink-0 text-gray-400">
-          {{ line.quantity }} × ${{ Number(line.unitPrice).toFixed(2) }}
+          {{ line.quantity }} × {{ formatPrice(Number(line.unitPrice)) }}
         </span>
       </li>
     </ul>
@@ -26,13 +26,17 @@
 </template>
 
 <script setup lang="ts">
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import type { IShowcaseLocalOrderHistoryEntry } from '@/types/showcaseOrder'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 const props = defineProps<{ entry: IShowcaseLocalOrderHistoryEntry }>()
 
+const route = useRoute()
 const { t, locale } = useI18n()
+const { formatPrice } = useShowcasePlaceTheme(() => String(route.params.id ?? ''))
 
 const placedAtLabel = computed(() => {
   const iso = props.entry.placedAt

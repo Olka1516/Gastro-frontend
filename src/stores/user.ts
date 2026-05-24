@@ -8,6 +8,7 @@ import {
   signUpByUserData,
   updateUserData,
 } from '@/services'
+import { DEFAULT_CURRENCY } from '@/constants/currency'
 import type { IUpdateUserData, IUserData, UserSignIn, UserSignUp } from '@/types'
 import { defineStore } from 'pinia'
 import { reactive, ref, toRefs } from 'vue'
@@ -20,6 +21,8 @@ export const useUserStore = defineStore('counter', () => {
     menuBackgroundColor: '#0f0f11',
     menuIconColor: '#dc5b41',
     logo: '',
+    currency: DEFAULT_CURRENCY,
+    menuWelcomeText: '',
     id: '',
     planName: null,
     planDate: null,

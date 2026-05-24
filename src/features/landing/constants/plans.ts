@@ -7,7 +7,7 @@ export const plans = [
   },
   {
     name: 'standart',
-    price: 20.0,
+    price: 15.0,
     subscribe: 'month',
     currency: '$',
   },

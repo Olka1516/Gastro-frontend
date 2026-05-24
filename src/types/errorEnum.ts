@@ -10,6 +10,7 @@ export enum ErrorMessageEnum {
   PassMissMach = 'passMissMatch',
   InvalidCredentials = 'invalidCredentials',
   FreePlanItemsLimit = 'freePlanItemsLimit',
+  CategoryTranslationsPremiumOnly = 'categoryTranslationsPremiumOnly',
 }
 
 export enum EStatus {

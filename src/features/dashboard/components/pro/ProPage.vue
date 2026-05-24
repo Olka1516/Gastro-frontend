@@ -1,8 +1,16 @@
 <template>
-  <div :class="['grid transition-all duration-300', sidebarStyle]">
-    <BaseSidebar :navs="navs" :userInfo :activeNav="activeNav" @handleProcess="(value) => getSidebarStyle(value)"
+  <div
+    class="grid min-h-screen w-full grid-cols-1 transition-all duration-300"
+    :class="sidebarStyle">
+    <BaseSidebar
+      :navs="navs"
+      :userInfo
+      :activeNav="activeNav"
+      @handleProcess="(value) => getSidebarStyle(value)"
       @handleNav="handleNav" />
-    <component :is="activeNav.component" @navigateTo="navigateTo" />
+    <div class="min-w-0 overflow-x-hidden">
+      <component :is="activeNav.component" @navigateTo="navigateTo" />
+    </div>
   </div>
 </template>
 
@@ -11,19 +19,21 @@ import type { IUserData } from '@/types'
 import { computed, markRaw, ref } from 'vue'
 import type { IBaseSidebarData } from '../../types'
 import BaseSidebar from '../general/BaseSidebar.vue'
+import QRCodeBlock from '../general/QRCodeBlock.vue'
+import AnalyticsBlock from './components/AnalyticsBlock.vue'
 import Categories from './components/CategoriesBlock.vue'
 import HomeBlock from './components/HomeBlock.vue'
 import OrdersBlock from './components/OrdersBlock.vue'
 import ReservationsBlock from './components/ReservationsBlock.vue'
 import SettingsBlock from './components/SettingsBlock.vue'
 import TableMenu from './components/TableMenu.vue'
-import QRCodeBlock from '../general/QRCodeBlock.vue'
 
 defineProps<{ userInfo: IUserData }>()
 
 const navs = [
   { name: 'dashboard.standart.navs.home', component: markRaw(HomeBlock), image: 'home' },
   { name: 'dashboard.standart.navs.menu', component: markRaw(TableMenu), image: 'table' },
+  { name: 'dashboard.standart.navs.categories', component: markRaw(Categories), image: 'category' },
   {
     name: 'dashboard.standart.navs.orders',
     component: markRaw(OrdersBlock),
@@ -34,7 +44,11 @@ const navs = [
     component: markRaw(ReservationsBlock),
     image: 'clock',
   },
-  { name: 'dashboard.standart.navs.categories', component: markRaw(Categories), image: 'category' },
+  {
+    name: 'dashboard.standart.navs.analytics',
+    component: markRaw(AnalyticsBlock),
+    image: 'chart',
+  },
   { name: 'dashboard.standart.navs.qrCode', component: markRaw(QRCodeBlock), image: 'qrCode' },
   {
     name: 'dashboard.standart.navs.settings',
@@ -64,9 +78,7 @@ const navigateTo = (key: string) => {
 
 const sidebarStyle = computed(() => {
   return isSidebarClosed.value
-    ? 'grid-cols-[minmax(0,0.1fr)_minmax(0,1fr)]'
-    : 'grid-cols-[minmax(0,0.24fr)_minmax(0,1fr)]'
+    ? 'lg:grid-cols-[minmax(4.5rem,0.09fr)_minmax(0,1fr)]'
+    : 'lg:grid-cols-[minmax(13rem,0.24fr)_minmax(0,1fr)]'
 })
 </script>
-
-<style scoped></style>

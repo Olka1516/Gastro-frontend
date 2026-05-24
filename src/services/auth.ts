@@ -38,7 +38,16 @@ export const updateUserData = async (userData: IUpdateUserData) => {
         if (userData.menuIconColor) {
           formData.append('menuIconColor', userData.menuIconColor)
         }
-        if(userData.logo) formData.append('logo', userData.logo)
+        if (userData.menuDishLayout) {
+          formData.append('menuDishLayout', userData.menuDishLayout)
+        }
+        if (userData.currency) {
+          formData.append('currency', userData.currency)
+        }
+        if (userData.menuWelcomeText !== undefined) {
+          formData.append('menuWelcomeText', userData.menuWelcomeText)
+        }
+        if (userData.logo) formData.append('logo', userData.logo)
         return formData
       })()
     : userData

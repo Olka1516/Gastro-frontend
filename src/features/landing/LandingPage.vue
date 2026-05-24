@@ -1,16 +1,15 @@
 <template>
-  <BaseHeader :limit="300" :navigations="navs" :activeSection />
+  <BaseHeader :limit="300" :navigations="navs" :activeSection is-landing-page />
 
   <template v-for="(section, i) in sections" :key="i">
-    <template v-if="section.repeat">
+    <section v-if="section.repeat" :id="section.id" class="scroll-mt-24">
       <component
         v-for="n in section.repeat"
         :is="section.component"
-        :id="section.id"
         :key="`${section.id}-${n}`"
         v-bind="section.props(n)"
       />
-    </template>
+    </section>
 
     <component v-else :is="section.component" :id="section.id" />
   </template>
@@ -27,6 +26,7 @@ import PhonesBlock from './components/PhonesBlock.vue'
 import NumbersBlock from './components/NumbersBlock.vue'
 import InfoBlock from './components/InfoBlock.vue'
 import MapBlock from './components/MapBlock.vue'
+import { INFO_BLOCK_IMAGES } from './constants'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -43,7 +43,7 @@ const sections = [
     repeat: 3,
     props: (n: number) => ({
       index: n,
-      img: '',
+      img: INFO_BLOCK_IMAGES[n] ?? INFO_BLOCK_IMAGES[1],
       title: `landing.infoBlock.${n}.title`,
       description: `landing.infoBlock.${n}.description`,
       buttonText: 'button.buyNow',
@@ -60,13 +60,16 @@ const navs = sections
 const navsId = sections.map((s) => s.id.charAt(0).toUpperCase() + s.id.slice(1))
 
 const onScroll = () => {
+  const headerOffset = 100
+
   for (const id of navsId) {
     const el = document.getElementById(id.toLowerCase())
     if (!el) continue
+
     const rect = el.getBoundingClientRect()
-    if (rect.top <= 100 && rect.bottom >= 100) {
+    if (rect.top <= headerOffset && rect.bottom >= headerOffset) {
       activeSection.value = id
-      break
+      return
     }
   }
 }

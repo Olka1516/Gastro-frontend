@@ -22,7 +22,7 @@
           <div class="flex flex-col gap-2">
             <span class="text-sm text-gray-300">{{
               t('dashboard.settings.menuBackgroundColor')
-              }}</span>
+            }}</span>
             <div class="flex items-center gap-2">
               <input v-model="formData.menuBackgroundColor" type="color"
                 class="h-11 w-14 min-w-14 rounded-lg border border-[#2a2930] bg-[#1a191f] p-1 cursor-pointer" />
@@ -43,24 +43,40 @@
           </div>
         </div>
 
+        <SettingsPlaceExtras v-model:currency="formData.currency" v-model:menu-welcome-text="formData.menuWelcomeText" />
+
+        <MenuDishLayoutPicker v-model="formData.menuDishLayout" />
+
         <div class="flex flex-col gap-2">
           <span class="text-sm text-gray-300">{{ t('dashboard.settings.logo') }}</span>
           <BaseDragFile :url="formData.logo" @update="handleLogoUpdate" />
         </div>
 
-        <button type="submit"
-          class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold rounded-lg shadow-md hover:bg-[#dc5b34] transition">
-          {{ t('button.edit') }}
-        </button>
+        <BaseButton
+          type="submit"
+          block
+          :scale-on-hover="false"
+          class="mt-4 shadow-md hover:bg-[#dc5b34]"
+          :text="t('button.edit')"
+        />
       </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseDragFile from '@/components/inputs/BaseDragFile.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
+import {
+  DEFAULT_MENU_DISH_LAYOUT,
+  parseMenuDishLayout,
+  type MenuDishLayout,
+} from '@/constants/menuDishLayout'
+import SettingsPlaceExtras from '@/features/dashboard/components/shared/SettingsPlaceExtras.vue'
+import MenuDishLayoutPicker from '@/features/dashboard/components/shared/MenuDishLayoutPicker.vue'
+import { DEFAULT_CURRENCY, parseCurrency } from '@/constants/currency'
 import { notificationStore, useUserStore } from '@/stores'
 import type { TRequestError } from '@/types'
 import useVuelidate from '@vuelidate/core'
@@ -80,7 +96,10 @@ const formData = reactive({
   email: '',
   menuBackgroundColor: DEFAULT_MENU_BG_COLOR,
   menuIconColor: DEFAULT_MENU_ICON_COLOR,
+  menuDishLayout: DEFAULT_MENU_DISH_LAYOUT as MenuDishLayout,
   logo: '' as string | File | null,
+  currency: DEFAULT_CURRENCY,
+  menuWelcomeText: '',
 })
 
 const rules = {
@@ -104,14 +123,15 @@ const handleSubmit = async () => {
     error.value = ''
     normalizeColor('menuBackgroundColor', DEFAULT_MENU_BG_COLOR)
     normalizeColor('menuIconColor', DEFAULT_MENU_ICON_COLOR)
-    console.log(formData.logo)
-
     await store.updateUser({
       placeName: formData.placeName,
       email: formData.email,
       menuBackgroundColor: formData.menuBackgroundColor,
       menuIconColor: formData.menuIconColor,
+      menuDishLayout: formData.menuDishLayout,
       logo: formData.logo,
+      currency: formData.currency,
+      menuWelcomeText: formData.menuWelcomeText.trim(),
     })
 
     toastStore.sendSuccess(t('dashboard.settings.dataSuccessUpdated'))
@@ -130,8 +150,9 @@ onMounted(() => {
   formData.email = store.email
   formData.menuBackgroundColor = store.menuBackgroundColor || DEFAULT_MENU_BG_COLOR
   formData.menuIconColor = store.menuIconColor || DEFAULT_MENU_ICON_COLOR
+  formData.menuDishLayout = parseMenuDishLayout(store.menuDishLayout)
   formData.logo = store.logo || null
+  formData.currency = parseCurrency(store.currency)
+  formData.menuWelcomeText = store.menuWelcomeText || ''
 })
 </script>
-
-<style scoped></style>

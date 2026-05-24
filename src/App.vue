@@ -7,8 +7,18 @@
 <style>
 @import 'tailwindcss';
 
+@theme {
+  --breakpoint-header: 87.5rem;
+}
+
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 .Vue-Toastification__toast.success-toats {

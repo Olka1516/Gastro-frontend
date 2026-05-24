@@ -33,7 +33,8 @@ export const ENDPOINTS = {
   GET_SHOWCASE_ORDERS: `dashboard/showcase-orders`,
   PATCH_SHOWCASE_ORDER: (orderId: string) => `dashboard/showcase-orders/${orderId}`,
   GET_TABLE_RESERVATIONS: `dashboard/table-reservations`,
-  PATCH_TABLE_RESERVATION: (reservationId: string) => `dashboard/table-reservations/${reservationId}`,
+  PATCH_TABLE_RESERVATION: (reservationId: string) =>
+    `dashboard/table-reservations/${reservationId}`,
 }
 
 export const LINK_TEMPLATES = {
@@ -42,4 +43,11 @@ export const LINK_TEMPLATES = {
   MENU_CHECKOUT: (placeSlug: string) => `/menu/${placeSlug}/checkout`,
   MENU_ORDERS: (placeSlug: string) => `/menu/${placeSlug}/orders`,
   MENU_RESERVE: (placeSlug: string) => `/menu/${placeSlug}/reserve`,
+}
+
+export const getMenuPublicHrefForNewTab = (placeName: string): string => {
+  const path = LINK_TEMPLATES.MENU(placeName)
+  const base = import.meta.env.VITE_BASE_URL_FRONT?.replace(/\/$/, '')
+  if (base) return `${base}${path}`
+  return path
 }

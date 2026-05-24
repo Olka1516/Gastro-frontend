@@ -1,5 +1,9 @@
 <template>
-  <section :id="category.id" class="scroll-mt-24">
+  <section
+    :id="category.id"
+    :data-showcase-category="category.id"
+    class="scroll-mt-36 sm:scroll-mt-40"
+  >
     <div class="mb-8">
       <div class="flex items-center gap-4 mb-2">
         <div
@@ -55,5 +59,3 @@ const handleDishClick = (dish: IDish) => {
   emit('dishClick', dish)
 }
 </script>
-
-<style scoped></style>

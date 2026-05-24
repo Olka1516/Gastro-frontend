@@ -13,10 +13,12 @@
       <div v-if="lines.length === 0"
         class="mt-10 rounded-2xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-10 text-center">
         <p class="text-gray-400">{{ t('showcase.premium.checkoutEmptyCart') }}</p>
-        <RouterLink :to="LINK_TEMPLATES.MENU(placeSlugDisplay)"
-          class="mt-6 inline-flex rounded-xl bg-[#dc5b41] px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.02]">
-          {{ t('showcase.premium.backToMenu') }}
-        </RouterLink>
+        <BaseButton
+          variant="showcase"
+          :to="LINK_TEMPLATES.MENU(placeSlugDisplay)"
+          :text="t('showcase.premium.backToMenu')"
+          class="mt-6"
+        />
       </div>
 
       <div v-else class="mt-10 grid gap-8 lg:grid-cols-2 lg:gap-12 lg:items-start">
@@ -40,19 +42,18 @@
                 <p class="font-medium text-white">{{ line.dish.name }}</p>
                 <p class="mt-0.5 text-xs text-gray-500">{{ line.dish.categoryName }}</p>
                 <p class="mt-1 text-sm text-gray-400">
-                  {{ line.quantity }} {{ t('showcase.premium.cartUnit') }} × ${{
-                    line.dish.price.toFixed(2)
-                  }}
+                  {{ line.quantity }} {{ t('showcase.premium.cartUnit') }} ×
+                  {{ formatPrice(line.dish.price) }}
                 </p>
               </div>
               <p class="shrink-0 text-sm font-semibold text-white">
-                ${{ lineTotal(line).toFixed(2) }}
+                {{ formatPrice(lineTotal(line)) }}
               </p>
             </li>
           </ul>
           <div class="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
             <span class="text-gray-400">{{ t('showcase.premium.cartTotal') }}</span>
-            <span class="text-xl font-bold text-white">${{ grandTotal.toFixed(2) }}</span>
+            <span class="text-xl font-bold text-white">{{ formatPrice(grandTotal) }}</span>
           </div>
         </section>
 
@@ -130,14 +131,19 @@
               </div>
             </div>
 
-            <button type="submit" :disabled="orderStore.loading"
-              class="mt-2 w-full rounded-xl bg-[#dc5b41] py-3.5 text-sm font-semibold text-white transition-transform hover:scale-[1.01] disabled:pointer-events-none disabled:opacity-60">
-              {{
+            <BaseButton
+              type="submit"
+              variant="showcase"
+              size="large"
+              block
+              class="mt-2"
+              :disabled="orderStore.loading"
+              :text="
                 orderStore.loading
                   ? t('showcase.premium.checkoutSubmitting')
                   : t('showcase.premium.checkoutSubmit')
-              }}
-            </button>
+              "
+            />
           </form>
         </section>
       </div>
@@ -146,12 +152,15 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseDeliveryAddress from '@/components/inputs/BaseDeliveryAddress.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import BaseTextarea from '@/components/inputs/BaseTextarea.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
 import { LINK_TEMPLATES } from '@/constants'
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
+import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useShowcaseOrderStore } from '@/stores/showcaseOrderStore'
 import type { IShowcaseCartLine } from '@/types/showcaseCart'
 import { linesToOrderPayload } from '@/types/showcaseOrder'
@@ -165,9 +174,12 @@ import { useRoute } from 'vue-router'
 const { t } = useI18n()
 const route = useRoute()
 const cartStore = useShowcaseCartStore()
+const showcaseStore = useShowcaseStore()
 const orderStore = useShowcaseOrderStore()
 
 const placeSlug = computed(() => String(route.params.id ?? ''))
+
+const { formatPrice } = useShowcasePlaceTheme(placeSlug)
 
 const placeSlugDisplay = computed(() => underscoreToSpace(placeSlug.value))
 
@@ -224,5 +236,6 @@ const handleSubmit = async () => {
 
 onMounted(() => {
   cartStore.load(placeSlug.value)
+  void showcaseStore.fetchPlaceBranding(placeSlug.value)
 })
 </script>

@@ -1,8 +1,13 @@
+import { DEFAULT_CURRENCY, parseCurrency, type CurrencyCode } from '@/constants/currency'
+import { DEFAULT_MENU_DISH_LAYOUT, parseMenuDishLayout } from '@/constants/menuDishLayout'
+import type { MenuDishLayout } from '@/constants/menuDishLayout'
+import { formatMenuPrice } from '@/utils/formatPrice'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useUserStore } from '@/stores/user'
 import { spaceToUnderscore, underscoreToSpace } from '@/utils/textHelpers'
 import type { MaybeRefOrGetter } from 'vue'
 import { computed, toValue } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export const DEFAULT_SHOWCASE_MENU_BG = '#0f0f11'
 export const DEFAULT_SHOWCASE_MENU_ICON = '#dc5b41'
@@ -10,6 +15,7 @@ export const DEFAULT_SHOWCASE_MENU_ICON = '#dc5b41'
 export function useShowcasePlaceTheme(placeKey: MaybeRefOrGetter<string>) {
   const showcaseStore = useShowcaseStore()
   const userStore = useUserStore()
+  const { locale } = useI18n()
 
   const routePlaceUnderscored = computed(() => String(toValue(placeKey) ?? '').trim())
 
@@ -40,10 +46,41 @@ export function useShowcasePlaceTheme(placeKey: MaybeRefOrGetter<string>) {
     return underscoreToSpace(key) || key
   })
 
+  const menuDishLayout = computed((): MenuDishLayout => {
+    const fromApi = showcaseStore.placeBranding?.menuDishLayout
+    if (fromApi) return parseMenuDishLayout(fromApi)
+    if (isOwnerPreview.value && userStore.menuDishLayout)
+      return parseMenuDishLayout(userStore.menuDishLayout)
+    return DEFAULT_MENU_DISH_LAYOUT
+  })
+
+  const currency = computed((): CurrencyCode => {
+    const fromApi = showcaseStore.placeBranding?.currency
+    if (fromApi) return parseCurrency(fromApi)
+    if (isOwnerPreview.value && userStore.currency) return parseCurrency(userStore.currency)
+    return DEFAULT_CURRENCY
+  })
+
+  const menuWelcomeText = computed(() => {
+    const fromApi = showcaseStore.placeBranding?.menuWelcomeText?.trim()
+    if (fromApi) return fromApi
+    if (isOwnerPreview.value) return (userStore.menuWelcomeText || '').trim()
+    return ''
+  })
+
+  const numberLocale = computed(() => (locale.value === 'ua' ? 'uk-UA' : 'en-GB'))
+
+  const formatPrice = (amount: number) =>
+    formatMenuPrice(amount, currency.value, numberLocale.value)
+
   return {
     menuBackgroundColor,
     menuIconColor,
     logoUrl,
     displayPlaceName,
+    menuDishLayout,
+    currency,
+    menuWelcomeText,
+    formatPrice,
   }
 }

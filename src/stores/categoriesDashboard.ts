@@ -5,9 +5,16 @@ import {
   getUserCategories,
 } from '@/services/dashboard'
 import type { TRequestError } from '@/types'
+import { EPlan } from '@/types/errorEnum'
 import type { ICategory } from '@/types/menu'
+import { useUserStore } from '@/stores/user'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+
+const isPremiumPlan = () => {
+  const userStore = useUserStore()
+  return userStore.planName === EPlan.premium
+}
 
 export const useCategoriesDashboardStore = defineStore('categoriesDashboard', () => {
   const categories = ref<ICategory[]>([])
@@ -15,33 +22,34 @@ export const useCategoriesDashboardStore = defineStore('categoriesDashboard', ()
 
   const addCategory = async (categoryData: ICategory) => {
     try {
-      await addCategoryForUser(categoryData)
-
-      return { success: true }
+      await addCategoryForUser(categoryData, { includeTranslations: isPremiumPlan() })
+      return { success: true as const }
     } catch (err) {
       const message = err as TRequestError
-      return { success: false, error: message.response?.data.message }
+      error.value = message.response?.data.message ?? ''
+      return { success: false as const, error: message.response?.data.message }
     }
   }
 
   const editCategory = async (categoryData: ICategory) => {
     try {
-      await editCategoryForUser(categoryData)
-
-      return { success: true }
+      await editCategoryForUser(categoryData, { includeTranslations: isPremiumPlan() })
+      return { success: true as const }
     } catch (err) {
       const message = err as TRequestError
-      return { success: false, error: message.response?.data.message }
+      error.value = message.response?.data.message ?? ''
+      return { success: false as const, error: message.response?.data.message }
     }
   }
 
   const deleteCategory = async (categoryId: string) => {
     try {
       await deleteCategoryById(categoryId)
-      return { success: true }
+      return { success: true as const }
     } catch (err) {
       const message = err as TRequestError
-      return { success: false, error: message.response?.data.message }
+      error.value = message.response?.data.message ?? ''
+      return { success: false as const, error: message.response?.data.message }
     }
   }
 
@@ -49,10 +57,11 @@ export const useCategoriesDashboardStore = defineStore('categoriesDashboard', ()
     try {
       const response = await getUserCategories()
       categories.value = response.categories
-      return { success: true }
+      return { success: true as const }
     } catch (err) {
       const message = err as TRequestError
-      return { success: false, error: message.response?.data.message }
+      error.value = message.response?.data.message ?? ''
+      return { success: false as const, error: message.response?.data.message }
     }
   }
 
@@ -63,5 +72,6 @@ export const useCategoriesDashboardStore = defineStore('categoriesDashboard', ()
     editCategory,
     deleteCategory,
     fetchCategories,
+    isPremiumPlan,
   }
 })

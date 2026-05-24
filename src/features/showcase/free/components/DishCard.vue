@@ -1,10 +1,10 @@
 <template>
   <div
-    class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-2xl border border-[#2a2930] overflow-hidden hover:border-[#dc5b41]/50 transition-all duration-300 hover:scale-[1.02] group shadow-lg hover:shadow-[0_20px_60px_rgba(220,91,65,0.2)] cursor-pointer"
+    class="bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-2xl border border-[#2a2930] overflow-hidden transition-all duration-300 hover:scale-[1.02] group shadow-lg cursor-pointer"
     @click="handleClick">
     <div class="relative h-48 overflow-hidden">
       <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dish.name"
-        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        class="w-full h-full object-cover group-hover:scale-101 transition-transform duration-500" />
       <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-transparent to-transparent"></div>
 
       <div v-if="dish.isAvailable === 'unavailable'" class="absolute top-4 right-4">
@@ -16,7 +16,7 @@
 
       <div class="absolute bottom-4 left-4">
         <div class="bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] px-4 py-2 rounded-xl shadow-lg backdrop-blur-md">
-          <span class="text-white text-lg font-bold">${{ Number(dish.price || 0).toFixed(2) }}</span>
+          <span class="text-white text-lg font-bold">{{ formatPrice(Number(dish.price || 0)) }}</span>
         </div>
       </div>
     </div>
@@ -31,10 +31,14 @@
 </template>
 
 <script setup lang="ts">
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import type { IDish } from '@/types/menu'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 const { t } = useI18n()
+const route = useRoute()
+const { formatPrice } = useShowcasePlaceTheme(() => String(route.params.id ?? ''))
 
 const props = defineProps<{
   dish: IDish
@@ -48,5 +52,3 @@ const handleClick = () => {
   emit('click', props.dish)
 }
 </script>
-
-<style scoped></style>

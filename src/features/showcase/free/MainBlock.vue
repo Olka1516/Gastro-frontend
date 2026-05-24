@@ -9,7 +9,7 @@
         {{ userInfo?.placeName || t('showcase.menu') }}
       </h1>
       <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-        {{ t('showcase.welcomeDescription') }}
+        {{ menuWelcomeText || t('showcase.welcomeDescription') }}
       </p>
     </div>
 
@@ -25,10 +25,16 @@
       </div>
     </div>
 
-    <div v-else class="space-y-20">
-      <CategorySection v-for="category in categoriesWithDishes" :key="category.id" :category="category" :dishes="dishes"
-        @dish-click="handleDishClick" />
-    </div>
+    <template v-else>
+      <ShowcaseCategoryTabs :categories="categoriesWithDishes" :active-id="activeCategoryId"
+        @select="scrollToCategory" />
+
+      <div class="space-y-20">
+        <CategorySection v-for="category in categoriesWithDishes" :key="category.id"
+          :ref="(el) => registerSection(category.id, el)" :category="category" :dishes="dishes"
+          @dish-click="handleDishClick" />
+      </div>
+    </template>
 
     <DishDetailsModal :dish="selectedDish" :category-name="selectedDishCategoryName" @close="closeDishModal" />
   </div>
@@ -36,6 +42,8 @@
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
+import { useShowcaseCategoryScroll } from '@/features/showcase/composables/useShowcaseCategoryScroll'
+import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useUserStore } from '@/stores/user'
 import type { IDish } from '@/types/menu'
@@ -43,6 +51,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import DishDetailsModal from '../components/DishDetailsModal.vue'
+import ShowcaseCategoryTabs from '../components/ShowcaseCategoryTabs.vue'
 import CategorySection from './components/CategorySection.vue'
 
 const { t } = useI18n()
@@ -53,6 +62,9 @@ const showcaseStore = useShowcaseStore()
 const loading = ref(true)
 const dishes = ref<IDish[]>([])
 const selectedDish = ref<IDish | null>(null)
+
+const placeRouteKey = computed(() => String(route.params.id ?? ''))
+const { menuWelcomeText } = useShowcasePlaceTheme(placeRouteKey)
 
 const userInfo = computed(() => userStore.$state)
 const selectedDishCategoryName = computed(() => {
@@ -73,6 +85,9 @@ const categoriesWithDishes = computed(() => {
     .sort((a, b) => b.dishCount - a.dishCount)
 })
 
+const { activeCategoryId, registerSection, scrollToCategory, start } =
+  useShowcaseCategoryScroll(categoriesWithDishes)
+
 const handleDishClick = (dish: IDish) => {
   selectedDish.value = dish
   document.body.style.overflow = 'hidden'
@@ -90,6 +105,7 @@ const fetchData = async () => {
     await Promise.all([
       showcaseStore.fetchDishes(placeName),
       showcaseStore.fetchCategories(placeName),
+      showcaseStore.fetchPlaceBranding(placeName),
     ])
     dishes.value = showcaseStore.dishes
   } finally {
@@ -99,7 +115,6 @@ const fetchData = async () => {
 
 onMounted(async () => {
   await fetchData()
+  await start()
 })
 </script>
-
-<style scoped></style>

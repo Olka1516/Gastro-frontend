@@ -7,7 +7,7 @@
             style="filter: brightness(0) invert(1)" />
         </div>
         <div>
-          <h2 class="text-white text-3xl font-bold">{{ category.name }}</h2>
+          <h2 class="text-white text-3xl font-bold">{{ categoryDisplayName }}</h2>
           <p v-if="category.description" class="text-gray-400 text-sm mt-1">
             {{ category.description }}
           </p>
@@ -16,18 +16,15 @@
       <div class="h-px mt-4" :style="separatorStyle"></div>
     </div>
 
-    <div v-if="categoryDishes.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <DishCard
-        v-for="dish in categoryDishes"
-        :key="dish.id"
-        :dish="dish"
-        :is-liked="likedDishIds.includes(dish.id)"
-        :menu-icon-color="menuIconColor"
-        :show-add-to-cart="showAddToCart"
-        :category-name="category.name"
-        @click="handleDishClick"
-        @toggle-like="handleToggleLike"
-      />
+    <div v-if="categoryDishes.length > 0" :class="menuDishLayout === 'list'
+        ? 'mx-auto flex w-full max-w-3xl flex-col gap-3 lg:max-w-4xl'
+        : menuDishLayout === 'magazine'
+          ? 'mx-auto flex w-full max-w-4xl flex-col gap-12 lg:max-w-5xl lg:gap-16'
+          : 'grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'
+      ">
+      <DishCard v-for="dish in categoryDishes" :key="dish.id" :dish="dish" :layout="menuDishLayout"
+        :is-liked="likedDishIds.includes(dish.id)" :menu-icon-color="menuIconColor" :show-add-to-cart="showAddToCart"
+        :category-name="categoryDisplayName" @click="handleDishClick" @toggle-like="handleToggleLike" />
     </div>
 
     <div v-else
@@ -38,12 +35,28 @@
 </template>
 
 <script setup lang="ts">
+import { DEFAULT_MENU_DISH_LAYOUT, type MenuDishLayout } from '@/constants/menuDishLayout'
+import {
+  getCategoryDisplayName,
+  mapUiLocaleToMenuLanguage,
+} from '@/features/dashboard/utils/categoryApi'
+import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
 import type { ICategory, IDish } from '@/types/menu'
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import DishCard from './DishCard.vue'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const menuLangStore = useShowcaseMenuLanguageStore()
+const { enabled: menuLangEnabled, languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
+
+const categoryDisplayName = computed(() => {
+  const lang = menuLangEnabled.value
+    ? menuLanguageCode.value
+    : mapUiLocaleToMenuLanguage(locale.value)
+  return getCategoryDisplayName(props.category, lang)
+})
 
 const props = withDefaults(
   defineProps<{
@@ -52,8 +65,9 @@ const props = withDefaults(
     likedDishIds: string[]
     menuIconColor: string
     showAddToCart?: boolean
+    menuDishLayout?: MenuDishLayout
   }>(),
-  { showAddToCart: false },
+  { showAddToCart: false, menuDishLayout: DEFAULT_MENU_DISH_LAYOUT },
 )
 
 const emit = defineEmits<{
@@ -105,5 +119,3 @@ const handleToggleLike = (dishId: string) => {
   emit('toggleLike', dishId)
 }
 </script>
-
-<style scoped></style>

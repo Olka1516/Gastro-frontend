@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#0f0f11]">
     <BaseHeader :limit="300" :navigations="navs" :active-section="activeSection" :is-menu-page="true"
-      :is-premium-menu="true" :showcase-nav-base-path="menuBasePath" />
+      :is-premium-menu="true" :showcase-nav-base-path="menuBasePath" :show-wishlist="true" />
 
     <div class="px-4 pb-16 pt-24 text-white sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl">
@@ -93,14 +93,19 @@
 
             <p class="text-xs text-gray-500">{{ t('showcase.premium.reserveLegalHint') }}</p>
 
-            <button type="submit" :disabled="reservationStore.loading"
-              class="mt-2 w-full rounded-xl bg-[#dc5b41] py-3.5 text-sm font-semibold text-white transition-transform hover:scale-[1.01] disabled:pointer-events-none disabled:opacity-60">
-              {{
+            <BaseButton
+              type="submit"
+              variant="showcase"
+              size="large"
+              block
+              class="mt-2"
+              :disabled="reservationStore.loading"
+              :text="
                 reservationStore.loading
                   ? t('showcase.premium.reserveSubmitting')
                   : t('showcase.premium.reserveSubmit')
-              }}
-            </button>
+              "
+            />
           </form>
         </section>
       </div>
@@ -111,6 +116,7 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
 import BaseFooter from '@/components/BaseFooter.vue'
 import BaseHeader from '@/components/BaseHeader.vue'
 import BaseText from '@/components/inputs/BaseText.vue'

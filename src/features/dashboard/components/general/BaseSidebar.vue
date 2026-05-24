@@ -1,105 +1,82 @@
 <template>
-  <aside aria-label="Sidebar"
-    class="bg-gradient-to-b from-[#1a191f] to-[#0f0f11] h-screen sticky top-0 relative border-r border-[#2a2930] transition-all duration-300">
+  <button v-if="!isDesktop && !isMobileOpen" ref="menuButtonRef" type="button"
+    class="fixed right-3 top-3 z-50 flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl border border-[#dc5b41]/80 bg-[#1a191f]/95 text-white shadow-lg backdrop-blur-sm transition hover:bg-[#2a2930] lg:hidden"
+    :aria-label="t('header.menuOpen')" @click="openMobileDrawer">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      <path d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      <path d="M4 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <aside v-if="isDesktop" aria-label="Sidebar"
+    class="relative sticky top-0 z-auto flex h-screen w-full flex-col border-r border-[#2a2930] bg-gradient-to-b from-[#1a191f] to-[#0f0f11]">
     <div
-      class="absolute top-6 -right-3 w-6 h-10 bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] flex justify-center items-center rounded-r-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-10">
-      <button class="cursor-pointer p-1.5 hover:bg-white/10 rounded transition-all duration-200" @click="changeClose"
-        aria-label="Toggle sidebar">
+      class="absolute top-5 -right-3 z-10 flex h-10 w-6 items-center justify-center rounded-r-lg bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] shadow-lg transition-all duration-300 hover:scale-105">
+      <button type="button"
+        class="flex h-full w-full cursor-pointer items-center justify-center rounded-[inherit] p-1.5 transition hover:bg-white/10"
+        aria-label="Toggle sidebar" @click="toggleDesktopCollapse">
         <img :class="[
-          'transition-transform duration-300 w-4 h-4 filter brightness-0 invert',
+          'h-4 w-4 transition-transform duration-300 filter brightness-0 invert',
           getStyleImg,
         ]" src="@/assets/images/icons/arrow-left.svg" alt="" />
       </button>
     </div>
 
-    <div class="h-full flex flex-col p-6 overflow-hidden">
-      <div class="mb-8 transition-all duration-300">
-        <div class="flex items-center gap-3 mb-2">
-          <div v-if="!isClose"
-            class="w-10 h-10 bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] rounded-lg flex items-center justify-center shadow-lg flex-shrink-0">
-            <span class="text-white font-bold text-lg">{{ getInitials }}</span>
-          </div>
-          <div v-if="!isClose" class="overflow-hidden">
-            <h2 class="text-white text-xl font-bold truncate">{{ userInfo.placeName }}</h2>
-            <p class="text-gray-400 text-xs truncate">{{ userInfo.email }}</p>
-          </div>
-          <div v-else class="w-full">
-            <h2 class="text-white text-lg font-bold text-center truncate px-1">
-              {{ userInfo.placeName }}
-            </h2>
-          </div>
-        </div>
-        <div v-if="!isClose" class="h-px bg-gradient-to-r from-transparent via-[#dc5b41]/30 to-transparent mt-4"></div>
-        <div v-else class="h-px bg-gradient-to-r from-transparent via-[#dc5b41]/30 to-transparent mt-2 mx-2"></div>
-      </div>
-
-      <nav class="flex-1 overflow-y-auto custom-scrollbar">
-        <ul class="space-y-2">
-          <li v-for="data in navs" :key="data.name">
-            <button :class="[
-              'w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group relative overflow-hidden',
-              isActive(data)
-                ? 'bg-gradient-to-r from-[#dc5b41]/20 to-[#e66a4f]/20 text-[#dc5b41] shadow-md'
-                : 'text-gray-300 hover:text-white hover:bg-[#2a2930]',
-              isClose ? 'justify-center px-2' : '',
-            ]" @click="$emit('handleNav', data)" :title="isClose ? t(data.name) : ''">
-              <div v-if="isActive(data)"
-                class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#dc5b41] to-[#e66a4f] rounded-r"></div>
-
-              <div :class="[
-                'w-5 h-5 flex items-center justify-center flex-shrink-0 transition-transform duration-200',
-                isActive(data) ? 'scale-100' : 'group-hover:scale-105',
-                isClose ? 'mx-auto' : '',
-              ]">
-                <img v-if="data.image" :src="getIconPath(data.image)" :alt="t(data.name)" :class="['w-5 h-5']"
-                  :style="getIconStyle(data)" />
-              </div>
-
-              <span v-if="!isClose" :class="[
-                'font-medium text-sm transition-all duration-200 whitespace-nowrap',
-                isActive(data) ? 'font-semibold' : '',
-              ]">
-                {{ t(data.name) }}
-              </span>
-            </button>
-          </li>
-        </ul>
-      </nav>
-
-      <div :class="['flex flex-col', isClose ? 'gap-2' : '']">
-        <button type="button" :class="[
-          'cursor-pointer flex items-center rounded-lg border border-[#dc5b41]/60 text-gray-300 hover:text-white hover:bg-[#dc5b41]/15 transition-all duration-200 w-full gap-3 px-4 py-2.5',
-          ,
-          isClose ? 'justify-center' : '',
-        ]" :title="isClose ? t('button.logOut') : undefined" :aria-label="t('button.logOut')" @click="handleLogOut">
-          <img :src="getIconPath('logout')" :alt="t('button.logOut')" class="w-5 h-5" />
-          <span v-if="!isClose" class="font-medium text-sm">{{ t('button.logOut') }}</span>
-        </button>
-
-        <div :class="['transition-all duration-300 my-4 border-t border-[#2a2930]']"></div>
-        <div :class="['flex flex-col items-center', isClose ? 'w-full text-center px-0.5' : '']">
-          <p class="text-gray-500 text-xs leading-tight">Gastro Dashboard</p>
-          <p class="text-gray-600 text-[10px] mt-1 leading-tight">v1.0.0</p>
-        </div>
-      </div>
-    </div>
+    <BaseSidebarInner :navs="navs" :user-info="userInfo" :active-nav="activeNav"
+      :show-expanded-content="showExpandedContent" :is-desktop="true" :is-close="isClose" @nav="handleNavClick"
+      @logout="handleLogOut" />
   </aside>
+
+  <Teleport to="body">
+    <Transition name="sidebar" :duration="{ enter: 560, leave: 580 }">
+      <div v-if="!isDesktop && isMobileOpen"
+        class="dashboard-sidebar-overlay fixed inset-0 z-[1001] overflow-hidden overscroll-none lg:hidden"
+        :style="originStyle" @keydown.esc="closeMobileDrawer">
+        <div class="dashboard-sidebar-backdrop absolute inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true"
+          @click="closeMobileDrawer" />
+        <aside aria-label="Sidebar"
+          class="dashboard-sidebar-panel fixed inset-y-0 right-0 flex w-full max-w-full flex-col overscroll-contain border-l border-[#2a2930] bg-gradient-to-b from-[#1a191f] to-[#0f0f11] shadow-2xl"
+          role="dialog" :aria-modal="true">
+          <div class="dashboard-sidebar-content flex h-full min-h-0 flex-col">
+            <div class="flex shrink-0 items-center justify-between border-b border-[#2a2930] px-5 py-4">
+              <div class="min-w-0 pr-3">
+                <h2 class="truncate text-lg font-bold text-white">{{ userInfo.placeName }}</h2>
+                <p class="truncate text-xs text-gray-400">{{ userInfo.email }}</p>
+              </div>
+              <button type="button"
+                class="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#dc5b41]/80 text-white transition-colors hover:bg-white/5"
+                :aria-label="t('header.menuClose')" @click="closeMobileDrawer">
+                <img src="@/assets/images/icons/exit_white.svg" alt="" class="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
+
+            <BaseSidebarInner class="flex-1 min-h-0" :navs="navs" :user-info="userInfo" :active-nav="activeNav"
+              :show-expanded-content="true" :is-desktop="false" :is-close="false" hide-profile @nav="handleNavClick"
+              @logout="handleLogOut" />
+          </div>
+        </aside>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import { getImage } from '@/common/functions'
-import { useUserStore } from '@/stores'
 import type { IUserData } from '@/types'
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores'
 import type { IBaseSidebarData } from '../../types'
+import BaseSidebarInner from './BaseSidebarInner.vue'
+
+const LG_BREAKPOINT = '(min-width: 1024px)'
 
 const { t } = useI18n()
 const store = useUserStore()
 const router = useRouter()
 
-const props = defineProps<{
+defineProps<{
   navs: IBaseSidebarData[]
   userInfo: IUserData
   activeNav?: IBaseSidebarData
@@ -110,121 +87,205 @@ const emit = defineEmits<{
   (e: 'handleNav', data: IBaseSidebarData): void
 }>()
 
+const menuButtonRef = ref<HTMLButtonElement | null>(null)
 const isClose = ref(false)
+const isMobileOpen = ref(false)
+const isDesktop = ref(true)
+const triggerAnchor = ref<{ x: number; y: number } | null>(null)
 
-const getStyleImg = computed(() => {
-  return isClose.value ? 'rotate-180' : ''
+const showExpandedContent = computed(() => !isClose.value)
+
+const getStyleImg = computed(() => (isClose.value ? 'rotate-180' : ''))
+
+const originStyle = computed(() => {
+  const anchor = triggerAnchor.value
+  const fallbackX = typeof window !== 'undefined' ? window.innerWidth - 32 : 0
+  const fallbackY = 28
+  return {
+    '--sidebar-origin-x': `${anchor?.x ?? fallbackX}px`,
+    '--sidebar-origin-y': `${anchor?.y ?? fallbackY}px`,
+  }
 })
 
-const changeClose = () => {
-  isClose.value = !isClose.value
+let mediaQuery: MediaQueryList | null = null
+
+const setBodyScrollLock = (locked: boolean) => {
+  const overflow = locked ? 'hidden' : ''
+  document.documentElement.style.overflow = overflow
+  document.documentElement.style.overflowX = overflow
+  document.body.style.overflow = overflow
+  document.body.style.overflowX = overflow
+}
+
+const syncBreakpoint = () => {
+  isDesktop.value = mediaQuery?.matches ?? window.innerWidth >= 1024
+  if (isDesktop.value) {
+    isMobileOpen.value = false
+    setBodyScrollLock(false)
+  }
+}
+
+onMounted(() => {
+  mediaQuery = window.matchMedia(LG_BREAKPOINT)
+  syncBreakpoint()
+  mediaQuery.addEventListener('change', syncBreakpoint)
+})
+
+onUnmounted(() => {
+  mediaQuery?.removeEventListener('change', syncBreakpoint)
+  setBodyScrollLock(false)
+})
+
+watch(isMobileOpen, (open) => {
+  if (!isDesktop.value) {
+    setBodyScrollLock(open)
+  }
+})
+
+const emitCollapseState = () => {
   emit('handleProcess', isClose.value)
 }
 
-const handleLogOut = async () => {
-  store.logOut()
-  await router.push('/')
-}
-
-const isActive = (nav: IBaseSidebarData) => {
-  return props.activeNav?.name === nav.name
-}
-
-const getInitials = computed(() => {
-  const placeName = props.userInfo.placeName || ''
-  return (
-    placeName
-      .split(' ')
-      .map((word) => word[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2) || 'G'
-  )
-})
-
-const getIconPath = (imageName: string) => {
-  return getImage(`../assets/images/icons/${imageName}.svg`)
-}
-
-const getIconStyle = (nav: IBaseSidebarData) => {
-  if (isActive(nav)) {
-    return {
-      filter:
-        'brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%) hue-rotate(341deg) brightness(98%) contrast(87%)',
+const openMobileDrawer = () => {
+  const el = menuButtonRef.value
+  if (el) {
+    const rect = el.getBoundingClientRect()
+    triggerAnchor.value = {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    }
+  } else {
+    triggerAnchor.value = {
+      x: typeof window !== 'undefined' ? window.innerWidth - 32 : 0,
+      y: 28,
     }
   }
-  return {
-    filter: 'brightness(0) invert(1)',
+  isMobileOpen.value = true
+}
+
+const closeMobileDrawer = () => {
+  isMobileOpen.value = false
+}
+
+const toggleDesktopCollapse = () => {
+  isClose.value = !isClose.value
+  emitCollapseState()
+}
+
+const handleNavClick = (data: IBaseSidebarData) => {
+  emit('handleNav', data)
+  if (!isDesktop.value) {
+    closeMobileDrawer()
   }
+}
+
+const handleLogOut = async () => {
+  closeMobileDrawer()
+  store.logOut()
+  await router.push('/')
 }
 </script>
 
 <style scoped>
-@keyframes hideElement {
-  from {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
+.dashboard-sidebar-overlay {
+  width: 100%;
+  max-width: 100%;
+}
+
+.sidebar-enter-active .dashboard-sidebar-backdrop {
+  transition: opacity 0.35s ease-out;
+}
+
+.sidebar-enter-active .dashboard-sidebar-panel {
+  transition: clip-path 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sidebar-enter-active .dashboard-sidebar-content {
+  transition:
+    opacity 0.3s ease-out 0.24s,
+    transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) 0.24s;
+}
+
+.sidebar-enter-from .dashboard-sidebar-backdrop {
+  opacity: 0;
+}
+
+.sidebar-enter-from .dashboard-sidebar-panel {
+  clip-path: circle(0px at var(--sidebar-origin-x) var(--sidebar-origin-y));
+}
+
+.sidebar-enter-from .dashboard-sidebar-content {
+  opacity: 0;
+  transform: translateX(1rem);
+}
+
+.sidebar-enter-to .dashboard-sidebar-backdrop {
+  opacity: 1;
+}
+
+.sidebar-enter-to .dashboard-sidebar-panel {
+  clip-path: circle(150vmax at var(--sidebar-origin-x) var(--sidebar-origin-y));
+}
+
+.sidebar-enter-to .dashboard-sidebar-content {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sidebar-leave-active .dashboard-sidebar-content {
+  transition:
+    opacity 0.18s ease-in,
+    transform 0.2s ease-in;
+}
+
+.sidebar-leave-active .dashboard-sidebar-panel {
+  transition: clip-path 0.48s cubic-bezier(0.55, 0, 1, 0.45) 0.1s;
+}
+
+.sidebar-leave-active .dashboard-sidebar-backdrop {
+  transition: opacity 0.3s ease-in 0.28s;
+}
+
+.sidebar-leave-from .dashboard-sidebar-backdrop {
+  opacity: 1;
+}
+
+.sidebar-leave-from .dashboard-sidebar-panel {
+  clip-path: circle(150vmax at var(--sidebar-origin-x) var(--sidebar-origin-y));
+}
+
+.sidebar-leave-from .dashboard-sidebar-content {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.sidebar-leave-to .dashboard-sidebar-backdrop {
+  opacity: 0;
+}
+
+.sidebar-leave-to .dashboard-sidebar-panel {
+  clip-path: circle(0px at var(--sidebar-origin-x) var(--sidebar-origin-y));
+}
+
+.sidebar-leave-to .dashboard-sidebar-content {
+  opacity: 0;
+  transform: translateX(0.75rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .sidebar-enter-active .dashboard-sidebar-backdrop,
+  .sidebar-enter-active .dashboard-sidebar-panel,
+  .sidebar-enter-active .dashboard-sidebar-content,
+  .sidebar-leave-active .dashboard-sidebar-backdrop,
+  .sidebar-leave-active .dashboard-sidebar-panel,
+  .sidebar-leave-active .dashboard-sidebar-content {
+    transition: none !important;
   }
 
-  to {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-10px);
+  .sidebar-enter-from .dashboard-sidebar-content,
+  .sidebar-leave-to .dashboard-sidebar-content {
+    transform: none;
   }
-}
-
-@keyframes showElement {
-  from {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-10px);
-  }
-
-  to {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-  }
-}
-
-.hide-element {
-  animation: hideElement 0.3s ease-in-out forwards;
-}
-
-.show-element {
-  animation: showElement 0.3s ease-in-out forwards;
-}
-
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #dc5b41 transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #dc5b41, #e66a4f);
-  border-radius: 3px;
-  transition: background 0.3s ease;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #e66a4f, #dc5b41);
-}
-
-.custom-scrollbar::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-aside {
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>

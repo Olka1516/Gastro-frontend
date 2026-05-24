@@ -1,15 +1,21 @@
 <template>
-  <div v-for="link in links" :key="link.key" @click="$emit('navigateTo', link.key)"
-    class="bg-[#1a191f] p-6 rounded-lg border border-[#2a2930] hover:border-[#dc5b41] transition-all duration-300 hover:scale-102 cursor-pointer group">
-    <div class="flex items-center gap-4">
+  <div
+    v-for="(link, idx) in links"
+    :key="`${link.key}-${link.icon}-${idx}`"
+    class="group min-w-0 cursor-pointer rounded-lg border border-[#2a2930] bg-[#1a191f] p-4 transition-all duration-300 hover:border-[#dc5b41] hover:translate-y-[-2px] sm:p-5 sm:hover:scale-[1.02]"
+    @click="$emit('navigateTo', link.key)">
+    <div class="flex min-w-0 items-center gap-3 sm:gap-4">
       <div
-        class="w-12 h-12 bg-[#2a2930] rounded-lg flex items-center justify-center group-hover:bg-[#dc5b41]/20 transition-all duration-300">
-        <img :src="getIconPath(link.icon)" :alt="link.key" class="w-6 h-6"
+        class="flex aspect-square h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#2a2930] transition-all duration-300 group-hover:bg-[#dc5b41]/20 sm:h-12 sm:w-12">
+        <img
+          :src="getIconPath(link.icon)"
+          :alt="link.key"
+          class="pointer-events-none h-5 w-5 shrink-0 object-contain sm:h-6 sm:w-6"
           style="filter: brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%) hue-rotate(341deg) brightness(98%) contrast(87%);" />
       </div>
-      <div class="flex flex-col items-start">
-        <h4 class="text-white font-semibold text-left">{{ t(link.title) }}</h4>
-        <p class="text-gray-400 text-xs text-left">{{ t(link.description) }}</p>
+      <div class="flex min-w-0 flex-col items-start">
+        <h4 class="text-left text-sm font-semibold text-white sm:text-base">{{ t(link.title) }}</h4>
+        <p class="mt-0.5 text-left text-xs text-gray-400 line-clamp-2">{{ t(link.description) }}</p>
       </div>
     </div>
   </div>
@@ -40,5 +46,3 @@ const getIconPath = (imageName: string) => {
   return getImage(`../assets/images/icons/${imageName}.svg`)
 }
 </script>
-
-<style scoped></style>

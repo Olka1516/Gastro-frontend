@@ -7,7 +7,7 @@
         @click="emit('close')"
       >
         <div
-          class="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] shadow-2xl"
+          :class="[MODAL_SURFACE_CLASS, 'max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg shadow-2xl']"
           @click.stop
         >
           <div class="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
@@ -64,7 +64,8 @@
                 {{ order.customer.comment }}
               </p>
               <p class="text-right font-semibold text-white">
-                {{ t('dashboard.orders.colTotal') }}: ${{ Number(order.total).toFixed(2) }}
+                {{ t('dashboard.orders.colTotal') }}:
+                {{ formatMenuPrice(Number(order.total), currency, numberLocale) }}
               </p>
             </div>
 
@@ -84,14 +85,14 @@
               >
                 {{ t('dashboard.orders.modalCancel') }}
               </button>
-              <button
-                type="button"
-                class="rounded-lg bg-[#dc5b41] px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+              <BaseButton
+                size="compact"
+                :scale-on-hover="false"
+                class="px-4 hover:opacity-90 disabled:opacity-50"
                 :disabled="saving || draftStatus === order.status"
+                :text="saving ? t('dashboard.orders.modalSaving') : t('dashboard.orders.modalSave')"
                 @click="onSave"
-              >
-                {{ saving ? t('dashboard.orders.modalSaving') : t('dashboard.orders.modalSave') }}
-              </button>
+              />
             </div>
           </div>
         </div>
@@ -101,8 +102,12 @@
 </template>
 
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import BaseOrdersStatusFilter from '@/components/inputs/BaseOrdersStatusFilter.vue'
+import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { useShowcaseOrdersTable } from '@/features/dashboard/composables/useShowcaseOrdersTable'
+import { formatMenuPrice } from '@/utils/formatPrice'
 import { usePremiumDashboardStore } from '@/stores/premiumDashboard'
 import { notificationStore } from '@/stores/notificationStore'
 import { SHOWCASE_ORDER_STATUSES, type IShowcasePlacedOrder, type ShowcaseOrderStatus } from '@/types/showcaseOrder'
@@ -118,6 +123,7 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const { formatOrderDate, formatCustomerName, formatLinesSummary, statusBadgeClass } =
   useShowcaseOrdersTable()
+const { currency, numberLocale } = useDashboardCurrency()
 const premiumStore = usePremiumDashboardStore()
 const notify = notificationStore()
 

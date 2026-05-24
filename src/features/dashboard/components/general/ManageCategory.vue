@@ -5,9 +5,11 @@
       leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
       <div v-if="open"
         class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px] p-4">
-        <div
-          class="relative border border-[#dc5b41] w-full max-w-xl max-h-[90vh] rounded-2xl shadow-2xl bg-black/85 overflow-hidden flex flex-col"
-          :class="multilingual ? '' : 'max-w-md'">
+        <div :class="[
+          MODAL_SURFACE_CLASS,
+          'relative flex max-h-[90vh] w-full flex-col overflow-hidden rounded-2xl shadow-2xl',
+          multilingual ? 'max-w-xl' : 'max-w-md',
+        ]">
           <div class="flex-shrink-0 relative px-6 pt-6 pb-4 border-b border-[#2a2930]/80">
             <button type="button"
               class="cursor-pointer absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition"
@@ -44,14 +46,8 @@
                 </div>
               </template>
 
-              <BaseButton
-                type="submit"
-                variant="gradient"
-                block
-                :scale-on-hover="false"
-                class="mt-2 shadow-lg shadow-[#dc5b41]/20 hover:opacity-95"
-                :text="isEditMode ? t('button.edit') : t('button.add')"
-              />
+              <BaseButton type="submit" variant="gradient" block :scale-on-hover="false" class="mt-2"
+                :text="isEditMode ? t('button.edit') : t('button.add')" />
             </form>
           </div>
         </div>
@@ -64,6 +60,7 @@
 import BaseButton from '@/components/BaseButton.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import { DEFAULT_MENU_LANGUAGE } from '@/constants/menuLanguages'
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import type { ICategory } from '@/types/menu'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'

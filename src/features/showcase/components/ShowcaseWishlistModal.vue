@@ -10,7 +10,7 @@
         @click.self="close"
       >
         <div
-          class="flex max-h-[min(90vh,820px)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] shadow-2xl"
+          :class="[MODAL_SURFACE_CLASS, 'flex max-h-[min(90vh,820px)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl shadow-2xl']"
           @click.stop
         >
           <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
@@ -62,6 +62,7 @@
 </template>
 
 <script setup lang="ts">
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'

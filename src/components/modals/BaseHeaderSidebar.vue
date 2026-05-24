@@ -11,9 +11,15 @@
           role="dialog" :aria-modal="true" :aria-label="t('header.sidebarNav')">
           <div class="header-sidebar-content flex h-full min-h-0 flex-col">
             <div class="flex shrink-0 items-center justify-between border-b border-[#2a2930] px-5 py-5">
-              <a href="/" class="logo" aria-label="На головну" @click="close">
+              <a v-if="!isMenuPage" href="/" class="logo" aria-label="На головну" @click="close">
                 <span class="text-lg font-semibold text-white">Gastro</span>
               </a>
+              <ShowcaseHeaderBrand
+                v-else-if="menuPlaceKey"
+                class="min-w-0 flex-1 pr-3"
+                :place-key="menuPlaceKey"
+                @navigate="close"
+              />
               <button type="button"
                 class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-[#dc5b41]/80 text-white transition-colors hover:bg-white/5"
                 :aria-label="t('header.menuClose')" @click="close">
@@ -114,6 +120,7 @@
 <script setup lang="ts">
 import BaseLanguageSelector from '@/components/BaseLanguageSelector.vue'
 import { HEADER_SIDEBAR_PANEL_ID, useHeaderNav } from '@/components/header/useHeaderNav'
+import ShowcaseHeaderBrand from '@/features/showcase/components/ShowcaseHeaderBrand.vue'
 import { useUserStore } from '@/stores'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
@@ -160,6 +167,12 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const route = useRoute()
 const store = useUserStore()
+
+const menuPlaceKey = computed(() => {
+  if (!props.isMenuPage) return ''
+  const id = route.params.id
+  return typeof id === 'string' ? id.trim() : ''
+})
 const wishlistStore = useShowcaseWishlistStore()
 const cartStore = useShowcaseCartStore()
 

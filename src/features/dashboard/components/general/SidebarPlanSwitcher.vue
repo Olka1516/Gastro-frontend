@@ -8,31 +8,39 @@
     ]">
     <div
       :class="[
-        'flex items-center gap-2.5',
+        showExpandedContent
+          ? 'flex w-full min-w-0 flex-col gap-2 min-[1300px]:flex-row min-[1300px]:items-center min-[1300px]:gap-2.5'
+          : 'flex items-center gap-2.5',
         isDesktop && isClose ? 'justify-center' : '',
       ]">
       <div
-        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41]/25 to-[#e66a4f]/15"
-        :title="isDesktop && isClose ? currentPlanLabel : undefined">
-        <img
-          src="@/assets/images/icons/bag.svg"
-          alt=""
-          class="h-4 w-4"
-          style="filter: brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%) hue-rotate(341deg) brightness(98%) contrast(87%)" />
-      </div>
+        :class="[
+          'flex min-w-0 items-center gap-2.5 max-[1299px]:w-full min-[1300px]:contents',
+          isDesktop && isClose ? 'justify-center' : '',
+        ]">
+        <div
+          class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41]/25 to-[#e66a4f]/15"
+          :title="isDesktop && isClose ? currentPlanLabel : undefined">
+          <img
+            src="@/assets/images/icons/bag.svg"
+            alt=""
+            class="h-4 w-4"
+            style="filter: brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%) hue-rotate(341deg) brightness(98%) contrast(87%)" />
+        </div>
 
-      <div v-if="showExpandedContent" class="min-w-0 flex-1">
-        <p class="text-[10px] font-medium uppercase tracking-wide text-gray-500">
-          {{ t('dashboard.sidebar.currentPlan') }}
-        </p>
-        <p class="truncate text-sm font-semibold text-white">{{ currentPlanLabel }}</p>
+        <div v-if="showExpandedContent" class="min-w-0 flex-1">
+          <p class="text-[10px] font-medium uppercase tracking-wide text-gray-500">
+            {{ t('dashboard.sidebar.currentPlan') }}
+          </p>
+          <p class="truncate text-sm font-semibold text-white">{{ currentPlanLabel }}</p>
+        </div>
       </div>
 
       <button
         v-if="showExpandedContent"
         ref="toggleButtonRef"
         type="button"
-        class="shrink-0 cursor-pointer rounded-md px-2 py-1 text-xs font-medium text-[#dc5b41] transition hover:bg-[#dc5b41]/10"
+        class="w-full shrink-0 cursor-pointer rounded-md px-2 py-1.5 text-center text-xs font-medium text-[#dc5b41] transition hover:bg-[#dc5b41]/10 max-[1299px]:w-full min-[1300px]:w-auto min-[1300px]:py-1 min-[1300px]:text-left"
         :disabled="isProcessing"
         @click.stop="togglePicker">
         {{ isPickerOpen ? t('dashboard.sidebar.collapsePlans') : t('dashboard.sidebar.changePlan') }}
@@ -109,7 +117,7 @@
             @click="closePicker" />
           <div
             ref="collapsedPickerRef"
-            class="plan-picker-modal-panel relative w-full max-w-sm rounded-lg border border-[#2a2930] bg-gradient-to-b from-[#1a191f] to-[#0f0f11] p-4 shadow-2xl"
+            :class="[MODAL_SURFACE_CLASS, 'plan-picker-modal-panel relative w-full max-w-sm rounded-lg p-4 shadow-2xl']"
             role="dialog"
             :aria-label="t('dashboard.sidebar.changePlan')">
             <p class="mb-3 text-sm font-semibold text-white">{{ t('dashboard.sidebar.changePlan') }}</p>
@@ -160,6 +168,7 @@
 
 <script setup lang="ts">
 import BaseDelete from '@/components/modals/BaseDelete.vue'
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { onClickOutside } from '@vueuse/core'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'

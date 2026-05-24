@@ -2,8 +2,7 @@
   <div ref="rootRef" class="relative w-fit shrink-0 self-start">
     <button ref="triggerRef" type="button" class="menu-lang-trigger" :aria-expanded="open" aria-haspopup="listbox"
       :aria-label="ariaLabel" @click="open = !open">
-      <span class="menu-lang-trigger__flag" aria-hidden="true">{{ activeLanguage?.flag }}</span>
-      <span class="menu-lang-trigger__code">{{ activeLanguage?.code.toUpperCase() }}</span>
+      <span class="menu-lang-trigger__code">{{ activeDisplayCode }}</span>
       <span class="menu-lang-trigger__chevron" :class="{ 'menu-lang-trigger__chevron--open': open }" aria-hidden="true">
         ▾
       </span>
@@ -22,7 +21,6 @@
               :class="{ 'menu-lang-option--active': lang.code === selectedCode }" @click="selectLanguage(lang.code)">
               <span aria-hidden="true">{{ lang.flag }}</span>
               <span class="menu-lang-option__label">{{ lang.nativeLabel }}</span>
-              <span class="menu-lang-option__code">{{ lang.code.toUpperCase() }}</span>
             </button>
           </li>
         </ul>
@@ -40,7 +38,6 @@
             :class="{ 'menu-lang-option--active': lang.code === selectedCode }" @click="selectLanguage(lang.code)">
             <span aria-hidden="true">{{ lang.flag }}</span>
             <span class="menu-lang-option__label">{{ lang.nativeLabel }}</span>
-            <span class="menu-lang-option__code">{{ lang.code.toUpperCase() }}</span>
           </button>
         </li>
       </ul>
@@ -49,7 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { MENU_LANGUAGES, getMenuLanguage, type MenuLanguage } from '@/constants/menuLanguages'
+import {
+  MENU_LANGUAGES,
+  getLanguageDisplayCode,
+  type MenuLanguage,
+} from '@/constants/menuLanguages'
 import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -125,7 +126,7 @@ const selectedCode = computed(() =>
   props.mode === 'ui' ? uiLocaleToMenuCode(locale.value) : menuLangStore.languageCode,
 )
 
-const activeLanguage = computed(() => getMenuLanguage(selectedCode.value))
+const activeDisplayCode = computed(() => getLanguageDisplayCode(selectedCode.value))
 
 const ariaLabel = computed(() =>
   props.mode === 'ui' ? t('landing.uiLanguage.label') : t('showcase.menuLanguage.label'),
@@ -199,11 +200,6 @@ onUnmounted(() => {
 
 .menu-lang-trigger:hover {
   background: rgba(255, 255, 255, 0.06);
-}
-
-.menu-lang-trigger__flag {
-  font-size: 1rem;
-  line-height: 1;
 }
 
 .menu-lang-trigger__code {
@@ -286,10 +282,4 @@ onUnmounted(() => {
   white-space: nowrap;
 }
 
-.menu-lang-option__code {
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: #9ca3af;
-}
 </style>

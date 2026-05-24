@@ -13,7 +13,7 @@
         class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px]"
       >
         <div
-          class="relative border border-[#dc5b41] w-full max-w-md rounded-2xl shadow-2xl p-8 bg-black/80"
+          :class="[MODAL_SURFACE_CLASS, 'relative w-full max-w-md rounded-2xl p-8 shadow-2xl']"
         >
           <button
             @click="closeModal"
@@ -50,6 +50,7 @@
   </Teleport>
 </template>
 <script setup lang="ts">
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { useI18n } from 'vue-i18n'
 import type { ModalKey } from '@/types'
 import SignUpModal from './SignUpModal.vue'

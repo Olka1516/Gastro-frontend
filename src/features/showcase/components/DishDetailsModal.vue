@@ -4,7 +4,7 @@
       <div v-if="dish" class="fixed inset-0 z-[1100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
         @click="emit('close')">
         <div
-          class="w-full max-w-2xl bg-gradient-to-br from-[#1a191f] to-[#0f0f11] rounded-lg border border-[#2a2930] overflow-hidden shadow-2xl"
+          :class="[MODAL_SURFACE_CLASS, 'w-full max-w-2xl overflow-hidden rounded-lg shadow-2xl']"
           @click.stop>
           <div class="relative h-64 bg-[#111]">
             <img v-if="typeof dish.image === 'string'" :src="dish.image" :alt="dishLabels.name"
@@ -50,6 +50,7 @@
 </template>
 
 <script setup lang="ts">
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { useShowcaseMenuContentLanguage } from '@/features/showcase/composables/useShowcaseMenuContentLanguage'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import type { IDish } from '@/types/menu'

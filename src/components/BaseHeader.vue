@@ -11,10 +11,11 @@
         ? 'header:grid-cols-[200px_minmax(0,1fr)_200px] header:justify-items-center'
         : 'header:grid-cols-[minmax(0,1fr)_auto] header:justify-items-stretch',
     ]">
-      <div :class="['shrink-0', props.isMenuPage && 'header:hidden']">
-        <a href="/" class="logo" aria-label="На головну">
+      <div :class="['min-w-0 shrink-0', props.isMenuPage && 'header:hidden']">
+        <a v-if="!props.isMenuPage" href="/" class="logo" aria-label="На головну">
           <span class="text-white"> Gastro </span>
         </a>
+        <ShowcaseHeaderBrand v-else-if="menuPlaceKey" :place-key="menuPlaceKey" />
       </div>
 
       <button ref="menuButtonRef" type="button"
@@ -50,7 +51,7 @@
 
       <nav v-if="
         props.isMenuPage && (props.showWishlist || props.isPremiumMenu || store.isUserAuthorized)
-      " class="hidden w-auto shrink-0 flex-nowrap items-center justify-end gap-12 justify-self-end header:flex"
+      " class="hidden w-auto shrink-0 flex-nowrap items-center justify-end gap-4 justify-self-end header:flex"
         aria-label="Меню закладу">
         <BaseLanguageSelector v-if="showMenuLanguageSelector" mode="menu" />
         <button v-if="props.showWishlist" type="button"
@@ -136,7 +137,9 @@ import AuthTeleportModals from '@/components/modals/auth/AuthTeleportModals.vue'
 import { HEADER_SIDEBAR_PANEL_ID, useHeaderNav } from '@/components/header/useHeaderNav'
 import { LINK_TEMPLATES } from '@/constants'
 import ShowcaseCartModal from '@/features/showcase/components/ShowcaseCartModal.vue'
+import ShowcaseHeaderBrand from '@/features/showcase/components/ShowcaseHeaderBrand.vue'
 import ShowcaseWishlistModal from '@/features/showcase/components/ShowcaseWishlistModal.vue'
+import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useUserStore } from '@/stores'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
@@ -148,8 +151,10 @@ import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
 const store = useUserStore()
+const showcaseStore = useShowcaseStore()
 const router = useRouter()
 const route = useRoute()
+
 const props = withDefaults(
   defineProps<{
     limit: number
@@ -169,6 +174,12 @@ const props = withDefaults(
     showWishlist: false,
   },
 )
+
+const menuPlaceKey = computed(() => {
+  if (!props.isMenuPage) return ''
+  const id = route.params.id
+  return typeof id === 'string' ? id.trim() : ''
+})
 
 const { t } = useI18n()
 const active = ref(props.activeSection)
@@ -283,6 +294,14 @@ watch(
     if (menuPage && !premium) {
       menuLangStore.disable()
     }
+  },
+  { immediate: true },
+)
+
+watch(
+  menuPlaceKey,
+  (key) => {
+    if (key) void showcaseStore.fetchPlaceBranding(key)
   },
   { immediate: true },
 )

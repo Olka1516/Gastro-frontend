@@ -7,7 +7,7 @@
         @click="emit('close')"
       >
         <div
-          class="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] shadow-2xl"
+          :class="[MODAL_SURFACE_CLASS, 'max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg shadow-2xl']"
           @click.stop
         >
           <div class="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
@@ -103,6 +103,7 @@
 
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue'
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import BaseOrdersStatusFilter from '@/components/inputs/BaseOrdersStatusFilter.vue'
 import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { useShowcaseOrdersTable } from '@/features/dashboard/composables/useShowcaseOrdersTable'

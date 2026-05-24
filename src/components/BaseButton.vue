@@ -1,19 +1,7 @@
 <template>
-  <component
-    :is="tag"
-    :type="isNativeButton ? type : undefined"
-    :href="href"
-    :to="to"
-    :class="buttonClasses"
-    v-bind="attrsWithoutClass"
-  >
-    <img
-      v-if="icon"
-      :src="icon"
-      :alt="iconAlt"
-      :class="iconClasses"
-      aria-hidden="true"
-    />
+  <component :is="tag" :type="isNativeButton ? type : undefined" :href="href" :to="to" :class="buttonClasses"
+    v-bind="attrsWithoutClass">
+    <img v-if="icon" :src="icon" :alt="iconAlt" :class="iconClasses" aria-hidden="true" />
     <span v-if="text || $slots.default" class="inline-flex items-center leading-none">
       <slot>{{ text }}</slot>
     </span>
@@ -87,11 +75,6 @@ const surfaceClasses = computed(() => {
 })
 
 const variantClasses = computed<Record<ButtonVariant, string>>(() => {
-  const scaleHover =
-    props.scaleOnHover &&
-    !isOutline.value &&
-    (props.variant === 'default' || props.variant === 'gradient' || props.variant === 'pill')
-
   const showcaseHover =
     props.scaleOnHover &&
     props.variant === 'showcase' &&

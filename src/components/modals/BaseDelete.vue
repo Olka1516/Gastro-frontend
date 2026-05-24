@@ -7,13 +7,8 @@
         class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 p-4 backdrop-blur-[6px]"
         role="presentation" @click.self="handleNextStep(false)">
         <div
-          class="delete-modal relative w-full max-w-md overflow-hidden rounded-lg border border-[#dc5b41]/80 bg-gradient-to-b from-[#1a191f] to-[#0f0f11] shadow-2xl shadow-black/50"
+          :class="[MODAL_SURFACE_CLASS, 'delete-modal relative w-full max-w-md overflow-hidden rounded-lg shadow-2xl shadow-black/50']"
           role="alertdialog" aria-modal="true" :aria-labelledby="titleId" @click.stop>
-          <div class="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#dc5b41]/10 blur-2xl"
-            aria-hidden="true" />
-          <div class="pointer-events-none absolute -bottom-12 -left-8 h-28 w-28 rounded-full bg-[#dc5b41]/5 blur-2xl"
-            aria-hidden="true" />
-
           <button type="button"
             class="absolute right-3 top-3 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-white/10 hover:text-white"
             :aria-label="t('header.menuClose')" @click="handleNextStep(false)">
@@ -59,6 +54,7 @@
 
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue'
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { onUnmounted, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 

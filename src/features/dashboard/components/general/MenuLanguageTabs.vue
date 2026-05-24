@@ -8,13 +8,12 @@
         role="tab"
         :aria-selected="modelValue === lang.code"
         :tabindex="modelValue === lang.code ? 0 : -1"
-        class="relative flex flex-col items-center justify-center gap-0.5 min-w-0 min-h-[3.25rem] px-1 py-1.5 rounded-[0.625rem] text-[0.625rem] font-bold tracking-wide cursor-pointer transition-all duration-200 active:scale-[0.97]"
+        class="menu-lang-tab relative grid min-w-0 min-h-[3.25rem] place-items-center rounded-[0.625rem] px-2 py-2 text-sm font-bold tracking-wider cursor-pointer transition-all duration-200 active:scale-[0.97]"
         :class="tabClasses(lang.code)"
         :title="lang.nativeLabel"
         @click="emit('update:modelValue', lang.code)"
       >
-        <span class="text-lg leading-none shrink-0" aria-hidden="true">{{ lang.flag }}</span>
-        <span class="text-[0.5625rem] leading-none">{{ lang.code.toUpperCase() }}</span>
+        <span class="menu-lang-tab__code">{{ getLanguageDisplayCode(lang.code) }}</span>
         <span
           class="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-200"
           :class="dotClasses(lang.code)"
@@ -26,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { MENU_LANGUAGES } from '@/constants/menuLanguages'
+import { MENU_LANGUAGES, getLanguageDisplayCode } from '@/constants/menuLanguages'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -67,3 +66,14 @@ const dotClasses = (code: string) => {
   return 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.55)]'
 }
 </script>
+
+<style scoped>
+.menu-lang-tab__code {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+</style>

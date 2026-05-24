@@ -13,7 +13,10 @@
         class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px] p-4"
       >
         <div
-          class="premium-dish-modal relative border border-[#dc5b41] w-full max-w-xl max-h-[90vh] rounded-2xl shadow-2xl bg-black/85 overflow-hidden flex flex-col"
+          :class="[
+            MODAL_SURFACE_CLASS,
+            'premium-dish-modal relative flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-2xl',
+          ]"
         >
           <header class="flex-shrink-0 relative px-6 pt-6 pb-4 border-b border-[#2a2930]/80">
             <button
@@ -165,6 +168,7 @@ import BaseSelect from '@/components/inputs/BaseSelect.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import BaseTextarea from '@/components/inputs/BaseTextarea.vue'
 import { DEFAULT_MENU_LANGUAGE } from '@/constants/menuLanguages'
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import MenuLanguageTabs from '@/features/dashboard/components/general/MenuLanguageTabs.vue'
 import { getCategoryDisplayName } from '@/features/dashboard/utils/categoryApi'
 import {

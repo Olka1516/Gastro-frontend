@@ -5,7 +5,7 @@
         class="fixed inset-0 z-[1100] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm" role="dialog"
         aria-modal="true" :aria-label="t('showcase.premium.cart')" @click.self="close">
         <div
-          class="flex max-h-[min(90vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] shadow-2xl"
+          :class="[MODAL_SURFACE_CLASS, 'flex max-h-[min(90vh,720px)] w-full max-w-lg flex-col overflow-hidden rounded-2xl shadow-2xl']"
           @click.stop>
           <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
             <h2 class="text-lg font-bold text-white md:text-xl">
@@ -92,6 +92,7 @@
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue'
 import { LINK_TEMPLATES } from '@/constants'
+import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import type { IShowcaseCartLine } from '@/types/showcaseCart'

@@ -18,17 +18,35 @@
 
     <template v-else>
       <div class="flex flex-col gap-6">
-        <div class="inline-flex flex-wrap rounded-xl border border-[#2a2930] bg-[#1a191f] p-1 gap-1 w-full sm:w-auto"
-          role="tablist" :aria-label="t('dashboard.analytics.period.aria')">
-          <button v-for="opt in periodOptions" :key="opt.value" type="button" role="tab"
-            :aria-selected="selectedPeriod === opt.value" :class="[
-              'flex-1 sm:flex-none min-w-[5.5rem] px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
-              selectedPeriod === opt.value
-                ? 'bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] text-white shadow-md'
-                : 'text-gray-400 hover:text-white hover:bg-[#2a2930]',
-            ]" @click="selectedPeriod = opt.value">
-            {{ opt.label }}
-          </button>
+        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <div
+            class="inline-flex flex-wrap rounded-xl border border-[#2a2930] bg-[#1a191f] p-1 gap-1 w-full sm:w-auto"
+            role="tablist"
+            :aria-label="t('dashboard.analytics.period.aria')"
+          >
+            <button
+              v-for="opt in periodOptions"
+              :key="opt.value"
+              type="button"
+              role="tab"
+              :aria-selected="periodMode === 'preset' && selectedPeriod === opt.value"
+              :class="[
+                'flex-1 sm:flex-none min-w-[5.5rem] px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
+                periodMode === 'preset' && selectedPeriod === opt.value
+                  ? 'bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] text-white shadow-md'
+                  : 'text-gray-400 hover:text-white hover:bg-[#2a2930]',
+              ]"
+              @click="selectPreset(opt.value)"
+            >
+              {{ opt.label }}
+            </button>
+          </div>
+
+          <AnalyticsCustomPeriodInput
+            v-model="customRange"
+            :active="periodMode === 'custom'"
+            @select="periodMode = 'custom'"
+          />
         </div>
 
         <article
@@ -39,7 +57,7 @@
           <div class="mt-6 pt-6 border-t border-[#2a2930]">
             <p class="text-gray-500 text-xs uppercase tracking-wide">{{ t('dashboard.analytics.cards.revenue') }}</p>
             <p class="text-[#dc5b41] text-2xl font-semibold tabular-nums mt-1">{{ formatMoney(activeOrderStats.revenue)
-              }}</p>
+            }}</p>
           </div>
         </article>
 
@@ -86,20 +104,25 @@ import {
   aggregateOrdersSince,
   countOrdersWithStatusSince,
   countReservationsSince,
+  dateRangeYmdToMs,
+  defaultLastDaysRange,
   dishPopularityByOrderCount,
   getPeriodBounds,
+  type AnalyticsDateRangeYmd,
 } from '@/features/dashboard/composables/useAnalyticsPeriodStats'
+import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { getShowcaseOrdersForOwner, getTableReservationsForOwner } from '@/services/dashboard'
 import type { IShowcasePlacedOrder } from '@/types/showcaseOrder'
 import type { ITableReservation } from '@/types/tableReservation'
-import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import AnalyticsCustomPeriodInput from './AnalyticsCustomPeriodInput.vue'
 import DishPopularityBarChart from './DishPopularityBarChart.vue'
 
 type Period = 'day' | 'week' | 'month'
+type PeriodMode = 'preset' | 'custom'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { formatPrice: formatMoney } = useDashboardCurrency()
 
 const loading = ref(true)
@@ -107,23 +130,56 @@ const loadError = ref(false)
 const allOrders = ref<IShowcasePlacedOrder[]>([])
 const allReservations = ref<ITableReservation[]>([])
 const selectedPeriod = ref<Period>('week')
+const periodMode = ref<PeriodMode>('preset')
+const customRange = ref<AnalyticsDateRangeYmd>(defaultLastDaysRange(7))
 
 const bounds = computed(() => getPeriodBounds())
 
+const customRangeMs = computed(() => dateRangeYmdToMs(customRange.value))
+
 const activeSince = computed(() => {
+  if (periodMode.value === 'custom') {
+    return customRangeMs.value?.startMs ?? 0
+  }
   const b = bounds.value
   if (selectedPeriod.value === 'day') return b.dayStart
   if (selectedPeriod.value === 'week') return b.weekStart
   return b.monthStart
 })
 
-const activeOrderStats = computed(() => aggregateOrdersSince(allOrders.value, activeSince.value))
+const activeUntil = computed(() => {
+  if (periodMode.value === 'custom') {
+    return customRangeMs.value?.endMs ?? Number.POSITIVE_INFINITY
+  }
+  return Number.POSITIVE_INFINITY
+})
+
+const activeOrderStats = computed(() =>
+  aggregateOrdersSince(allOrders.value, activeSince.value, activeUntil.value),
+)
 
 const activePeriodTitle = computed(() => {
+  if (periodMode.value === 'custom') {
+    const ms = customRangeMs.value
+    if (!ms) return t('dashboard.analytics.period.invalid')
+    const loc = locale.value === 'ua' ? 'uk-UA' : 'en-GB'
+    const fmt = new Intl.DateTimeFormat(loc, { day: 'numeric', month: 'short', year: 'numeric' })
+    const start = new Date(ms.startMs)
+    const end = new Date(ms.endMs)
+    if (customRange.value.startYmd === customRange.value.endYmd) {
+      return fmt.format(start)
+    }
+    return `${fmt.format(start)} – ${fmt.format(end)}`
+  }
   if (selectedPeriod.value === 'day') return t('dashboard.analytics.period.day')
   if (selectedPeriod.value === 'week') return t('dashboard.analytics.period.week')
   return t('dashboard.analytics.period.month')
 })
+
+function selectPreset(period: Period) {
+  periodMode.value = 'preset'
+  selectedPeriod.value = period
+}
 
 const periodOptions = computed(() => [
   { value: 'day' as const, label: t('dashboard.analytics.period.day') },
@@ -137,17 +193,27 @@ const avgCheckActive = computed(() => {
 })
 
 const completedInActivePeriod = computed(() =>
-  countOrdersWithStatusSince(allOrders.value, 'completed', activeSince.value),
+  countOrdersWithStatusSince(
+    allOrders.value,
+    'completed',
+    activeSince.value,
+    activeUntil.value,
+  ),
 )
 
 const pendingOrdersCount = computed(() => allOrders.value.filter((o) => o.status === 'pending').length)
 
 const reservationsInActivePeriod = computed(() =>
-  countReservationsSince(allReservations.value, activeSince.value),
+  countReservationsSince(allReservations.value, activeSince.value, activeUntil.value),
 )
 
 const dishPopularity = computed(() =>
-  dishPopularityByOrderCount(allOrders.value, activeSince.value),
+  dishPopularityByOrderCount(
+    allOrders.value,
+    activeSince.value,
+    15,
+    activeUntil.value,
+  ),
 )
 
 onMounted(async () => {

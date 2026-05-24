@@ -25,3 +25,6 @@ export const DEFAULT_MENU_LANGUAGE = MENU_LANGUAGES[0].code
 export const MENU_LANGUAGE_CODES = MENU_LANGUAGES.map((l) => l.code)
 
 export const getMenuLanguage = (code: string) => MENU_LANGUAGES.find((l) => l.code === code)
+
+/** UI label for language code (uk → UA, not UK / United Kingdom). */
+export const getLanguageDisplayCode = (code: string) => (code === 'uk' ? 'UA' : code.toUpperCase())

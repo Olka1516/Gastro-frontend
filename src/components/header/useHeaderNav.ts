@@ -8,18 +8,14 @@ export function useHeaderNav(
   showcaseNavBasePath?: MaybeRefOrGetter<string | undefined>,
 ) {
   const route = useRoute()
-  const active = isRef(activeSection)
-    ? activeSection
-    : ref(toValue(activeSection))
+  const active = ref(toValue(isRef(activeSection) ? activeSection.value : activeSection))
 
-  if (!isRef(activeSection)) {
-    watch(
-      () => toValue(activeSection),
-      (value) => {
-        active.value = value
-      },
-    )
-  }
+  watch(
+    () => (isRef(activeSection) ? activeSection.value : toValue(activeSection)),
+    (value) => {
+      active.value = value
+    },
+  )
 
   const linkColor = (key: string) =>
     computed(() => (active.value === key ? 'text-[#dc5b41]' : 'text-white'))

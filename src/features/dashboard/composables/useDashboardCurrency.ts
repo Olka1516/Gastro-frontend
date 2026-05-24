@@ -9,7 +9,7 @@ export function useDashboardCurrency() {
   const { locale, t } = useI18n()
   const { currency: currencyRef } = storeToRefs(useUserStore())
 
-  const currency = computed(() => parseCurrency(currencyRef.value))
+  const currency = computed(() => parseCurrency(currencyRef?.value))
 
   const numberLocale = computed(() => (locale.value === 'ua' ? 'uk-UA' : 'en-GB'))
 

@@ -240,11 +240,6 @@ const firstCategoryId = computed(() => categoriesWithDishes.value[0]?.id ?? '')
 const { activeCategoryId, registerSection, scrollToCategory, start } =
   useShowcaseCategoryScroll(categoriesWithDishes)
 
-const firstCategoryId = computed(() => categoriesWithDishes.value[0]?.id ?? '')
-
-const { activeCategoryId, registerSection, scrollToCategory, start } =
-  useShowcaseCategoryScroll(categoriesWithDishes)
-
 const handleDishClick = (dish: IDish) => {
   selectedDish.value = dish
 }

@@ -29,6 +29,7 @@
                 <ErrorMessage :v="v$.name" :error="error" />
               </div>
               <div class="relative">
+                <label class="mb-2 block text-sm text-gray-400">{{ priceFieldLabel }}</label>
                 <BaseText v-model="formData.price" :v="v$.price" type="price" :error="error" autocomplete="price" />
                 <ErrorMessage :v="v$.price" :error="error" />
               </div>
@@ -78,6 +79,7 @@ import { useI18n } from 'vue-i18n'
 const props = defineProps<{ text: string; error: string }>()
 
 const { t } = useI18n()
+const { priceFieldLabel } = useDashboardCurrency()
 const open = defineModel('openManage')
 const dish = defineModel<IDish>('dish')
 const emit = defineEmits<{

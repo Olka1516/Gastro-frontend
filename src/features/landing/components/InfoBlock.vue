@@ -73,6 +73,8 @@ const direction = imageFirst.value ? 1 : -1
 
 const circleFlipClass = imageFirst.value ? 'right-0' : 'left-0 right-auto scale-x-[-1]'
 
+const circleFlipClass = props.index % 2 === 0 ? 'left-0 right-auto scale-x-[-1]' : 'right-0'
+
 let observer: IntersectionObserver | null = null
 
 const setHiddenOffset = () => {

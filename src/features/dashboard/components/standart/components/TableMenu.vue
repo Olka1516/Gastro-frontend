@@ -127,7 +127,11 @@
       </div>
     </div>
 
-    <BasePagination v-if="dishes.length > 0" v-model:datas="dishes" v-model:paginationPage="paginationPage" :size />
+    <BasePagination
+      v-if="dishes.length > 0"
+      v-model:datas="dishes"
+      v-model:paginationPage="paginationPage"
+      :size />
 
     <BaseDelete v-model:openDelete="openDelete" text="dashboard.tableHead.deleteMeal"
       @handleProcess="(value) => deleteMeal(value)" />

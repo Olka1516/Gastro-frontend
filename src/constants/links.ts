@@ -19,6 +19,7 @@ export const ENDPOINTS = {
   ADD_CATEGORY: `dashboard/categories`,
   DELETE_CATEGORY: (id: string) => `dashboard/categories/${id}`,
   EDIT_CATEGORY: (id: string) => `dashboard/categories/${id}`,
+  REORDER_CATEGORIES: `dashboard/categories/reorder`,
   GET_USER_STATUS: (placeName: string) =>
     `showcase/get-plan-status/${encodePlaceNameForApi(placeName)}`,
   GET_MENU_DISHES: (placeName: string) => `showcase/get-dishes/${encodePlaceNameForApi(placeName)}`,

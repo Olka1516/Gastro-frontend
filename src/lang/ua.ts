@@ -335,7 +335,7 @@ export default {
       multilingualHint:
         'Українська назва обовʼязкова; опис та інші мови — за бажанням. Категорія в списку показується мовою активного таба.',
       sectionGeneral: 'Загальні дані',
-      sectionTranslations: 'Назва та опис для гостей',
+      sectionTranslations: 'Назва та опис',
       translationsHint: 'Перемикайте мову та заповнюйте текст для публічного меню.',
       ukNameRequired: 'Заповніть назву українською',
       optionalDescription: 'необовʼязково',
@@ -349,6 +349,16 @@ export default {
       ukNameRequired: 'Заповніть назву українською',
       languagesTablist: 'Мови меню',
       languagesFilled: 'Заповнено {count} з {total} мов',
+      placeInUse: 'Ця назва місця вже використовується',
+      orderTitle: 'Порядок у публічному меню',
+      orderHint: 'Стрілками змінюйте порядок, у якому гості бачать категорії.',
+      orderOpen: 'Змінити порядок',
+      orderClose: 'Приховати',
+      orderCollapsedHint: '{count} категорій',
+      orderMoveUp: 'Підняти вище',
+      orderMoveDown: 'Опустити нижче',
+      orderSaving: 'Зберігаємо порядок…',
+      orderSaveFailed: 'Не вдалося зберегти порядок категорій. Спробуйте ще раз.',
     },
     settings: {
       menuBackgroundColor: 'Колір фону меню',
@@ -388,6 +398,9 @@ export default {
     availability: 'Наявність страви',
     available: 'В наявності',
     unavailable: 'Немає в наявності',
+    pending: {
+      description: 'Очікуйте, поки ваш платіж буде успішно опрацьований.',
+    },
   },
   footer: {
     description:
@@ -451,7 +464,7 @@ export default {
     password: {
       required: 'Поле обов’язкове для заповнення',
       minLength: 'Пароль має містити щонайменше 6 символів',
-      passwordWrong: 'Неправильний пароль',
+      passWrong: 'Неправильний пароль',
       passMissMatch: 'Паролі не збігаються',
     },
     confirmPassword: {

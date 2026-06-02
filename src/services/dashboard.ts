@@ -97,7 +97,10 @@ export const addCategoryForUser = async (
   const body = serializeCategoryForApi(categoryData, {
     includeTranslations: options?.includeTranslations ?? false,
   })
-  const { data } = await http.post<{ category?: ICategory } | ICategory>(ENDPOINTS.ADD_CATEGORY, body)
+  const { data } = await http.post<{ category?: ICategory } | ICategory>(
+    ENDPOINTS.ADD_CATEGORY,
+    body,
+  )
   const raw = (data as { category?: ICategory }).category ?? (data as ICategory)
   return normalizeCategoryFromApi(raw)
 }
@@ -119,6 +122,10 @@ export const editCategoryForUser = async (
 
 export const deleteCategoryById = async (categoryId: string) => {
   await http.delete(ENDPOINTS.DELETE_CATEGORY(categoryId))
+}
+
+export const reorderCategoriesForUser = async (categoryIds: string[]) => {
+  await http.put(ENDPOINTS.REORDER_CATEGORIES, { categoryIds })
 }
 
 export const getShowcaseOrdersForOwner = async (params?: {
@@ -143,8 +150,7 @@ export const patchShowcaseOrderStatus = async (
 export const getTableReservationsForOwner = async (params?: {
   status?: TableReservationStatusFilter
 }): Promise<ITableReservation[]> => {
-  const query =
-    params?.status && params.status !== 'all' ? { status: params.status } : undefined
+  const query = params?.status && params.status !== 'all' ? { status: params.status } : undefined
   const { data } = await http.get<{ reservations?: ITableReservation[] } | ITableReservation[]>(
     ENDPOINTS.GET_TABLE_RESERVATIONS,
     { params: query },

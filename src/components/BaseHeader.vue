@@ -6,9 +6,9 @@
     <div :class="[
       'mx-auto h-full min-w-0 w-full',
       'max-header:flex max-header:items-center max-header:justify-between max-header:gap-4 max-header:px-4 max-header:sm:px-6',
-      'header:grid header:w-full header:items-center header:justify-center header:gap-0 header:px-46',
+      'header:grid header:w-full header:items-center header:justify-center header:gap-0 header:px-16',
       !props.isMenuPage
-        ? 'header:grid-cols-[200px_minmax(0,1fr)_200px] header:justify-items-center'
+        ? 'header:grid-cols-[350px_minmax(0,1fr)_350px] header:justify-items-center'
         : 'header:grid-cols-[minmax(0,1fr)_auto] header:justify-items-stretch',
     ]">
       <div :class="['min-w-0 shrink-0', props.isMenuPage && 'header:hidden']">
@@ -204,9 +204,7 @@ const cartBadgeCount = computed(() =>
   cartStore.linesInCart.reduce((sum, line) => sum + line.quantity, 0),
 )
 
-const showMenuLanguageSelector = computed(
-  () => props.isLandingPage || (props.isMenuPage && props.isPremiumMenu),
-)
+const showMenuLanguageSelector = computed(() => props.isLandingPage || props.isMenuPage)
 
 const showDashboardOnThisMenu = computed(() => {
   if (!store.isUserAuthorized || !store.placeName) return false
@@ -247,7 +245,6 @@ const toggleSidebar = () => {
 const setOpenAuthModal = (key: boolean, nav: ModalKey) => {
   open.value = key
   activeModal.value = nav
-  document.body.style.overflow = 'hidden'
 }
 
 const changeRoute = async (link: string) => {
@@ -285,13 +282,13 @@ watch(
 )
 
 watch(
-  () => [props.isMenuPage, props.isPremiumMenu, route.params.id] as const,
-  ([menuPage, premium, id]) => {
-    if (menuPage && premium && typeof id === 'string' && id.trim()) {
+  () => [props.isMenuPage, route.params.id] as const,
+  ([menuPage, id]) => {
+    if (menuPage && typeof id === 'string' && id.trim()) {
       menuLangStore.enableForPlace(id.trim())
       return
     }
-    if (menuPage && !premium) {
+    if (!menuPage) {
       menuLangStore.disable()
     }
   },

@@ -1,4 +1,5 @@
 import { DEFAULT_MENU_LANGUAGE, MENU_LANGUAGE_CODES } from '@/constants/menuLanguages'
+import { parseTranslationsRecord } from '@/features/dashboard/utils/translationParse'
 import type { IDish, IDishTranslation } from '@/types/menu'
 
 export const getDishDisplayName = (
@@ -47,6 +48,11 @@ export const getDishDisplayDescription = (
 
 export const normalizeDishFromApi = (dish: IDish): IDish => {
   const normalized: IDish = { ...dish }
+
+  const parsedTranslations = parseTranslationsRecord<IDishTranslation>(normalized.translations)
+  if (parsedTranslations) {
+    normalized.translations = parsedTranslations
+  }
 
   if (normalized.translations) {
     const cleaned: Partial<Record<string, IDishTranslation>> = {}

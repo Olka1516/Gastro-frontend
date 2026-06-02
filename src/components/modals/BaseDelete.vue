@@ -55,7 +55,8 @@
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue'
 import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
-import { onUnmounted, useId, watch } from 'vue'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
+import { useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 defineProps<{ text: string }>()
@@ -67,25 +68,16 @@ const emit = defineEmits<{
   (e: 'handleProcess', value: boolean): void
 }>()
 
-const setBodyScrollLock = (locked: boolean) => {
-  const overflow = locked ? 'hidden' : ''
-  document.documentElement.style.overflow = overflow
-  document.body.style.overflow = overflow
-}
+useBodyScrollLock(open)
 
 const closeModal = () => {
   open.value = false
-  setBodyScrollLock(false)
 }
 
 const handleNextStep = (answer: boolean) => {
   closeModal()
   emit('handleProcess', answer)
 }
-
-watch(open, (isOpen) => setBodyScrollLock(!!isOpen), { immediate: true })
-
-onUnmounted(() => setBodyScrollLock(false))
 </script>
 
 <style scoped>

@@ -4,8 +4,10 @@
       enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-200 ease-in"
       leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
       <div v-if="open" class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px]">
-        <div
-          :class="[MODAL_SURFACE_CLASS, 'relative flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-2xl pb-[18px] shadow-2xl']">
+        <div :class="[
+          MODAL_SURFACE_CLASS,
+          'relative flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-2xl pb-[18px] shadow-2xl',
+        ]">
           <div class="flex-shrink-0 relative p-6 pb-0">
             <button @click="closeModal"
               class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition">
@@ -27,7 +29,6 @@
                 <ErrorMessage :v="v$.name" :error="error" />
               </div>
               <div class="relative">
-                <label class="mb-2 block text-sm text-gray-400">{{ priceFieldLabel }}</label>
                 <BaseText v-model="formData.price" :v="v$.price" type="price" :error="error" autocomplete="price" />
                 <ErrorMessage :v="v$.price" :error="error" />
               </div>
@@ -66,18 +67,17 @@ import BaseSelect from '@/components/inputs/BaseSelect.vue'
 import BaseText from '@/components/inputs/BaseText.vue'
 import ErrorMessage from '@/components/inputs/ErrorMessage.vue'
 import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
-import { useDashboardCurrency } from '@/features/dashboard/composables/useDashboardCurrency'
 import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import type { IDish } from '@/types/menu'
 import useVuelidate from '@vuelidate/core'
 import { numeric, required } from '@vuelidate/validators'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ text: string; error: string }>()
 
 const { t } = useI18n()
-const { priceFieldLabel } = useDashboardCurrency()
 const open = defineModel('openManage')
 const dish = defineModel<IDish>('dish')
 const emit = defineEmits<{
@@ -150,9 +150,10 @@ const v$ = useVuelidate(rules, formData)
 
 const isEditMode = computed(() => !!dish.value?.id)
 
+useBodyScrollLock(open)
+
 const closeModal = () => {
   open.value = false
-  document.body.style.overflow = ''
 }
 
 const handleNextStep = async () => {

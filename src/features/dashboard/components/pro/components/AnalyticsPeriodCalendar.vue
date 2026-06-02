@@ -59,6 +59,7 @@ import {
   type AnalyticsDateRangeYmd,
 } from '@/features/dashboard/composables/useAnalyticsPeriodStats'
 import { computed, ref, watch } from 'vue'
+import { intlLocaleForUi } from '@/lang'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{
@@ -77,7 +78,7 @@ const viewMonth = ref(new Date().getMonth())
 const awaitingEnd = ref(false)
 const hoverYmd = ref<string | null>(null)
 
-const dateLocale = computed(() => (locale.value === 'ua' ? 'uk-UA' : 'en-GB'))
+const dateLocale = computed(() => intlLocaleForUi(locale.value))
 
 const monthFormatter = computed(
   () =>

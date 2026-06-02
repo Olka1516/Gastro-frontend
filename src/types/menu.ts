@@ -25,5 +25,6 @@ export interface ICategory {
   name: string
   description?: string
   ownerId?: string
+  sortOrder?: number
   translations?: Partial<Record<string, ICategoryTranslation>>
 }

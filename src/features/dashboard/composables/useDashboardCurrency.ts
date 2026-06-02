@@ -1,4 +1,5 @@
 import { getCurrencySymbol, parseCurrency } from '@/constants/currency'
+import { intlLocaleForUi } from '@/lang'
 import { useUserStore } from '@/stores/user'
 import { formatMenuPrice } from '@/utils/formatPrice'
 import { storeToRefs } from 'pinia'
@@ -11,7 +12,7 @@ export function useDashboardCurrency() {
 
   const currency = computed(() => parseCurrency(currencyRef?.value))
 
-  const numberLocale = computed(() => (locale.value === 'ua' ? 'uk-UA' : 'en-GB'))
+  const numberLocale = computed(() => intlLocaleForUi(locale.value))
 
   const formatPrice = (amount: number) => {
     const code = currency.value

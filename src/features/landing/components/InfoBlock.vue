@@ -1,9 +1,10 @@
 <template>
   <div ref="container"
     class="w-full overflow-x-clip bg-[#0f0f11] px-4 py-14 md:min-h-[calc(100vh-150px)] md:px-18 md:py-24">
-    <div
-      class="flex w-full flex-col items-center gap-8 transition-transform duration-2500 ease-in-out md:items-stretch md:flex-row md:items-center md:justify-between md:gap-16 lg:gap-24"
-      :style="{ transform: `translateX(${offset}px)` }">
+    <div :class="[
+      'flex w-full flex-col items-center gap-8 transition-transform duration-2500 ease-in-out md:items-stretch md:flex-row md:items-center md:justify-between md:gap-16 lg:gap-24',
+      imageFirst ? '' : 'md:flex-row-reverse',
+    ]" :style="{ transform: `translateX(${offset}px)` }">
       <img :key="`info-hero-${index}`"
         class="h-auto w-auto min-h-32 min-w-32 max-h-44 max-w-[min(100%,13rem)] shrink-0 object-contain sm:max-h-52 md:h-100 md:max-h-100 md:max-w-[min(42vw,22rem)] md:shrink-0 lg:max-w-[min(38vw,26rem)]"
         :src="displaySrc" :alt="t(title)" @error="onImageError" />
@@ -15,8 +16,7 @@
             class="pointer-events-none absolute -top-2 z-1 h-28 w-28 object-contain opacity-0 transition-opacity duration-1700 ease-in-out md:-top-4 md:h-140 md:w-auto"
             src="@/assets/images/circles.png" alt="" />
           <div
-            class="relative z-2 flex w-full max-w-xl flex-col items-center gap-4 py-2 text-center md:max-w-none md:items-start md:gap-8 md:px-6 md:text-left"
-          >
+            class="relative z-2 flex w-full max-w-xl flex-col items-center gap-4 py-2 text-center md:max-w-none md:items-start md:gap-8 md:px-6 md:text-left">
             <h3 class="text-xl font-bold text-white sm:text-2xl">
               {{ t(title) }}
             </h3>
@@ -26,12 +26,8 @@
           </div>
         </div>
 
-        <BaseButton
-          href="#info"
-          :text="t(buttonText)"
-          size="compact"
-          class="relative z-2 w-full text-center md:mx-6 md:w-auto"
-        />
+        <BaseButton href="#info" :text="t(buttonText)" size="compact"
+          class="relative z-2 w-full text-center md:mx-6 md:w-auto" />
       </div>
     </div>
   </div>
@@ -57,6 +53,8 @@ const SLIDE_DISTANCE = 200
 
 const heroImageSrc = computed(() => getInfoBlockImageUrl(props.index))
 
+const imageFirst = computed(() => props.index % 2 === 1)
+
 const displaySrc = ref(heroImageSrc.value)
 
 watch(heroImageSrc, (url) => {
@@ -71,9 +69,9 @@ const container = ref<HTMLElement | null>(null)
 const showCircle = ref(false)
 const offset = ref(0)
 
-const direction = props.index % 2 === 0 ? -1 : 1
+const direction = imageFirst.value ? 1 : -1
 
-const circleFlipClass = props.index % 2 === 0 ? 'left-0 right-auto scale-x-[-1]' : 'right-0'
+const circleFlipClass = imageFirst.value ? 'right-0' : 'left-0 right-auto scale-x-[-1]'
 
 let observer: IntersectionObserver | null = null
 

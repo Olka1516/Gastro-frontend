@@ -3,30 +3,17 @@
 
   <form class="space-y-6" @submit.prevent="submit" autocomplete="on">
     <div class="relative">
-      <BaseText
-        v-model="userData.email"
-        :v="v$.email"
-        type="email"
-        :error="error"
-        autocomplete="username"
-      />
+      <BaseText v-model="userData.email" :v="v$.email" type="email" :error="error" autocomplete="username" />
       <ErrorMessage :v="v$.email" :error="error" />
     </div>
 
     <div class="relative">
-      <BasePassword
-        v-model="userData.password"
-        :v="v$.password"
-        type="password"
-        autocomplete="new-password"
-      />
+      <BasePassword v-model="userData.password" :v="v$.password" type="password" autocomplete="new-password" />
       <ErrorMessage :v="v$.password" :error="error" />
     </div>
 
-    <button
-      type="submit"
-      class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold rounded-lg shadow-md hover:bg-[#dc5b34] transition"
-    >
+    <button type="submit"
+      class="cursor-pointer w-full py-2 mt-4 bg-[#dc5b41] text-white font-semibold rounded-lg shadow-md hover:bg-[#dc5b34] transition">
       {{ t('button.signIn') }}
     </button>
   </form>
@@ -77,7 +64,6 @@ const submit = async () => {
   } catch (err) {
     const message = err as TRequestError
     error.value = message.response?.data.message || ''
-    toastStore.sendError('toasts.error')
   }
 }
 </script>

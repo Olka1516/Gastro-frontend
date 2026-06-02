@@ -8,6 +8,7 @@ export enum ErrorMessageEnum {
   EmailInUse = 'emailTaken',
   PlaceInUse = 'placeTaken',
   PassMissMach = 'passMissMatch',
+  PasswordWrong = 'passWrong',
   InvalidCredentials = 'invalidCredentials',
   FreePlanItemsLimit = 'freePlanItemsLimit',
   CategoryTranslationsPremiumOnly = 'categoryTranslationsPremiumOnly',

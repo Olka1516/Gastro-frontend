@@ -1,25 +1,13 @@
 <template>
   <Teleport to="body">
-    <Transition
-      enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 scale-90"
-      enter-to-class="opacity-100 scale-100"
-      leave-active-class="transition duration-200 ease-in"
-      leave-from-class="opacity-100 scale-100"
-      leave-to-class="opacity-0 scale-90"
-    >
-      <div
-        v-if="open"
-        class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px]"
-      >
-        <div
-          :class="[MODAL_SURFACE_CLASS, 'relative w-full max-w-md rounded-2xl p-8 shadow-2xl']"
-        >
-          <button
-            @click="closeModal"
-            class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition"
-          >
-            ✕
+    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 scale-90"
+      enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
+      <div v-if="open" class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px]">
+        <div :class="[MODAL_SURFACE_CLASS, 'relative w-full max-w-md rounded-2xl p-8 shadow-2xl']">
+          <button @click="closeModal"
+            class="cursor-pointer absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition">
+            <img src="@/assets/images/icons/exit_white.svg" alt="Close" class="w-5 h-5">
           </button>
 
           <div class="mb-6">
@@ -51,6 +39,7 @@
 </template>
 <script setup lang="ts">
 import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
 import { useI18n } from 'vue-i18n'
 import type { ModalKey } from '@/types'
 import SignUpModal from './SignUpModal.vue'
@@ -67,9 +56,10 @@ const emit = defineEmits<{
   (e: 'handleProcess'): void
 }>()
 
+useBodyScrollLock(open)
+
 const closeModal = () => {
   open.value = false
-  document.body.style.overflow = ''
 }
 
 const handleNextStep = () => {

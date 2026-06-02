@@ -34,7 +34,6 @@ export function useDashboardPlanChange() {
     if (target.name === EPlan.free) {
       if (currentPlan.value !== EPlan.free) {
         openDelete.value = true
-        document.body.style.overflow = 'hidden'
       }
       return
     }

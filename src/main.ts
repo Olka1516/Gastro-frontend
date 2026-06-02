@@ -1,13 +1,18 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import { i18n } from './lang'
+import { applyUiLocale, i18n, readStoredUiLocale } from './lang'
 import App from './App.vue'
 import router from './router'
 import Toast, { POSITION, type PluginOptions } from 'vue-toastification'
 
 import 'leaflet/dist/leaflet.css'
 import 'vue-toastification/dist/index.css'
+
+const storedUiLocale = readStoredUiLocale()
+if (storedUiLocale) {
+  applyUiLocale(storedUiLocale)
+}
 
 const app = createApp(App)
 const options: PluginOptions = {

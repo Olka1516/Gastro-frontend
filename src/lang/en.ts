@@ -334,7 +334,7 @@ export default {
       multilingualHint:
         'Ukrainian name is required; description and other languages are optional. Category labels follow the active tab language.',
       sectionGeneral: 'General details',
-      sectionTranslations: 'Name & description for guests',
+      sectionTranslations: 'Name & description',
       translationsHint: 'Switch the language tab and fill in text shown on the public menu.',
       ukNameRequired: 'Enter the name in Ukrainian',
       optionalDescription: 'optional',
@@ -345,9 +345,19 @@ export default {
       noCategoriesDescription:
         'Create categories to organize your menu. This helps customers find the dishes they need more easily.',
       freePlanItemsLimit: 'You have reached the category limit for the free plan',
+      placeInUse: 'This venue name is already in use',
       ukNameRequired: 'Enter the name in Ukrainian',
       languagesTablist: 'Menu languages',
       languagesFilled: '{count} of {total} languages filled',
+      orderTitle: 'Order on the public menu',
+      orderHint: 'Use the arrows to change the order guests see categories in.',
+      orderOpen: 'Change order',
+      orderClose: 'Hide',
+      orderCollapsedHint: '{count} categories',
+      orderMoveUp: 'Move up',
+      orderMoveDown: 'Move down',
+      orderSaving: 'Saving order…',
+      orderSaveFailed: 'Could not save category order. Please try again.',
     },
     settings: {
       menuBackgroundColor: 'Menu background color',
@@ -388,6 +398,9 @@ export default {
     availability: 'Dish availability',
     available: 'Available',
     unavailable: 'Unavailable',
+    pending: {
+      description: 'Please wait until payment is confirmed.',
+    },
   },
   footer: {
     description:
@@ -447,7 +460,7 @@ export default {
     password: {
       required: 'This field is required',
       minLength: 'Password must be at least 6 characters',
-      passwordWrong: 'Incorrect password',
+      passWrong: 'Incorrect password',
       passMissMatch: 'Passwords do not match',
     },
     confirmPassword: {

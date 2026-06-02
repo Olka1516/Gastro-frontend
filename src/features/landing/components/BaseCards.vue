@@ -138,10 +138,8 @@ const nextStep = async (value: Plan) => {
   if (!store.isUserAuthorized) {
     plan.value = value
     open.value = true
-    document.body.style.overflow = 'hidden'
   } else if (value.name === EPlan.free && store.planName !== EPlan.free) {
     openDelete.value = true
-    document.body.style.overflow = 'hidden'
   } else if (value.name === EPlan.free) {
     await setFreePlan(true)
   } else {

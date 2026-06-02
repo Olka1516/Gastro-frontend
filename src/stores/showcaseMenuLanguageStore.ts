@@ -1,4 +1,5 @@
 import { DEFAULT_MENU_LANGUAGE, MENU_LANGUAGE_CODES } from '@/constants/menuLanguages'
+import { applyUiLocale, menuLanguageCodeToUiLocale } from '@/lang'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -17,10 +18,12 @@ export const useShowcaseMenuLanguageStore = defineStore('showcaseMenuLanguage', 
     const stored = sessionStorage.getItem(storageKey(placeSlug.value))
     if (stored && MENU_LANGUAGE_CODES.includes(stored)) {
       languageCode.value = stored
+      applyUiLocale(menuLanguageCodeToUiLocale(stored))
       return
     }
 
     languageCode.value = DEFAULT_MENU_LANGUAGE
+    applyUiLocale(menuLanguageCodeToUiLocale(DEFAULT_MENU_LANGUAGE))
   }
 
   const disable = () => {
@@ -30,7 +33,9 @@ export const useShowcaseMenuLanguageStore = defineStore('showcaseMenuLanguage', 
 
   const setLanguage = (code: string) => {
     if (!MENU_LANGUAGE_CODES.includes(code)) return
+    enabled.value = true
     languageCode.value = code
+    applyUiLocale(menuLanguageCodeToUiLocale(code))
     if (placeSlug.value) {
       sessionStorage.setItem(storageKey(placeSlug.value), code)
     }
@@ -39,6 +44,7 @@ export const useShowcaseMenuLanguageStore = defineStore('showcaseMenuLanguage', 
   return {
     enabled,
     languageCode,
+    placeSlug,
     enableForPlace,
     disable,
     setLanguage,

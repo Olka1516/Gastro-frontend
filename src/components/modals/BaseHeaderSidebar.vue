@@ -125,8 +125,9 @@ import { useUserStore } from '@/stores'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
 import type { ModalKey } from '@/types'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
 import { spaceToUnderscore } from '@/utils/textHelpers'
-import { computed, onUnmounted, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
@@ -207,14 +208,6 @@ const showDashboardOnThisMenu = computed(() => {
   return spaceToUnderscore(store.placeName) === slug.trim()
 })
 
-const setBodyScrollLock = (locked: boolean) => {
-  const overflow = locked ? 'hidden' : ''
-  document.documentElement.style.overflow = overflow
-  document.documentElement.style.overflowX = overflow
-  document.body.style.overflow = overflow
-  document.body.style.overflowX = overflow
-}
-
 const close = () => {
   emit('update:modelValue', false)
 }
@@ -249,20 +242,12 @@ const emitOpenCart = () => {
   emit('open-cart')
 }
 
-watch(
-  () => props.modelValue,
-  (open) => setBodyScrollLock(open),
-  { immediate: true },
-)
+useBodyScrollLock(() => props.modelValue)
 
 watch(
   () => route.fullPath,
   () => close(),
 )
-
-onUnmounted(() => {
-  setBodyScrollLock(false)
-})
 </script>
 
 <style scoped>

@@ -75,8 +75,14 @@
 
     <template v-else>
       <div class="px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
-        <ShowcaseCategoryTabs :categories="categoriesWithDishes" :active-id="activeCategoryId"
-          :accent-color="menuIconColor" :panel-background="menuBackgroundColor" @select="scrollToCategory" />
+        <ShowcaseCategoryTabs
+          :categories="categoriesWithDishes"
+          :language-code="menuContentLangCode"
+          :active-id="activeCategoryId"
+          :accent-color="menuIconColor"
+          :panel-background="menuBackgroundColor"
+          @select="scrollToCategory"
+        />
 
         <div class="space-y-16 sm:space-y-20">
           <CategorySection v-for="category in categoriesWithDishes" :key="category.id"
@@ -94,8 +100,12 @@
 
 <script setup lang="ts">
 import BaseLoader from '@/components/BaseLoader.vue'
-import { getCategoryDisplayName } from '@/features/dashboard/utils/categoryApi'
+import {
+  filterCategoriesWithAvailableDishes,
+  getCategoryDisplayName,
+} from '@/features/dashboard/utils/categoryApi'
 import { useShowcaseCategoryScroll } from '@/features/showcase/composables/useShowcaseCategoryScroll'
+import { useShowcaseMenuContentLanguage } from '@/features/showcase/composables/useShowcaseMenuContentLanguage'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
@@ -117,7 +127,7 @@ const cartStore = useShowcaseCartStore()
 const menuLangStore = useShowcaseMenuLanguageStore()
 const wishlistStore = useShowcaseWishlistStore()
 const { likedDishIds } = storeToRefs(wishlistStore)
-const { languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
+const { menuContentLangCode } = useShowcaseMenuContentLanguage()
 
 const placeRouteKey = computed(() => String(route.params.id ?? ''))
 const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName, menuDishLayout, menuWelcomeText } =
@@ -218,20 +228,12 @@ const selectedDishCategoryName = computed(() => {
   if (!selectedDish.value) return ''
   const category = showcaseStore.categories.find((item) => item.id === selectedDish.value?.category)
   if (!category) return selectedDish.value.category
-  return getCategoryDisplayName(category, menuLanguageCode.value)
+  return getCategoryDisplayName(category, menuContentLangCode.value)
 })
 
-const categoriesWithDishes = computed(() => {
-  const availableDishes = dishes.value.filter((d) => d.isAvailable === 'available')
-
-  return showcaseStore.categories
-    .map((category) => ({
-      ...category,
-      dishCount: availableDishes.filter((d) => d.category === category.id).length,
-    }))
-    .filter((category) => category.dishCount > 0)
-    .sort((a, b) => b.dishCount - a.dishCount)
-})
+const categoriesWithDishes = computed(() =>
+  filterCategoriesWithAvailableDishes(showcaseStore.categories, dishes.value),
+)
 
 const firstCategoryId = computed(() => categoriesWithDishes.value[0]?.id ?? '')
 
@@ -240,12 +242,10 @@ const { activeCategoryId, registerSection, scrollToCategory, start } =
 
 const handleDishClick = (dish: IDish) => {
   selectedDish.value = dish
-  document.body.style.overflow = 'hidden'
 }
 
 const closeDishModal = () => {
   selectedDish.value = null
-  document.body.style.overflow = ''
 }
 
 const handleToggleLike = (dishId: string) => {
@@ -280,7 +280,4 @@ onMounted(async () => {
   await start()
 })
 
-onUnmounted(() => {
-  document.body.style.overflow = ''
-})
 </script>

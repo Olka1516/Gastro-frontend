@@ -49,10 +49,10 @@ import DishCard from './DishCard.vue'
 
 const { t, locale } = useI18n()
 const menuLangStore = useShowcaseMenuLanguageStore()
-const { enabled: menuLangEnabled, languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
+const { placeSlug, languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
 
 const categoryDisplayName = computed(() => {
-  const lang = menuLangEnabled.value
+  const lang = placeSlug.value
     ? menuLanguageCode.value
     : mapUiLocaleToMenuLanguage(locale.value)
   return getCategoryDisplayName(props.category, lang)

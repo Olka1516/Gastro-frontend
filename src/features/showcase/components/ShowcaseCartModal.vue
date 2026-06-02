@@ -74,14 +74,8 @@
               <span class="text-gray-400">{{ t('showcase.premium.cartTotal') }}</span>
               <span class="text-xl font-bold">{{ formatPrice(grandTotal) }}</span>
             </div>
-            <BaseButton
-              v-if="placeSlug"
-              variant="showcase"
-              block
-              pressable
-              :text="t('showcase.premium.goToCheckout')"
-              @click="goToCheckout"
-            />
+            <BaseButton v-if="placeSlug" block pressable :text="t('showcase.premium.goToCheckout')"
+              @click="goToCheckout" />
           </div>
         </div>
       </div>
@@ -96,7 +90,8 @@ import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseCartStore } from '@/stores/showcaseCartStore'
 import type { IShowcaseCartLine } from '@/types/showcaseCart'
-import { computed, onUnmounted, watch } from 'vue'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -146,17 +141,7 @@ const blurQuantityInput = (event: KeyboardEvent) => {
   if (el instanceof HTMLInputElement) el.blur()
 }
 
-watch(
-  () => props.modelValue,
-  (open) => {
-    document.body.style.overflow = open ? 'hidden' : ''
-  },
-  { immediate: true },
-)
-
-onUnmounted(() => {
-  document.body.style.overflow = ''
-})
+useBodyScrollLock(() => props.modelValue)
 </script>
 
 <style scoped>

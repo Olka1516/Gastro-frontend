@@ -78,13 +78,13 @@ const variantClasses = computed<Record<ButtonVariant, string>>(() => {
   const showcaseHover =
     props.scaleOnHover &&
     props.variant === 'showcase' &&
-    (props.size === 'large' ? 'transition-transform hover:scale-[1.01]' : 'transition-transform hover:scale-[1.02]')
+    (props.size === 'large' ? 'transition-transform hover:scale-[1.01]' : 'transition-transform hover:scale-[1.01]')
 
   const gradientHover = isGradient.value && props.scaleOnHover && 'hover:scale-105'
   const defaultHover =
     props.variant === 'default' &&
     props.scaleOnHover &&
-    'transition-transform duration-300 hover:scale-105'
+    'transition-transform duration-300 hover:scale-101'
 
   const opacityHover =
     props.variant === 'default' &&

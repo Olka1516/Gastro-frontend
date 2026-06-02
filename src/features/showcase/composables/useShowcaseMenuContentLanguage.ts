@@ -9,10 +9,10 @@ import { useI18n } from 'vue-i18n'
 export const useShowcaseMenuContentLanguage = () => {
   const { locale } = useI18n()
   const menuLangStore = useShowcaseMenuLanguageStore()
-  const { enabled: menuLangEnabled, languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
+  const { placeSlug, languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
 
   const menuContentLangCode = computed(() =>
-    menuLangEnabled.value ? menuLanguageCode.value : mapUiLocaleToMenuLanguage(locale.value),
+    placeSlug.value ? menuLanguageCode.value : mapUiLocaleToMenuLanguage(locale.value),
   )
 
   const getDishLabels = (dish: IDish) => ({

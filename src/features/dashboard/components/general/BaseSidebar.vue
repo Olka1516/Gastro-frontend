@@ -63,7 +63,8 @@
 
 <script setup lang="ts">
 import type { IUserData } from '@/types'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores'
@@ -109,19 +110,10 @@ const originStyle = computed(() => {
 
 let mediaQuery: MediaQueryList | null = null
 
-const setBodyScrollLock = (locked: boolean) => {
-  const overflow = locked ? 'hidden' : ''
-  document.documentElement.style.overflow = overflow
-  document.documentElement.style.overflowX = overflow
-  document.body.style.overflow = overflow
-  document.body.style.overflowX = overflow
-}
-
 const syncBreakpoint = () => {
   isDesktop.value = mediaQuery?.matches ?? window.innerWidth >= 1024
   if (isDesktop.value) {
     isMobileOpen.value = false
-    setBodyScrollLock(false)
   }
 }
 
@@ -133,14 +125,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   mediaQuery?.removeEventListener('change', syncBreakpoint)
-  setBodyScrollLock(false)
 })
 
-watch(isMobileOpen, (open) => {
-  if (!isDesktop.value) {
-    setBodyScrollLock(open)
-  }
-})
+useBodyScrollLock(() => isMobileOpen.value && !isDesktop.value)
 
 const emitCollapseState = () => {
   emit('handleProcess', isClose.value)

@@ -7,7 +7,6 @@ interface ICustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
-  withCredentials: true,
 })
 
 API.interceptors.request.use((config) => {

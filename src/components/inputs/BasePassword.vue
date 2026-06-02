@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+import { getImage } from '@/common/functions'
 import { ErrorMessageEnum } from '@/types'
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -64,8 +65,7 @@ const isVisible = () => {
 
 const newUrl = () => {
   const name = bloke.value === 'password' ? 'eye' : 'eye-off'
-  const st = new URL(`../../assets/images/icons/${name}.svg`, import.meta.url)
-  return st.href
+  return getImage(`${name}.svg`)
 }
 
 watch(

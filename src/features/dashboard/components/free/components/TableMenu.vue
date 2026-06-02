@@ -12,10 +12,8 @@
         </h2>
         <p class="text-gray-400 text-sm">{{ t('dashboard.menu.subtitle') }}</p>
       </div>
-      <BaseButton variant="gradient" class="w-full shrink-0 sm:w-auto" @click="openAddDish">
-        <span class="text-2xl leading-none transition-transform duration-300 group-hover:rotate-90">+</span>
-        {{ t('dashboard.tableHead.addMeal') }}
-      </BaseButton>
+      <BaseButton variant="gradient" class="w-full shrink-0 sm:w-auto" :icon="plusIcon"
+        :text="t('dashboard.tableHead.addMeal')" @click="openAddDish" />
     </div>
 
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
@@ -140,6 +138,7 @@
 </template>
 
 <script setup lang="ts">
+import plusIcon from '@/assets/images/icons/plus.svg'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
 import BasePagination from '@/components/BasePagination.vue'

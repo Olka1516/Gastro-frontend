@@ -22,7 +22,6 @@
 <script setup lang="ts">
 import type { IShowcaseLocalOrderHistoryEntry } from '@/types/showcaseOrder'
 import {
-  SHOWCASE_CART_STORAGE_PREFIX,
   SHOWCASE_ORDER_HISTORY_STORAGE_PREFIX,
   SHOWCASE_ORDER_HISTORY_UPDATED_EVENT,
   placeSlugFromShowcaseRoute,
@@ -47,12 +46,7 @@ const onHistoryUpdated = () => {
 }
 
 const onStorage = (ev: StorageEvent) => {
-  const k = ev.key
-  if (
-    !k?.startsWith(SHOWCASE_ORDER_HISTORY_STORAGE_PREFIX) &&
-    !k?.startsWith(SHOWCASE_CART_STORAGE_PREFIX)
-  )
-    return
+  if (!ev.key?.startsWith(SHOWCASE_ORDER_HISTORY_STORAGE_PREFIX)) return
   load()
 }
 

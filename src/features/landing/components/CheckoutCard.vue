@@ -3,7 +3,7 @@
     <div class="bg-[#1f242b] p-4 rounded-xl flex gap-4 justify-center items-center"
       v-for="(soup, i) in soupsArray.slice(start, end)" :key="i">
       <img class="animatable h-12 mx-auto"
-        :src="getImage(`../features/landing/assets/images/landing/soup_${start + i + 1}.png`)" />
+        :src="getLandingImageUrl(`soup_${start + i + 1}.png`)" />
       <div>
         <h3 class="text-[10px] text-white">{{ soup.name }}</h3>
         <p class="text-[10px] text-[#5d6073] line-clamp-1">{{ soup.description }}</p>
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { getImage } from '@/common/functions';
+import { getLandingImageUrl } from '../constants/landingImages'
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 

@@ -28,7 +28,7 @@
 
           <img
             class="h-14 w-auto object-contain sm:h-16 lg:h-auto"
-            :src="getImage(`../features/landing/assets/images/landing/plan_${i + 1}.png`)"
+            :src="getLandingImageUrl(`plan_${i + 1}.png`)"
             alt=""
           />
 
@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { getImage } from '@/common/functions'
+import { getLandingImageUrl } from '../constants/landingImages'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseDelete from '@/components/modals/BaseDelete.vue'
 import AuthTeleportModals from '@/components/modals/auth/AuthTeleportModals.vue'

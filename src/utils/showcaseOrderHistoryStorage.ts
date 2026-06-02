@@ -85,35 +85,6 @@ export function normalizeHistoryEntry(o: unknown): IShowcaseLocalOrderHistoryEnt
   }
 }
 
-export function normalizeCartLineToHistoryEntry(
-  o: unknown,
-): IShowcaseLocalOrderHistoryEntry | null {
-  if (!isRecord(o)) return null
-  if (o.status !== 'ordered') return null
-  const lineId = o.lineId
-  if (typeof lineId !== 'string' || !lineId.trim()) return null
-  const quantity = Number(o.quantity)
-  if (!Number.isFinite(quantity) || quantity < 1) return null
-  const addedAt = typeof o.addedAt === 'string' ? o.addedAt.trim() : ''
-  if (!addedAt) return null
-  const dish = o.dish
-  if (!isRecord(dish)) return null
-  const name = typeof dish.name === 'string' ? dish.name : '—'
-  const price = Number(dish.price)
-  if (!Number.isFinite(price)) return null
-  const categoryName = typeof dish.categoryName === 'string' ? dish.categoryName : ''
-  const unitPrice = price
-  const total = quantity * unitPrice
-  return {
-    id: `cart:${lineId.trim()}`,
-    placedAt: addedAt,
-    total,
-    customerSummary: '—',
-    lines: [{ name, quantity, unitPrice, categoryName }],
-    source: 'cart',
-  }
-}
-
 function listLocalStorageKeysWithPrefix(prefix: string): string[] {
   const keys: string[] = []
   for (let i = 0; i < localStorage.length; i++) {
@@ -136,20 +107,11 @@ function matchingHistoryStorageKeys(placeSlug: string): string[] {
   })
 }
 
-function matchingCartStorageKeys(placeSlug: string): string[] {
-  if (!placeSlug.trim()) return []
-  const target = normalizeHistoryLookupKey(placeSlug)
-  return listLocalStorageKeysWithPrefix(SHOWCASE_CART_STORAGE_PREFIX).filter((fullKey) => {
-    const suffix = fullKey.slice(SHOWCASE_CART_STORAGE_PREFIX.length)
-    return normalizeHistoryLookupKey(suffix) === target
-  })
-}
-
 function mergeHistoryItemIntoMap(
   byId: Map<string, IShowcaseLocalOrderHistoryEntry>,
   item: unknown,
 ) {
-  const e = normalizeHistoryEntry(item) ?? normalizeCartLineToHistoryEntry(item)
+  const e = normalizeHistoryEntry(item)
   if (e) byId.set(e.id, e)
 }
 
@@ -167,19 +129,6 @@ export function readShowcaseOrderHistory(placeSlug: string): IShowcaseLocalOrder
       }
     } catch {
       console.error('Error parsing showcase order history:', fullKey, raw)
-    }
-  }
-  for (const fullKey of matchingCartStorageKeys(placeSlug)) {
-    const raw = localStorage.getItem(fullKey)
-    if (!raw) continue
-    try {
-      const parsed: unknown = JSON.parse(raw)
-      if (!Array.isArray(parsed)) continue
-      for (const item of parsed) {
-        mergeHistoryItemIntoMap(byId, item)
-      }
-    } catch {
-      console.error('Error parsing showcase cart:', fullKey, raw)
     }
   }
   return [...byId.values()].sort((a, b) => {
@@ -215,7 +164,7 @@ export function appendShowcaseOrderHistory(
 ): void {
   if (!placeSlug.trim() || !entry.id) return
   const canonicalKey = showcaseOrderHistoryStorageKey(placeSlug)
-  const prev = readShowcaseOrderHistory(placeSlug).filter((e) => e.source !== 'cart')
+  const prev = readShowcaseOrderHistory(placeSlug)
   const withoutDup = prev.filter((e) => e.id !== entry.id)
   const next = [entry, ...withoutDup].slice(0, MAX_ENTRIES)
   localStorage.setItem(canonicalKey, JSON.stringify(next))

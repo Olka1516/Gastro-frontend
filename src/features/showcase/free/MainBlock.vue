@@ -46,6 +46,7 @@ import { useShowcaseCategoryScroll } from '@/features/showcase/composables/useSh
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useUserStore } from '@/stores/user'
+import { filterCategoriesWithAvailableDishes } from '@/features/dashboard/utils/categoryApi'
 import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -73,29 +74,19 @@ const selectedDishCategoryName = computed(() => {
   return category?.name || selectedDish.value.category
 })
 
-const categoriesWithDishes = computed(() => {
-  const availableDishes = dishes.value.filter((d) => d.isAvailable === 'available')
-
-  return showcaseStore.categories
-    .map((category) => ({
-      ...category,
-      dishCount: availableDishes.filter((d) => d.category === category.id).length,
-    }))
-    .filter((category) => category.dishCount > 0)
-    .sort((a, b) => b.dishCount - a.dishCount)
-})
+const categoriesWithDishes = computed(() =>
+  filterCategoriesWithAvailableDishes(showcaseStore.categories, dishes.value),
+)
 
 const { activeCategoryId, registerSection, scrollToCategory, start } =
   useShowcaseCategoryScroll(categoriesWithDishes)
 
 const handleDishClick = (dish: IDish) => {
   selectedDish.value = dish
-  document.body.style.overflow = 'hidden'
 }
 
 const closeDishModal = () => {
   selectedDish.value = null
-  document.body.style.overflow = ''
 }
 
 const fetchData = async () => {

@@ -1,5 +1,15 @@
 import { createI18n } from 'vue-i18n'
+import cs from './cs'
+import de from './de'
 import en from './en'
+import es from './es'
+import fr from './fr'
+import it from './it'
+import pl from './pl'
+import pt from './pt'
+import ro from './ro'
+import sk from './sk'
+import tr from './tr'
 import ua from './ua'
 
 const customRule = (choice: number, choicesLength: number) => {
@@ -22,6 +32,16 @@ const customRule = (choice: number, choicesLength: number) => {
 const messages = {
   ua,
   en,
+  pl,
+  de,
+  fr,
+  es,
+  it,
+  cs,
+  ro,
+  tr,
+  pt,
+  sk,
 }
 
 export const i18n = createI18n({
@@ -33,3 +53,26 @@ export const i18n = createI18n({
     ua: customRule,
   },
 })
+
+export {
+  UI_LOCALE_STORAGE_KEY,
+  intlLocaleForUi,
+  isUiLocale,
+  menuLanguageCodeToUiLocale,
+  readStoredUiLocale,
+  uiLocaleToMenuLanguageCode,
+  UI_LOCALES,
+  type UiLocale,
+} from './localeSync'
+
+import { UI_LOCALE_STORAGE_KEY } from './localeStorage'
+import type { UiLocale } from './uiLocales'
+
+export const applyUiLocale = (locale: UiLocale) => {
+  if (typeof i18n.global.locale === 'string') {
+    i18n.global.locale = locale
+  } else {
+    ;(i18n.global.locale as { value: UiLocale }).value = locale
+  }
+  sessionStorage.setItem(UI_LOCALE_STORAGE_KEY, locale)
+}

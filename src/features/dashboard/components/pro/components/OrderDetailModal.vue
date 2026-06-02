@@ -111,6 +111,7 @@ import { formatMenuPrice } from '@/utils/formatPrice'
 import { usePremiumDashboardStore } from '@/stores/premiumDashboard'
 import { notificationStore } from '@/stores/notificationStore'
 import { SHOWCASE_ORDER_STATUSES, type IShowcasePlacedOrder, type ShowcaseOrderStatus } from '@/types/showcaseOrder'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -119,6 +120,8 @@ const props = defineProps<{ order: IShowcasePlacedOrder }>()
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
+
+useBodyScrollLock(() => true)
 
 const { t } = useI18n()
 const { formatOrderDate, formatCustomerName, formatLinesSummary, statusBadgeClass } =

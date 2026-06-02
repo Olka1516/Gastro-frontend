@@ -14,7 +14,7 @@
             <button type="button"
               class="cursor-pointer absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition"
               @click="closeModal">
-              ✕
+              <img src="@/assets/images/icons/exit_white.svg" alt="Close" class="w-5 h-5">
             </button>
 
             <h2 class="text-2xl font-semibold text-white text-center pr-8">
@@ -64,6 +64,7 @@ import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import type { ICategory } from '@/types/menu'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
 import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MenuLanguageTabs from './MenuLanguageTabs.vue'
@@ -152,9 +153,10 @@ const inputErrorMessage = computed(() => {
   return te(key) ? t(key) : t('dashboard.categories.ukNameRequired')
 })
 
+useBodyScrollLock(open)
+
 const closeModal = () => {
   open.value = false
-  document.body.style.overflow = ''
 }
 
 const handleNextStep = async () => {

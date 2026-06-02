@@ -13,12 +13,8 @@
       <div v-if="lines.length === 0"
         class="mt-10 rounded-2xl border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-10 text-center">
         <p class="text-gray-400">{{ t('showcase.premium.checkoutEmptyCart') }}</p>
-        <BaseButton
-          variant="showcase"
-          :to="LINK_TEMPLATES.MENU(placeSlugDisplay)"
-          :text="t('showcase.premium.backToMenu')"
-          class="mt-6"
-        />
+        <BaseButton variant="showcase" :to="LINK_TEMPLATES.MENU(placeSlugDisplay)"
+          :text="t('showcase.premium.backToMenu')" class="mt-6" />
       </div>
 
       <div v-else class="mt-10 grid gap-8 lg:grid-cols-2 lg:gap-12 lg:items-start">
@@ -68,7 +64,7 @@
               <div class="flex flex-col gap-1.5">
                 <span class="text-sm text-gray-300">{{
                   t('showcase.premium.checkoutFirstName')
-                  }}</span>
+                }}</span>
                 <div class="relative">
                   <BaseText v-model="form.firstName" :v="v$.firstName" type="firstName" autocomplete="given-name" />
                   <ErrorMessage :v="v$.firstName" />
@@ -77,7 +73,7 @@
               <div class="flex flex-col gap-1.5">
                 <span class="text-sm text-gray-300">{{
                   t('showcase.premium.checkoutLastName')
-                  }}</span>
+                }}</span>
                 <div class="relative">
                   <BaseText v-model="form.lastName" :v="v$.lastName" type="lastName" autocomplete="family-name" />
                   <ErrorMessage :v="v$.lastName" />
@@ -131,19 +127,10 @@
               </div>
             </div>
 
-            <BaseButton
-              type="submit"
-              variant="showcase"
-              size="large"
-              block
-              class="mt-2"
-              :disabled="orderStore.loading"
-              :text="
-                orderStore.loading
-                  ? t('showcase.premium.checkoutSubmitting')
-                  : t('showcase.premium.checkoutSubmit')
-              "
-            />
+            <BaseButton type="submit" size="large" block class="mt-2" :disabled="orderStore.loading" :text="orderStore.loading
+                ? t('showcase.premium.checkoutSubmitting')
+                : t('showcase.premium.checkoutSubmit')
+              " />
           </form>
         </section>
       </div>

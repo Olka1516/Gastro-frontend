@@ -12,13 +12,8 @@
         </h2>
         <p class="text-sm text-gray-400">{{ t('dashboard.menu.subtitle') }}</p>
       </div>
-      <BaseButton
-        variant="gradient"
-        class="w-full shrink-0 sm:w-auto"
-        :icon="plusIcon"
-        :text="t('dashboard.tableHead.addMeal')"
-        @click="openAddDish"
-      />
+      <BaseButton variant="gradient" class="w-full shrink-0 sm:w-auto" :icon="plusIcon"
+        :text="t('dashboard.tableHead.addMeal')" @click="openAddDish" />
     </div>
 
     <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
@@ -32,58 +27,53 @@
         <p class="mb-1 text-xs uppercase tracking-wider text-gray-400">
           {{ t('dashboard.home.available') }}
         </p>
-        <p class="text-xl font-bold tabular-nums text-green-400 sm:text-2xl">{{ availableDishes }}</p>
+        <p class="text-xl font-bold tabular-nums text-green-400 sm:text-2xl">
+          {{ availableDishes }}
+        </p>
       </div>
       <div class="rounded-lg border border-red-500/20 bg-gradient-to-br from-red-500/10 to-[#0f0f11] p-4">
         <p class="mb-1 text-xs uppercase tracking-wider text-gray-400">
           {{ t('dashboard.home.unavailable') }}
         </p>
-        <p class="text-xl font-bold tabular-nums text-red-400 sm:text-2xl">{{ unavailableDishes }}</p>
+        <p class="text-xl font-bold tabular-nums text-red-400 sm:text-2xl">
+          {{ unavailableDishes }}
+        </p>
       </div>
     </div>
 
-    <div
-      v-if="dishes.length === 0"
+    <div v-if="dishes.length === 0"
       class="rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] p-8 text-center sm:p-12 md:p-20">
       <div class="flex flex-col items-center gap-4 sm:gap-6">
         <div
-          class="flex h-24 w-24 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] shadow-[0_20px_60px_rgb(220,91,65,0.3)] sm:h-32 sm:w-32">
+          class="flex h-24 w-24 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-32 sm:w-32">
           <span class="text-5xl sm:text-6xl">🍽️</span>
         </div>
-        <h3 class="text-2xl font-bold text-white sm:text-3xl">{{ t('dashboard.menu.noDishes') }}</h3>
-        <p class="max-w-md px-2 text-sm text-gray-400 sm:text-base">{{ t('dashboard.menu.addFirstDish') }}</p>
-        <BaseButton
-          variant="gradient"
-          size="large"
-          class="mt-2 shadow-lg sm:mt-4 sm:w-auto"
-          block
-          :text="t('dashboard.tableHead.addMeal')"
-          @click="openAddDish"
-        />
+        <h3 class="text-2xl font-bold text-white sm:text-3xl">
+          {{ t('dashboard.menu.noDishes') }}
+        </h3>
+        <p class="max-w-md px-2 text-sm text-gray-400 sm:text-base">
+          {{ t('dashboard.menu.addFirstDish') }}
+        </p>
+        <BaseButton variant="gradient" size="large" class="mt-2 shadow-lg sm:mt-4 sm:w-auto" block
+          :text="t('dashboard.tableHead.addMeal')" @click="openAddDish" />
       </div>
     </div>
 
     <div v-else class="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <div
-        v-for="data in dishes.slice((paginationPage - 1) * size, paginationPage * size)"
-        :key="data.id"
-        class="group flex h-full flex-col overflow-hidden rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] shadow-xl transition-all duration-300 hover:scale-[1.02] hover:border-[#dc5b41]/50 hover:shadow-[0_20px_60px_rgba(220,91,65,0.2)]">
+      <div v-for="data in dishes.slice((paginationPage - 1) * size, paginationPage * size)" :key="data.id"
+        class="group flex h-full flex-col overflow-hidden rounded-lg border border-[#2a2930] bg-gradient-to-br from-[#1a191f] to-[#0f0f11] transition-all duration-300 hover:scale-[1.02] hover:border-[#dc5b41]/50">
         <div class="relative h-44 overflow-hidden sm:h-52 md:h-56">
-          <img
-            v-if="typeof data.image === 'string'"
-            :src="data.image"
-            alt="dish"
+          <img v-if="typeof data.image === 'string'" :src="data.image" alt="dish"
             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
           <div class="absolute inset-0 bg-gradient-to-t from-[#0f0f11] via-transparent to-transparent" />
 
           <div class="absolute right-3 top-3 sm:right-4 sm:top-4">
-            <span
-              :class="[
-                'rounded-full px-2.5 py-1 text-[0.625rem] font-semibold shadow-lg backdrop-blur-md sm:px-3 sm:py-1.5 sm:text-xs',
-                data.isAvailable === 'available'
-                  ? 'border border-green-500/30 bg-green-500/20 text-green-300'
-                  : 'border border-red-500/30 bg-red-500/20 text-red-300',
-              ]">
+            <span :class="[
+              'rounded-full px-2.5 py-1 text-[0.625rem] font-semibold shadow-lg backdrop-blur-md sm:px-3 sm:py-1.5 sm:text-xs',
+              data.isAvailable === 'available'
+                ? 'border border-green-500/30 bg-green-500/20 text-green-300'
+                : 'border border-red-500/30 bg-red-500/20 text-red-300',
+            ]">
               {{
                 data.isAvailable === 'available'
                   ? '✓ ' + t('dashboard.available')
@@ -119,24 +109,17 @@
           </p>
 
           <div class="mt-auto flex items-center gap-2 border-t border-[#2a2930] pt-3 sm:pt-4">
-            <button
-              type="button"
+            <button type="button"
               class="group/btn flex min-w-0 flex-1 items-center justify-center gap-2 rounded-lg bg-[#2a2930] py-2.5 transition-all duration-200 hover:bg-[#dc5b41]/20 sm:py-3"
               @click="openManageDish(data)">
-              <img
-                src="@/assets/images/icons/edit.svg"
-                alt="edit"
+              <img src="@/assets/images/icons/edit.svg" alt="edit"
                 class="h-4 w-4 shrink-0 opacity-60 transition-opacity group-hover/btn:opacity-100 sm:h-5 sm:w-5" />
               <span class="truncate text-sm font-semibold text-white">{{ t('button.edit') }}</span>
             </button>
-            <button
-              type="button"
+            <button type="button"
               class="group/btn shrink-0 rounded-lg bg-[#2a2930] p-2.5 transition-all duration-200 hover:bg-red-500/20 sm:p-3"
-              :aria-label="t('dashboard.tableHead.deleteMeal')"
-              @click="changeDeleteValue(data.id)">
-              <img
-                src="@/assets/images/icons/trash.svg"
-                alt="delete"
+              :aria-label="t('dashboard.tableHead.deleteMeal')" @click="changeDeleteValue(data.id)">
+              <img src="@/assets/images/icons/trash.svg" alt="delete"
                 class="h-5 w-5 opacity-60 transition-opacity group-hover/btn:opacity-100" />
             </button>
           </div>
@@ -150,21 +133,11 @@
       v-model:paginationPage="paginationPage"
       :size />
 
-    <BaseDelete
-      v-model:openDelete="openDelete"
-      text="dashboard.tableHead.deleteMeal"
+    <BaseDelete v-model:openDelete="openDelete" text="dashboard.tableHead.deleteMeal"
       @handleProcess="(value) => deleteMeal(value)" />
-    <ManageDish
-      v-model:dish="editDish"
-      v-model:openManage="openManage"
-      text="dashboard.editText"
-      :error
+    <ManageDish v-model:dish="editDish" v-model:openManage="openManage" text="dashboard.editText" :error
       @handleProcess="(value) => editMeal(value)" />
-    <ManageDish
-      v-model:dish="newDish"
-      v-model:openManage="openAdd"
-      text="dashboard.addText"
-      :error
+    <ManageDish v-model:dish="newDish" v-model:openManage="openAdd" text="dashboard.addText" :error
       @handleProcess="(value) => addMeal(value)" />
   </div>
 </template>
@@ -225,7 +198,6 @@ const unavailableDishes = computed(() => {
 const changeDeleteValue = (id: string) => {
   openDelete.value = true
   mealId.value = id
-  document.body.style.overflow = 'hidden'
 }
 
 const deleteMeal = async (value: boolean) => {
@@ -242,7 +214,6 @@ const deleteMeal = async (value: boolean) => {
 const openManageDish = (value: IDish) => {
   openManage.value = true
   Object.assign(editDish.value, value)
-  document.body.style.overflow = 'hidden'
 }
 
 const editMeal = async (value: IDish) => {
@@ -257,7 +228,6 @@ const editMeal = async (value: IDish) => {
 const openAddDish = () => {
   newDish.value = defaultDish()
   openAdd.value = true
-  document.body.style.overflow = 'hidden'
 }
 
 const addMeal = async (value: IDish) => {

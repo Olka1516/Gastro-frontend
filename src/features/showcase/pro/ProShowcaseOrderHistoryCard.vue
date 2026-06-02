@@ -29,6 +29,7 @@
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import type { IShowcaseLocalOrderHistoryEntry } from '@/types/showcaseOrder'
 import { computed } from 'vue'
+import { intlLocaleForUi } from '@/lang'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
@@ -42,7 +43,7 @@ const placedAtLabel = computed(() => {
   const iso = props.entry.placedAt
   const d = Date.parse(iso)
   if (Number.isNaN(d)) return iso
-  return new Intl.DateTimeFormat(locale.value === 'ua' ? 'uk-UA' : 'en-GB', {
+  return new Intl.DateTimeFormat(intlLocaleForUi(locale.value), {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(d)

@@ -170,6 +170,7 @@
 import BaseDelete from '@/components/modals/BaseDelete.vue'
 import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { onClickOutside } from '@vueuse/core'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useDashboardPlanChange } from '../../composables/useDashboardPlanChange'
@@ -196,6 +197,8 @@ const showInlinePicker = computed(
 const showCollapsedModal = computed(
   () => props.isDesktop && props.isClose && isPickerOpen.value,
 )
+
+useBodyScrollLock(showCollapsedModal)
 
 const currentPlanLabel = computed(() => t(`plans.${currentPlan.value}.name`))
 

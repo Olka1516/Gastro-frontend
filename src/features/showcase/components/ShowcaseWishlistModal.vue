@@ -67,7 +67,8 @@ import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowca
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
 import type { IDish } from '@/types/menu'
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import DishCard from './DishCard.vue'
@@ -123,26 +124,26 @@ const onToggleLike = (dishId: string) => {
   wishlistStore.toggle(dishId)
 }
 
+useBodyScrollLock(() => props.modelValue)
+
 watch(
   () => props.modelValue,
   async (open) => {
-    if (open) {
-      document.body.style.overflow = 'hidden'
-      const slug = placeRouteKey.value
-      if (
-        slug &&
-        wishlistStore.likedDishIds.length > 0 &&
-        showcaseStore.dishes.length === 0
-      ) {
-        await Promise.all([
-          showcaseStore.fetchDishes(slug),
-          showcaseStore.fetchCategories(slug),
-          showcaseStore.fetchPlaceBranding(slug),
-        ])
-      }
-    } else {
+    if (!open) {
       selectedDish.value = null
-      document.body.style.overflow = ''
+      return
+    }
+    const slug = placeRouteKey.value
+    if (
+      slug &&
+      wishlistStore.likedDishIds.length > 0 &&
+      showcaseStore.dishes.length === 0
+    ) {
+      await Promise.all([
+        showcaseStore.fetchDishes(slug),
+        showcaseStore.fetchCategories(slug),
+        showcaseStore.fetchPlaceBranding(slug),
+      ])
     }
   },
   { immediate: true },
@@ -152,9 +153,6 @@ watch(placeRouteKey, (slug) => {
   if (slug) wishlistStore.load(slug)
 })
 
-onUnmounted(() => {
-  document.body.style.overflow = ''
-})
 </script>
 
 <style scoped>

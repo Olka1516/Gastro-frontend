@@ -38,7 +38,7 @@
             <div class="flex flex-col gap-1.5">
               <span class="text-sm text-gray-300">{{
                 t('showcase.premium.reservePartySize')
-                }}</span>
+              }}</span>
               <div class="relative">
                 <BaseText v-model="form.partySize" :v="v$.partySize" type="partySize" input-type="number"
                   autocomplete="off" />
@@ -50,7 +50,7 @@
               <div class="flex flex-col gap-1.5">
                 <span class="text-sm text-gray-300">{{
                   t('showcase.premium.checkoutFirstName')
-                  }}</span>
+                }}</span>
                 <div class="relative">
                   <BaseText v-model="form.firstName" :v="v$.firstName" type="firstName" autocomplete="given-name" />
                   <ErrorMessage :v="v$.firstName" />
@@ -59,7 +59,7 @@
               <div class="flex flex-col gap-1.5">
                 <span class="text-sm text-gray-300">{{
                   t('showcase.premium.checkoutLastName')
-                  }}</span>
+                }}</span>
                 <div class="relative">
                   <BaseText v-model="form.lastName" :v="v$.lastName" type="lastName" autocomplete="family-name" />
                   <ErrorMessage :v="v$.lastName" />
@@ -93,19 +93,10 @@
 
             <p class="text-xs text-gray-500">{{ t('showcase.premium.reserveLegalHint') }}</p>
 
-            <BaseButton
-              type="submit"
-              variant="showcase"
-              size="large"
-              block
-              class="mt-2"
-              :disabled="reservationStore.loading"
-              :text="
-                reservationStore.loading
-                  ? t('showcase.premium.reserveSubmitting')
-                  : t('showcase.premium.reserveSubmit')
-              "
-            />
+            <BaseButton type="submit" size="large" block class="mt-2" :disabled="reservationStore.loading" :text="reservationStore.loading
+                ? t('showcase.premium.reserveSubmitting')
+                : t('showcase.premium.reserveSubmit')
+              " />
           </form>
         </section>
       </div>

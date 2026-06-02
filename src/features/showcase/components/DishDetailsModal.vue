@@ -54,6 +54,7 @@ import { MODAL_SURFACE_CLASS } from '@/constants/modalSurface'
 import { useShowcaseMenuContentLanguage } from '@/features/showcase/composables/useShowcaseMenuContentLanguage'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import type { IDish } from '@/types/menu'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
 import { computed, toRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -75,6 +76,8 @@ const props = withDefaults(
 const emit = defineEmits<{
   (e: 'close'): void
 }>()
+
+useBodyScrollLock(() => !!props.dish)
 
 const { t } = useI18n()
 const { useDishLabels } = useShowcaseMenuContentLanguage()

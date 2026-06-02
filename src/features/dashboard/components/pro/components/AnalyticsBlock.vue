@@ -115,6 +115,7 @@ import { getShowcaseOrdersForOwner, getTableReservationsForOwner } from '@/servi
 import type { IShowcasePlacedOrder } from '@/types/showcaseOrder'
 import type { ITableReservation } from '@/types/tableReservation'
 import { computed, onMounted, ref } from 'vue'
+import { intlLocaleForUi } from '@/lang'
 import { useI18n } from 'vue-i18n'
 import AnalyticsCustomPeriodInput from './AnalyticsCustomPeriodInput.vue'
 import DishPopularityBarChart from './DishPopularityBarChart.vue'
@@ -162,7 +163,7 @@ const activePeriodTitle = computed(() => {
   if (periodMode.value === 'custom') {
     const ms = customRangeMs.value
     if (!ms) return t('dashboard.analytics.period.invalid')
-    const loc = locale.value === 'ua' ? 'uk-UA' : 'en-GB'
+    const loc = intlLocaleForUi(locale.value)
     const fmt = new Intl.DateTimeFormat(loc, { day: 'numeric', month: 'short', year: 'numeric' })
     const start = new Date(ms.startMs)
     const end = new Date(ms.endMs)

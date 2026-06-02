@@ -66,8 +66,12 @@
 
     <template v-else>
       <div class="px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
+        <div class="mb-3 flex justify-end sm:mb-4">
+          <BaseLanguageSelector mode="menu" />
+        </div>
         <ShowcaseCategoryTabs
           :categories="categoriesWithDishes"
+          :language-code="menuContentLangCode"
           :active-id="activeCategoryId"
           :accent-color="menuIconColor"
           :panel-background="menuBackgroundColor"
@@ -97,9 +101,16 @@
 </template>
 
 <script setup lang="ts">
+import BaseLanguageSelector from '@/components/BaseLanguageSelector.vue'
 import BaseLoader from '@/components/BaseLoader.vue'
+import {
+  filterCategoriesWithAvailableDishes,
+  getCategoryDisplayName,
+} from '@/features/dashboard/utils/categoryApi'
 import { useShowcaseCategoryScroll } from '@/features/showcase/composables/useShowcaseCategoryScroll'
+import { useShowcaseMenuContentLanguage } from '@/features/showcase/composables/useShowcaseMenuContentLanguage'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
+import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
 import type { IDish } from '@/types/menu'
@@ -114,8 +125,10 @@ import ShowcaseCategoryTabs from '../components/ShowcaseCategoryTabs.vue'
 const { t } = useI18n()
 const route = useRoute()
 const showcaseStore = useShowcaseStore()
+const menuLangStore = useShowcaseMenuLanguageStore()
 const wishlistStore = useShowcaseWishlistStore()
 const { likedDishIds } = storeToRefs(wishlistStore)
+const { menuContentLangCode } = useShowcaseMenuContentLanguage()
 
 const placeRouteKey = computed(() => String(route.params.id ?? ''))
 const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName, menuDishLayout, menuWelcomeText } =
@@ -202,20 +215,13 @@ const placeInitial = computed(() => {
 const selectedDishCategoryName = computed(() => {
   if (!selectedDish.value) return ''
   const category = showcaseStore.categories.find((item) => item.id === selectedDish.value?.category)
-  return category?.name || selectedDish.value.category
+  if (!category) return selectedDish.value.category
+  return getCategoryDisplayName(category, menuContentLangCode.value)
 })
 
-const categoriesWithDishes = computed(() => {
-  const availableDishes = dishes.value.filter((d) => d.isAvailable === 'available')
-
-  return showcaseStore.categories
-    .map((category) => ({
-      ...category,
-      dishCount: availableDishes.filter((d) => d.category === category.id).length,
-    }))
-    .filter((category) => category.dishCount > 0)
-    .sort((a, b) => b.dishCount - a.dishCount)
-})
+const categoriesWithDishes = computed(() =>
+  filterCategoriesWithAvailableDishes(showcaseStore.categories, dishes.value),
+)
 
 const firstCategoryId = computed(() => categoriesWithDishes.value[0]?.id ?? '')
 
@@ -224,12 +230,10 @@ const { activeCategoryId, registerSection, scrollToCategory, start } =
 
 const handleDishClick = (dish: IDish) => {
   selectedDish.value = dish
-  document.body.style.overflow = 'hidden'
 }
 
 const closeDishModal = () => {
   selectedDish.value = null
-  document.body.style.overflow = ''
 }
 
 const handleToggleLike = (dishId: string) => {
@@ -252,10 +256,12 @@ const fetchData = async () => {
 }
 
 watch(placeRouteKey, (slug) => {
+  menuLangStore.enableForPlace(slug)
   wishlistStore.load(slug)
 })
 
 onMounted(async () => {
+  menuLangStore.enableForPlace(placeRouteKey.value)
   wishlistStore.load(placeRouteKey.value)
   await fetchData()
   await start()

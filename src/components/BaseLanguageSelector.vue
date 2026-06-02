@@ -51,19 +51,23 @@ import {
   getLanguageDisplayCode,
   type MenuLanguage,
 } from '@/constants/menuLanguages'
+import {
+  applyUiLocale,
+  menuLanguageCodeToUiLocale,
+  readStoredUiLocale,
+  uiLocaleToMenuLanguageCode,
+} from '@/lang'
 import { useShowcaseMenuLanguageStore } from '@/stores/showcaseMenuLanguageStore'
+import { storeToRefs } from 'pinia'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const UI_LANGUAGE_CODES = ['uk', 'en'] as const
-const UI_LOCALE_STORAGE_KEY = 'gastro-ui-locale'
 const DROPDOWN_WIDTH_PX = 11.5 * 16
 const DROPDOWN_GAP_PX = 6
 
 const props = withDefaults(
   defineProps<{
     mode?: 'menu' | 'ui'
-    /** Opens above the trigger; uses fixed positioning (needed inside clip-path sidebars). */
     placement?: 'above' | 'below'
   }>(),
   { mode: 'menu', placement: 'below' },
@@ -71,6 +75,7 @@ const props = withDefaults(
 
 const { t, locale } = useI18n()
 const menuLangStore = useShowcaseMenuLanguageStore()
+const { languageCode: menuLanguageCode } = storeToRefs(menuLangStore)
 const open = ref(false)
 const rootRef = ref<HTMLElement | null>(null)
 const triggerRef = ref<HTMLButtonElement | null>(null)
@@ -112,18 +117,10 @@ const detachPositionListeners = () => {
   positionListenersAttached = false
 }
 
-const uiLocaleToMenuCode = (value: string) => (value === 'ua' ? 'uk' : value === 'en' ? 'en' : 'uk')
-
-const menuCodeToUiLocale = (code: string) => (code === 'uk' ? 'ua' : code)
-
-const availableLanguages = computed<MenuLanguage[]>(() =>
-  props.mode === 'ui'
-    ? MENU_LANGUAGES.filter((lang) => UI_LANGUAGE_CODES.includes(lang.code as (typeof UI_LANGUAGE_CODES)[number]))
-    : MENU_LANGUAGES,
-)
+const availableLanguages = computed<MenuLanguage[]>(() => MENU_LANGUAGES)
 
 const selectedCode = computed(() =>
-  props.mode === 'ui' ? uiLocaleToMenuCode(locale.value) : menuLangStore.languageCode,
+  props.mode === 'ui' ? uiLocaleToMenuLanguageCode(locale.value) : menuLanguageCode.value,
 )
 
 const activeDisplayCode = computed(() => getLanguageDisplayCode(selectedCode.value))
@@ -133,12 +130,17 @@ const ariaLabel = computed(() =>
 )
 
 const selectLanguage = (code: string) => {
+  const uiLocale = menuLanguageCodeToUiLocale(code)
+
   if (props.mode === 'ui') {
-    const nextLocale = menuCodeToUiLocale(code)
-    locale.value = nextLocale
-    sessionStorage.setItem(UI_LOCALE_STORAGE_KEY, nextLocale)
+    applyUiLocale(uiLocale)
+    locale.value = uiLocale
+    if (menuLangStore.placeSlug) {
+      menuLangStore.setLanguage(code)
+    }
   } else {
     menuLangStore.setLanguage(code)
+    locale.value = uiLocale
   }
   open.value = false
 }
@@ -153,8 +155,8 @@ watch(
   () => props.mode,
   (mode) => {
     if (mode !== 'ui') return
-    const stored = sessionStorage.getItem(UI_LOCALE_STORAGE_KEY)
-    if (stored === 'ua' || stored === 'en') {
+    const stored = readStoredUiLocale()
+    if (stored) {
       locale.value = stored
     }
   },
@@ -281,5 +283,4 @@ onUnmounted(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 </style>

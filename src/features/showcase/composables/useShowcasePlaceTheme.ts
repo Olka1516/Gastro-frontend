@@ -1,6 +1,7 @@
 import { DEFAULT_CURRENCY, parseCurrency, type CurrencyCode } from '@/constants/currency'
 import { DEFAULT_MENU_DISH_LAYOUT, parseMenuDishLayout } from '@/constants/menuDishLayout'
 import type { MenuDishLayout } from '@/constants/menuDishLayout'
+import { intlLocaleForUi } from '@/lang'
 import { formatMenuPrice } from '@/utils/formatPrice'
 import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useUserStore } from '@/stores/user'
@@ -68,7 +69,7 @@ export function useShowcasePlaceTheme(placeKey: MaybeRefOrGetter<string>) {
     return ''
   })
 
-  const numberLocale = computed(() => (locale.value === 'ua' ? 'uk-UA' : 'en-GB'))
+  const numberLocale = computed(() => intlLocaleForUi(locale.value))
 
   const formatPrice = (amount: number) =>
     formatMenuPrice(amount, currency.value, numberLocale.value)

@@ -3,6 +3,7 @@ import type {
   IShowcasePlacedOrder,
   ShowcaseOrderStatus,
 } from '@/types/showcaseOrder'
+import { intlLocaleForUi } from '@/lang'
 import { useI18n } from 'vue-i18n'
 
 export function sortShowcaseOrdersByDateDesc(orders: IShowcasePlacedOrder[]) {
@@ -27,7 +28,7 @@ export function useShowcaseOrdersTable() {
     if (!iso) return '—'
     const d = Date.parse(iso)
     if (Number.isNaN(d)) return iso
-    return new Intl.DateTimeFormat(locale.value === 'ua' ? 'uk-UA' : 'en-GB', {
+    return new Intl.DateTimeFormat(intlLocaleForUi(locale.value), {
       dateStyle: 'short',
       timeStyle: 'short',
     }).format(d)

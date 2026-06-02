@@ -7,7 +7,7 @@ export interface MenuLanguage {
 
 export const MENU_LANGUAGES: MenuLanguage[] = [
   { code: 'uk', label: 'Ukrainian', nativeLabel: 'Українська', flag: '🇺🇦' },
-  { code: 'en', label: 'English', nativeLabel: 'English', flag: '🇬🇧' },
+  { code: 'en', label: 'English', nativeLabel: 'English', flag: '🇺🇸' },
   { code: 'pl', label: 'Polish', nativeLabel: 'Polski', flag: '🇵🇱' },
   { code: 'de', label: 'German', nativeLabel: 'Deutsch', flag: '🇩🇪' },
   { code: 'fr', label: 'French', nativeLabel: 'Français', flag: '🇫🇷' },
@@ -17,7 +17,7 @@ export const MENU_LANGUAGES: MenuLanguage[] = [
   { code: 'ro', label: 'Romanian', nativeLabel: 'Română', flag: '🇷🇴' },
   { code: 'tr', label: 'Turkish', nativeLabel: 'Türkçe', flag: '🇹🇷' },
   { code: 'pt', label: 'Portuguese', nativeLabel: 'Português', flag: '🇵🇹' },
-  { code: 'zh', label: 'Chinese', nativeLabel: '中文', flag: '🇨🇳' },
+  { code: 'sk', label: 'Slovak', nativeLabel: 'Slovenčina', flag: '🇸🇰' },
 ]
 
 export const DEFAULT_MENU_LANGUAGE = MENU_LANGUAGES[0].code
@@ -26,5 +26,4 @@ export const MENU_LANGUAGE_CODES = MENU_LANGUAGES.map((l) => l.code)
 
 export const getMenuLanguage = (code: string) => MENU_LANGUAGES.find((l) => l.code === code)
 
-/** UI label for language code (uk → UA, not UK / United Kingdom). */
 export const getLanguageDisplayCode = (code: string) => (code === 'uk' ? 'UA' : code.toUpperCase())

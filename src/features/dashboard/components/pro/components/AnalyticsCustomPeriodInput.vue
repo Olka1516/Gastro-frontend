@@ -50,6 +50,7 @@ import {
   type AnalyticsDateRangeYmd,
 } from '@/features/dashboard/composables/useAnalyticsPeriodStats'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { intlLocaleForUi } from '@/lang'
 import { useI18n } from 'vue-i18n'
 import AnalyticsPeriodCalendar from './AnalyticsPeriodCalendar.vue'
 
@@ -68,7 +69,7 @@ const { t, locale } = useI18n()
 const open = ref(false)
 const rootRef = ref<HTMLElement | null>(null)
 
-const dateLocale = computed(() => (locale.value === 'ua' ? 'uk-UA' : 'en-GB'))
+const dateLocale = computed(() => intlLocaleForUi(locale.value))
 
 const rangeFormatter = computed(
   () =>

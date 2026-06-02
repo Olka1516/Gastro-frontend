@@ -1,30 +1,19 @@
 <template>
   <Teleport to="body">
-    <Transition
-      enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 scale-90"
-      enter-to-class="opacity-100 scale-100"
-      leave-active-class="transition duration-200 ease-in"
-      leave-from-class="opacity-100 scale-100"
-      leave-to-class="opacity-0 scale-90"
-    >
-      <div
-        v-if="open"
-        class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px] p-4"
-      >
-        <div
-          :class="[
-            MODAL_SURFACE_CLASS,
-            'premium-dish-modal relative flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-2xl',
-          ]"
-        >
+    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0 scale-90"
+      enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
+      <div v-if="open"
+        class="fixed inset-0 flex items-center justify-center bg-black/70 z-1000 backdrop-blur-[6px] p-4">
+        <div :class="[
+          MODAL_SURFACE_CLASS,
+          'premium-dish-modal relative flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl shadow-2xl',
+        ]">
           <header class="flex-shrink-0 relative px-6 pt-6 pb-4 border-b border-[#2a2930]/80">
-            <button
-              type="button"
+            <button type="button"
               class="cursor-pointer absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition"
-              @click="closeModal"
-            >
-              ✕
+              @click="closeModal">
+              <img src="@/assets/images/icons/exit_white.svg" alt="Close" class="w-5 h-5">
             </button>
 
             <h2 class="text-2xl font-semibold text-white text-center pr-8">
@@ -48,29 +37,23 @@
                   <div class="form-field">
                     <label class="form-field__label">{{ priceFieldLabel }}</label>
                     <div class="form-field__control">
-                      <BaseText
-                        v-model="formData.price"
-                        :v="v$.price"
-                        type="price"
-                        :error="error"
-                        autocomplete="off"
-                      />
+                      <BaseText v-model="formData.price" :v="v$.price" type="price" :error="error" autocomplete="off" />
                     </div>
                     <p class="field-error-slot" aria-live="polite">
-                      <span v-show="v$.price.$error && v$.price.$dirty">{{ priceErrorMessage }}</span>
+                      <span v-show="v$.price.$error && v$.price.$dirty">{{
+                        priceErrorMessage
+                      }}</span>
                     </p>
                   </div>
 
                   <div class="form-row">
                     <div class="form-field">
-                      <label class="form-field__label">{{ t('dashboard.tableHead.category') }}</label>
+                      <label class="form-field__label">{{
+                        t('dashboard.tableHead.category')
+                      }}</label>
                       <div class="form-field__control form-field__control--select">
-                        <BaseSelect
-                          v-model:category="selectedCategoryLabel"
-                          :all-selections="categoryLabels"
-                          type="dashboard.tableHead.category"
-                          :v="v$.category"
-                        />
+                        <BaseSelect v-model:category="selectedCategoryLabel" :all-selections="categoryLabels"
+                          type="dashboard.tableHead.category" :v="v$.category" />
                       </div>
                       <p class="field-error-slot" aria-live="polite">
                         <span v-show="v$.category.$error && v$.category.$dirty">{{
@@ -82,12 +65,8 @@
                     <div class="form-field">
                       <label class="form-field__label">{{ t('dashboard.availability') }}</label>
                       <div class="form-field__control form-field__control--select">
-                        <BaseAvailabilitySelect
-                          v-model:availability="formData.isAvailable"
-                          :all-selections="availabilityOptions"
-                          type="dashboard.availability"
-                          :v="v$.isAvailable"
-                        />
+                        <BaseAvailabilitySelect v-model:availability="formData.isAvailable"
+                          :all-selections="availabilityOptions" type="dashboard.availability" :v="v$.isAvailable" />
                       </div>
                       <p class="field-error-slot" aria-live="polite">
                         <span v-show="v$.isAvailable.$error && v$.isAvailable.$dirty">{{
@@ -112,13 +91,7 @@
                       <span v-if="isUkrainianTab" class="form-field__required">*</span>
                     </label>
                     <div class="form-field__control">
-                      <BaseText
-                        v-model="formData.name"
-                        :v="v$.name"
-                        type="name"
-                        :error="error"
-                        autocomplete="off"
-                      />
+                      <BaseText v-model="formData.name" :v="v$.name" type="name" :error="error" autocomplete="off" />
                     </div>
                     <p class="field-error-slot" aria-live="polite">
                       <span v-show="showNameError">{{ nameErrorMessage }}</span>
@@ -133,25 +106,14 @@
                       </span>
                     </label>
                     <div class="form-field__control">
-                      <BaseTextarea
-                        v-model="formData.description"
-                        :v="v$.description"
-                        type="description"
-                        :rows="3"
-                      />
+                      <BaseTextarea v-model="formData.description" :v="v$.description" type="description" :rows="3" />
                     </div>
                   </div>
                 </div>
               </section>
 
-              <BaseButton
-                type="submit"
-                variant="gradient"
-                block
-                :scale-on-hover="false"
-                class="shadow-lg shadow-[#dc5b41]/20 hover:opacity-95"
-                :text="isEditMode ? t('button.edit') : t('button.add')"
-              />
+              <BaseButton type="submit" variant="gradient" block :scale-on-hover="false"
+                :text="isEditMode ? t('button.edit') : t('button.add')" />
             </form>
           </div>
         </div>
@@ -184,6 +146,7 @@ import { useCategoriesDashboardStore } from '@/stores/categoriesDashboard'
 import type { IDish } from '@/types/menu'
 import useVuelidate from '@vuelidate/core'
 import { numeric, required } from '@vuelidate/validators'
+import { useBodyScrollLock } from '@/utils/bodyScrollLock'
 import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -225,9 +188,7 @@ const formData = reactive({
 })
 
 const categoryLabels = computed(() =>
-  categoriesDashboardStore.categories.map((cat) =>
-    getCategoryDisplayName(cat, activeLang.value),
-  ),
+  categoriesDashboardStore.categories.map((cat) => getCategoryDisplayName(cat, activeLang.value)),
 )
 
 const selectedCategoryLabel = computed({
@@ -290,9 +251,10 @@ const syncActiveLangFromForm = () => {
   translations[activeLang.value].description = formData.description
 }
 
+useBodyScrollLock(open)
+
 const closeModal = () => {
   open.value = false
-  document.body.style.overflow = ''
 }
 
 const handleImageUpdate = (image: File) => {

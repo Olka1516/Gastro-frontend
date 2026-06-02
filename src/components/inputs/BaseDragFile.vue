@@ -1,7 +1,7 @@
 <template>
   <div id="drop-area" @dragenter="handleDragEnter" @dragover="handleDragOver" @dragleave="handleDragLeave"
     @drop="handleDrop"
-    class="flex items-center justify-center text-center w-full h-[280px] border-2 border-dashed rounded-xl transition-colors duration-200 max-[1200px]:p-1 max-[1200px]:grid"
+    class="flex items-center justify-center text-center w-full h-[280px] border-2 border-dashed rounded-xl transition-colors duration-200 max-[1200px]:p-1"
     :class="{
       'border-red-500': isInfoInvalid,
       'border-[#dc5b41]': isHighlighted,
@@ -15,7 +15,7 @@
       </label>
     </form>
 
-    <div v-if="isImageChoosen || props.url">
+    <div :class="classNames" v-if="isImageChoosen || props.url">
       <div id="gallery">
         <img v-if="previewUrl" :src="previewUrl as string" id="previewImage"
           class="min-w-full h-[270px] rounded-2xl object-cover object-center max-[1200px]:w-full max-[1200px]:h-[240px]" />
@@ -35,6 +35,7 @@ const props = defineProps<{
     $invalid: boolean
     $dirty: boolean
   }
+  isSettings?: boolean
   url: string | File | null
 }>()
 
@@ -46,6 +47,10 @@ const emit = defineEmits<{ (e: 'update', value: File): void }>()
 const isHeavy = ref(false)
 const uploadedFile = ref<File | null>(null)
 const previewUrl = ref(props.url || '')
+
+const classNames = computed(() => {
+  return !props.isSettings ? 'w-[calc(100%-8px)] max-w-[400px]' : ''
+})
 
 const handleDragEnter = (e: DragEvent) => {
   preventDefaults(e)

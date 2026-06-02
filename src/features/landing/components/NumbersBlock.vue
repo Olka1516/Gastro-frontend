@@ -15,7 +15,7 @@
           </h3>
           <img
             class="pointer-events-none absolute right-0 top-0 z-1 h-11 w-11 object-contain sm:h-13 sm:w-13 md:h-15 md:w-15"
-            :src="getImage(`../features/landing/assets/images/landing/${value.text}.png`)"
+            :src="getLandingImageUrl(`${value.text}.png`)"
             alt=""
           />
         </div>
@@ -31,7 +31,7 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { datas } from '../constants/numbers'
-import { getImage } from '@/common/functions'
+import { getLandingImageUrl } from '../constants/landingImages'
 
 const { t } = useI18n()
 

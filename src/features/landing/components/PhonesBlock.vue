@@ -40,8 +40,11 @@
                       {{ t('landing.soups.1.description') }}
                     </p>
                   </div>
-                  <img class="animatable absolute -right-14 z-4 h-25" src="../assets/images/landing/soup_1.png"
-                    alt="" />
+                  <img
+                    class="animatable absolute -right-14 z-4 h-25"
+                    :src="getLandingImageUrl('soup_1.png')"
+                    alt=""
+                  />
                 </div>
                 <BaseButton variant="pill" :text="t('landing.addToCard')" />
               </div>
@@ -68,6 +71,7 @@
 
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue'
+import { getLandingImageUrl } from '../constants/landingImages'
 import { useI18n } from 'vue-i18n'
 import MenuCard from './MenuCard.vue'
 import CheckoutCard from './CheckoutCard.vue'

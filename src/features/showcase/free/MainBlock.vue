@@ -7,7 +7,7 @@
 
     <div class="text-center mb-16">
       <h1 class="text-white text-5xl font-bold mb-4">
-        {{ userInfo?.placeName || t('showcase.menu') }}
+        {{ displayPlaceName || t('showcase.menu') }}
       </h1>
       <p class="text-gray-400 text-lg max-w-2xl mx-auto">
         {{ menuWelcomeText || t('showcase.welcomeDescription') }}
@@ -46,7 +46,6 @@ import BaseLoader from '@/components/BaseLoader.vue'
 import { useShowcaseCategoryScroll } from '@/features/showcase/composables/useShowcaseCategoryScroll'
 import { useShowcasePlaceTheme } from '@/features/showcase/composables/useShowcasePlaceTheme'
 import { useShowcaseStore } from '@/stores/showcaseStore'
-import { useUserStore } from '@/stores/user'
 import { filterCategoriesWithAvailableDishes } from '@/features/dashboard/utils/categoryApi'
 import type { IDish } from '@/types/menu'
 import { computed, onMounted, ref } from 'vue'
@@ -58,7 +57,6 @@ import CategorySection from './components/CategorySection.vue'
 
 const { t } = useI18n()
 const route = useRoute()
-const userStore = useUserStore()
 const showcaseStore = useShowcaseStore()
 
 const loading = ref(true)
@@ -66,9 +64,7 @@ const dishes = ref<IDish[]>([])
 const selectedDish = ref<IDish | null>(null)
 
 const placeRouteKey = computed(() => String(route.params.id ?? ''))
-const { menuWelcomeText } = useShowcasePlaceTheme(placeRouteKey)
-
-const userInfo = computed(() => userStore.$state)
+const { displayPlaceName, menuWelcomeText } = useShowcasePlaceTheme(placeRouteKey)
 const selectedDishCategoryName = computed(() => {
   if (!selectedDish.value) return ''
   const category = showcaseStore.categories.find((item) => item.id === selectedDish.value?.category)

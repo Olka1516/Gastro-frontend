@@ -1,5 +1,5 @@
 <template>
-  <CategoriesBlock multilingual />
+  <CategoriesBlock />
 </template>
 
 <script setup lang="ts">

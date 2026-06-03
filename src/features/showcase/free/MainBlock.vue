@@ -1,6 +1,7 @@
 <template>
   <div id="menu" class="min-h-screen bg-[#0f0f11] py-16 px-8 md:px-12 lg:px-24 pt-32">
-    <div v-if="loading" class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 

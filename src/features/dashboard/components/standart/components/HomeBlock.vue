@@ -1,6 +1,7 @@
 <template>
   <div class="flex min-h-screen min-w-0 flex-col gap-6 bg-[#0f0f11] p-4 sm:gap-8 sm:p-6 md:p-8 lg:p-12">
-    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f0f11]/80 backdrop-blur-sm">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -10,25 +11,16 @@
       </h1>
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <p class="text-base text-gray-400 sm:text-lg">{{ t('dashboard.home.subtitle') }}</p>
-        <a
-          class="flex shrink-0 cursor-pointer items-center gap-2 self-start text-base text-sky-600 sm:gap-3 sm:self-auto sm:text-lg"
-          :href="menuPublicHref"
-          target="_blank"
-          rel="noopener noreferrer">
+        <a class="flex shrink-0 cursor-pointer items-center gap-2 self-start text-base text-sky-600 sm:gap-3 sm:self-auto sm:text-lg"
+          :href="menuPublicHref" target="_blank" rel="noopener noreferrer">
           {{ t('dashboard.home.link') }}
-          <img
-            src="@/assets/images/icons/link.svg"
-            alt=""
-            class="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
+          <img src="@/assets/images/icons/link.svg" alt="" class="h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
         </a>
       </div>
     </div>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-      <DashboardCard
-        v-for="card in cards"
-        :key="card.id"
-        v-bind="card"
+      <DashboardCard v-for="card in cards" :key="card.id" v-bind="card"
         @click="card.id && $emit('navigateTo', card.navigateKey)" />
     </div>
 
@@ -39,8 +31,7 @@
       </div>
     </div>
 
-    <div
-      class="rounded-lg border border-[#dc5b41]/30 bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-5 sm:p-6 md:p-8">
+    <div class="rounded-lg border border-[#dc5b41]/30 bg-gradient-to-r from-[#1a191f] to-[#2a2930] p-5 sm:p-6 md:p-8">
       <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-start">
         <div
           class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#dc5b41] to-[#e66a4f] sm:h-14 sm:w-14 md:h-16 md:w-16">

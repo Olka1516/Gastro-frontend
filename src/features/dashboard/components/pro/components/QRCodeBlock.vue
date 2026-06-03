@@ -1,7 +1,8 @@
 <template>
   <div
     class="flex min-h-screen min-w-0 flex-col gap-6 bg-[#0f0f11] p-4 sm:gap-8 sm:p-6 md:p-8 lg:p-12 md:pt-16 sm:pt-16">
-    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f0f11]/80 backdrop-blur-sm">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -22,8 +23,7 @@
             <div
               class="relative mx-auto w-fit rounded-lg bg-white p-4 shadow-2xl transition-transform duration-300 group-hover:scale-105 sm:p-5 md:p-6">
               <img v-if="qrCode" :src="qrCode" alt="QR Code" class="block h-48 w-48 sm:h-56 sm:w-56 md:h-64 md:w-64" />
-              <div
-                v-if="!qrCode"
+              <div v-if="!qrCode"
                 class="flex h-48 w-48 items-center justify-center rounded-lg bg-gray-100 sm:h-56 sm:w-56 md:h-64 md:w-64">
                 <BaseLoader />
               </div>
@@ -58,24 +58,10 @@
             </div>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
-              <BaseButton
-                variant="gradient"
-                size="large"
-                class="flex-1"
-                :icon="downloadIcon"
-                :text="t('button.download')"
-                @click="downloadQRCode"
-              />
-              <BaseButton
-                variant="outline"
-                size="large"
-                class="flex-1"
-                :href="menuUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-                :icon="linkIcon"
-                :text="t('dashboard.standart.qrCode.openMenu')"
-              />
+              <BaseButton variant="gradient" size="large" class="flex-1" :icon="downloadIcon"
+                :text="t('button.download')" @click="downloadQRCode" />
+              <BaseButton variant="outline" size="large" class="flex-1" :href="menuUrl" target="_blank"
+                rel="noopener noreferrer" :icon="linkIcon" :text="t('dashboard.standart.qrCode.openMenu')" />
             </div>
           </div>
         </div>

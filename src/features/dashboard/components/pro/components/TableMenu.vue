@@ -1,7 +1,8 @@
 <template>
   <div
     class="flex min-h-screen min-w-0 flex-col gap-6 bg-[#0f0f11] p-4 sm:gap-8 sm:p-6 md:p-8 lg:p-12 md:pt-16 sm:pt-16">
-    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f0f11]/80 backdrop-blur-sm">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -119,11 +120,7 @@
       </div>
     </div>
 
-    <BasePagination
-      v-if="dishes.length > 0"
-      v-model:datas="dishes"
-      v-model:paginationPage="paginationPage"
-      :size />
+    <BasePagination v-if="dishes.length > 0" v-model:datas="dishes" v-model:paginationPage="paginationPage" :size />
 
     <BaseDelete v-model:openDelete="openDelete" text="dashboard.tableHead.deleteMeal"
       @handleProcess="(value) => deleteMeal(value)" />

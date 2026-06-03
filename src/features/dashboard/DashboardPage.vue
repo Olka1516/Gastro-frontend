@@ -1,6 +1,10 @@
 <template>
   <div class="min-h-screen bg-[#0f0f11]">
-    <div v-if="loading">Loading...</div>
+    <div v-if="loading">
+      <div class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
+        <BaseLoader />
+      </div>
+    </div>
     <template v-else>
       <AuthTeleportModals v-model:open="authModalOpen" v-model:activeModal="activeModal"
         @handleProcess="onAuthSuccess" />

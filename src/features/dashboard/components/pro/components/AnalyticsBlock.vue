@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#0f0f11] p-12 flex flex-col gap-8">
-    <div v-if="loading" class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -19,34 +20,21 @@
     <template v-else>
       <div class="flex flex-col gap-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <div
-            class="inline-flex flex-wrap rounded-xl border border-[#2a2930] bg-[#1a191f] p-1 gap-1 w-full sm:w-auto"
-            role="tablist"
-            :aria-label="t('dashboard.analytics.period.aria')"
-          >
-            <button
-              v-for="opt in periodOptions"
-              :key="opt.value"
-              type="button"
-              role="tab"
-              :aria-selected="periodMode === 'preset' && selectedPeriod === opt.value"
-              :class="[
+          <div class="inline-flex flex-wrap rounded-xl border border-[#2a2930] bg-[#1a191f] p-1 gap-1 w-full sm:w-auto"
+            role="tablist" :aria-label="t('dashboard.analytics.period.aria')">
+            <button v-for="opt in periodOptions" :key="opt.value" type="button" role="tab"
+              :aria-selected="periodMode === 'preset' && selectedPeriod === opt.value" :class="[
                 'flex-1 sm:flex-none min-w-[5.5rem] px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
                 periodMode === 'preset' && selectedPeriod === opt.value
                   ? 'bg-gradient-to-r from-[#dc5b41] to-[#e66a4f] text-white shadow-md'
                   : 'text-gray-400 hover:text-white hover:bg-[#2a2930]',
-              ]"
-              @click="selectPreset(opt.value)"
-            >
+              ]" @click="selectPreset(opt.value)">
               {{ opt.label }}
             </button>
           </div>
 
-          <AnalyticsCustomPeriodInput
-            v-model="customRange"
-            :active="periodMode === 'custom'"
-            @select="periodMode = 'custom'"
-          />
+          <AnalyticsCustomPeriodInput v-model="customRange" :active="periodMode === 'custom'"
+            @select="periodMode = 'custom'" />
         </div>
 
         <article
@@ -57,7 +45,7 @@
           <div class="mt-6 pt-6 border-t border-[#2a2930]">
             <p class="text-gray-500 text-xs uppercase tracking-wide">{{ t('dashboard.analytics.cards.revenue') }}</p>
             <p class="text-[#dc5b41] text-2xl font-semibold tabular-nums mt-1">{{ formatMoney(activeOrderStats.revenue)
-            }}</p>
+              }}</p>
           </div>
         </article>
 

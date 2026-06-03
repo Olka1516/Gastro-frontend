@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen min-w-0 bg-[#0f0f11] p-4 sm:p-6 md:p-8 lg:p-12 flex flex-col gap-6 sm:gap-8">
-    <div v-if="loading" class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -29,12 +30,8 @@
         </h2>
         <p class="text-gray-300 text-sm max-w-xl">{{ t('dashboard.home.addEditDishes') }}</p>
       </div>
-      <BaseButton
-        variant="gradient"
-        class="w-full shrink-0 text-center sm:w-fit"
-        :text="t('dashboard.home.manageMenu')"
-        @click="$emit('navigateTo', 'menu')"
-      />
+      <BaseButton variant="gradient" class="w-full shrink-0 text-center sm:w-fit" :text="t('dashboard.home.manageMenu')"
+        @click="$emit('navigateTo', 'menu')" />
     </div>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -74,9 +71,7 @@
           class="bg-[#1a191f] p-4 sm:p-5 rounded-lg border border-[#2a2930] hover:border-[#dc5b41] transition-all duration-300 text-left group hover:translate-y-[-3px]">
           <div
             class="w-10 h-10 rounded-lg bg-[#2a2930] group-hover:bg-[#dc5b41]/20 transition-all duration-300 flex items-center justify-center mb-3">
-            <img
-              :src="getIconPath(action.icon)"
-              :alt="action.key"
+            <img :src="getIconPath(action.icon)" :alt="action.key"
               class="h-6 w-6 shrink-0 object-contain pointer-events-none"
               style="filter: brightness(0) saturate(100%) invert(54%) sepia(87%) saturate(2067%) hue-rotate(341deg) brightness(98%) contrast(87%);" />
           </div>

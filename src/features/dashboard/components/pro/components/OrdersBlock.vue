@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#0f0f11] p-12 flex flex-col gap-8">
-    <div v-if="loading" class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 

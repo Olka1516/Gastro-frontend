@@ -1,8 +1,8 @@
 <template>
   <div id="menu" class="min-h-screen pb-20 pt-[80px] sm:pb-24" :style="pageStyle"
     :data-menu-dish-layout="menuDishLayout">
-    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
-      :style="loadingStyle">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -75,14 +75,9 @@
 
     <template v-else>
       <div class="px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
-        <ShowcaseCategoryTabs
-          :categories="categoriesWithDishes"
-          :language-code="menuContentLangCode"
-          :active-id="activeCategoryId"
-          :accent-color="menuIconColor"
-          :panel-background="menuBackgroundColor"
-          @select="scrollToCategory"
-        />
+        <ShowcaseCategoryTabs :categories="categoriesWithDishes" :language-code="menuContentLangCode"
+          :active-id="activeCategoryId" :accent-color="menuIconColor" :panel-background="menuBackgroundColor"
+          @select="scrollToCategory" />
 
         <div class="space-y-16 sm:space-y-20">
           <CategorySection v-for="category in categoriesWithDishes" :key="category.id"
@@ -113,7 +108,7 @@ import { useShowcaseStore } from '@/stores/showcaseStore'
 import { useShowcaseWishlistStore } from '@/stores/showcaseWishlistStore'
 import type { IDish } from '@/types/menu'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import CategorySection from '../components/CategorySection.vue'
@@ -160,10 +155,6 @@ const hexToRgba = (hex: string, alpha: number) => {
 
 const pageStyle = computed(() => ({
   backgroundColor: menuBackgroundColor.value,
-}))
-
-const loadingStyle = computed(() => ({
-  backgroundColor: hexToRgba(menuBackgroundColor.value, 0.8),
 }))
 
 const iconBadgeStyle = computed(() => ({

@@ -1,7 +1,8 @@
 <template>
   <div
     class="flex min-h-screen min-w-0 flex-col gap-6 bg-[#0f0f11] p-4 sm:gap-8 sm:p-6 md:p-8 lg:p-12 md:pt-16 sm:pt-16">
-    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0f0f11]/80 backdrop-blur-sm">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -57,24 +58,10 @@
             </div>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
-              <BaseButton
-                variant="gradient"
-                size="large"
-                class="flex-1"
-                :icon="downloadIcon"
-                :text="t('button.download')"
-                @click="downloadQRCode"
-              />
-              <BaseButton
-                variant="outline"
-                size="large"
-                class="flex-1"
-                :href="menuUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-                :icon="linkIcon"
-                :text="t('dashboard.standart.qrCode.openMenu')"
-              />
+              <BaseButton variant="gradient" size="large" class="flex-1" :icon="downloadIcon"
+                :text="t('button.download')" @click="downloadQRCode" />
+              <BaseButton variant="outline" size="large" class="flex-1" :href="menuUrl" target="_blank"
+                rel="noopener noreferrer" :icon="linkIcon" :text="t('dashboard.standart.qrCode.openMenu')" />
             </div>
           </div>
         </div>

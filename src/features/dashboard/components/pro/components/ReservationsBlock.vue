@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#0f0f11] p-12 flex flex-col gap-8">
-    <div v-if="loading" class="fixed inset-0 bg-[#0f0f11]/80 backdrop-blur-sm flex items-center justify-center z-50">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -9,13 +10,9 @@
         <h2 class="text-white text-4xl font-bold">{{ t('dashboard.reservations.title') }}</h2>
         <p class="text-gray-400 text-sm">{{ t('dashboard.reservations.subtitle') }}</p>
       </div>
-      <BaseOrdersStatusFilter
-        :model-value="reservationsStatusFilter"
-        :option-values="reservationFilterOptionValues"
-        option-label-key-prefix="dashboard.reservations.status"
-        id="reservations-list-status-filter"
-        @update:model-value="onReservationFilterChange"
-      />
+      <BaseOrdersStatusFilter :model-value="reservationsStatusFilter" :option-values="reservationFilterOptionValues"
+        option-label-key-prefix="dashboard.reservations.status" id="reservations-list-status-filter"
+        @update:model-value="onReservationFilterChange" />
     </div>
 
     <div v-if="reservationsError"

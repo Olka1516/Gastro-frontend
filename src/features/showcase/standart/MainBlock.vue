@@ -1,8 +1,8 @@
 <template>
   <div id="menu" class="min-h-screen pb-20 pt-24 sm:pb-24 sm:pt-28 md:pt-32" :style="pageStyle"
     :data-menu-dish-layout="menuDishLayout">
-    <div v-if="loading" class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
-      :style="loadingStyle">
+    <div v-if="loading"
+      class="fixed w-screen h-screen inset-0 bg-[#0f0f11]/94 flex items-center justify-center z-[2000]">
       <BaseLoader />
     </div>
 
@@ -69,28 +69,15 @@
         <div class="mb-3 flex justify-end sm:mb-4">
           <BaseLanguageSelector mode="menu" />
         </div>
-        <ShowcaseCategoryTabs
-          :categories="categoriesWithDishes"
-          :language-code="menuContentLangCode"
-          :active-id="activeCategoryId"
-          :accent-color="menuIconColor"
-          :panel-background="menuBackgroundColor"
-          @select="scrollToCategory"
-        />
+        <ShowcaseCategoryTabs :categories="categoriesWithDishes" :language-code="menuContentLangCode"
+          :active-id="activeCategoryId" :accent-color="menuIconColor" :panel-background="menuBackgroundColor"
+          @select="scrollToCategory" />
 
         <div class="space-y-16 sm:space-y-20">
-          <CategorySection
-            v-for="category in categoriesWithDishes"
-            :key="category.id"
-            :ref="(el) => registerSection(category.id, el)"
-            :category="category"
-            :dishes="dishes"
-            :liked-dish-ids="likedDishIds"
-            :menu-icon-color="menuIconColor"
-            :menu-dish-layout="menuDishLayout"
-            @dish-click="handleDishClick"
-            @toggle-like="handleToggleLike"
-          />
+          <CategorySection v-for="category in categoriesWithDishes" :key="category.id"
+            :ref="(el) => registerSection(category.id, el)" :category="category" :dishes="dishes"
+            :liked-dish-ids="likedDishIds" :menu-icon-color="menuIconColor" :menu-dish-layout="menuDishLayout"
+            @dish-click="handleDishClick" @toggle-like="handleToggleLike" />
         </div>
       </div>
     </template>
@@ -131,8 +118,14 @@ const { likedDishIds } = storeToRefs(wishlistStore)
 const { menuContentLangCode } = useShowcaseMenuContentLanguage()
 
 const placeRouteKey = computed(() => String(route.params.id ?? ''))
-const { menuBackgroundColor, menuIconColor, logoUrl, displayPlaceName, menuDishLayout, menuWelcomeText } =
-  useShowcasePlaceTheme(placeRouteKey)
+const {
+  menuBackgroundColor,
+  menuIconColor,
+  logoUrl,
+  displayPlaceName,
+  menuDishLayout,
+  menuWelcomeText,
+} = useShowcasePlaceTheme(placeRouteKey)
 
 const loading = ref(true)
 const dishes = ref<IDish[]>([])
@@ -161,10 +154,6 @@ const hexToRgba = (hex: string, alpha: number) => {
 
 const pageStyle = computed(() => ({
   backgroundColor: menuBackgroundColor.value,
-}))
-
-const loadingStyle = computed(() => ({
-  backgroundColor: hexToRgba(menuBackgroundColor.value, 0.8),
 }))
 
 const iconBadgeStyle = computed(() => ({

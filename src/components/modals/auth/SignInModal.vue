@@ -8,7 +8,7 @@
     </div>
 
     <div class="relative">
-      <BasePassword v-model="userData.password" :v="v$.password" type="password" autocomplete="current-password" />
+      <BasePassword v-model="userData.password" :v="v$.password" type="password" autocomplete="off" />
       <ErrorMessage :v="v$.password" :error="error" />
     </div>
 
